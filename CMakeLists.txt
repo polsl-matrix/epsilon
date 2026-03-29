@@ -1,0 +1,70 @@
+cmake_minimum_required(VERSION 3.23)
+
+project(epsilon VERSION 0.1.0)
+
+find_package(Qt6 COMPONENTS Core Gui Quick Qml REQUIRED)
+
+qt_standard_project_setup()
+
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
+
+if(APPLE)
+  qt_add_executable(epsilon MACOSX_BUNDLE src/main.cpp)
+else()
+  qt_add_executable(epsilon src/main.cpp)
+endif()
+
+qt_add_qml_module(epsilon
+  URI Main
+  QML_FILES src/Main.qml
+)
+
+target_link_libraries(epsilon 
+  PRIVATE 
+    Qt6::Core 
+    Qt6::Gui 
+    Qt6::Quick
+    Qt6::Qml
+)
+
+# Disallow warnings
+if (MSVC)
+  add_compile_options(/W4 /WX)
+else()
+  add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
+# TODO: Compiler optimizations
+
+if(WIN32)
+  find_program(WINDEPLOYQT_EXECUTABLE windeployqt PATHS ENV PATH)
+  if(WINDEPLOYQT_EXECUTABLE)
+    add_custom_command(TARGET epsilon POST_BUILD
+    COMMAND "${WINDEPLOYQT_EXECUTABLE}" 
+      --no-compiler-runtime 
+      --qmldir "${CMAKE_CURRENT_SOURCE_DIR}" 
+      "$<TARGET_FILE:epsilon>"
+    COMMENT "Deploying Qt libraries for Windows..."
+  )
+endif()
+
+elseif(APPLE)
+  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt PATHS ENV PATH)
+  if(MACDEPLOYQT_EXECUTABLE)
+    add_custom_command(TARGET epsilon POST_BUILD
+      COMMAND "${MACDEPLOYQT_EXECUTABLE}" 
+        "$<TARGET_BUNDLE_DIR:epsilon>" 
+        -qmldir="${CMAKE_CURRENT_SOURCE_DIR}"
+      COMMENT "Deploying Qt libraries for macOS..."
+    )
+endif()
+
+elseif(UNIX AND NOT APPLE)
+    # Use RPATH to point the executable to the system Qt installation.
+    # No physical file copying is needed for local development.
+    set_target_properties(epsilon PROPERTIES
+        INSTALL_RPATH "${CMAKE_PREFIX_PATH}/lib"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()

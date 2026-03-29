@@ -1,0 +1,8 @@
+# Generated files
+build
+install
+CMakeUserPresets.json
+
+# Environment configuration files
+.env
+.vscode
