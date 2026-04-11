@@ -13,7 +13,7 @@ endif()
 
 # TODO: Compiler optimizations
 
-### Qt Configuration ###
+### Qt configuration ###
 
 find_package(Qt6 COMPONENTS Core Gui Quick Qml REQUIRED)
 
@@ -85,7 +85,7 @@ elseif(UNIX AND NOT APPLE)
     )
 endif()
 
-### Google Test ###
+### Google Test configuration ###
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   if(WIN32)
