@@ -22,6 +22,9 @@ You may need to run it twice to get rid of the *Qt6 not found*
 error. To then build the project, run `cmake --build --preset conan-debug`.
 The built executable will be located at `build/Debug/epsilon.exe`.
 
+**CAUTION!** If conan is complaining about missing binaries,
+try running it with an additional `--build=missing` option.
+
 ## Release mode
 
 Building in release mode looks similarly to building in debug mode.
@@ -31,3 +34,9 @@ Then, you run `cmake --preset conan-release`. Again, you may need
 to run it twice. Finally, `cmake --build --preset conan-release`
 should build the executable itself. It will be localted at
 `build/Release/epsilon.exe`.
+
+# Running tests
+
+To run unit tests, you should first build the application in
+debug mode. After that, run `cd build/Debug && ctest`. You should
+now be seeing test results.
