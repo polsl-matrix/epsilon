@@ -30,6 +30,11 @@ unit tests for it.
 If you branch off of your own branch, you don't need to open a pull request to
 merge it, but you should still stick to the naming conventions.
 
+## Unit tests
+
+You should probably write unit tests to all non-UI features you write.
+The test suite should be named after the tested feature.
+
 ### Branch naming conventions
 
 Branch names should *obviously* be descriptive. Don't use abbriviations.

@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os
+import os, sys
 
 load_dotenv()
 
@@ -10,15 +10,16 @@ class EpsilonRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     
     def requirements(self):
-        pass 
-
-    def build_requirements(self):
-        self.tool_requires("pkgconf/2.1.0")
+        self.requires("gtest/1.17.0")
 
     def generate(self):
         tc = CMakeToolchain(self)
         
-        print(f"Qt's path is {os.getenv("QT_PATH")}")
+        # Qt configuration
+        if os.getenv("QT_PATH") is None:
+            print("ERROR! Qt path was not supplied in an .env file!", file=sys.stderr)
+        else:
+            print(f"Qt's path is \"{os.getenv("QT_PATH")}\"")
         tc.variables["CMAKE_PREFIX_PATH"] = os.getenv("QT_PATH")
         tc.variables["CMAKE_CXX_STANDARD"] = "23"
         tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "TRUE"

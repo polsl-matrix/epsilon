@@ -39,6 +39,13 @@ T add (T left, T right) {
 At the start of every header file and every implementation
 file, you should include the `#pragma once` directive.
 
+### Unit tests
+
+Unit tests should be located in a seperate file from the
+feature their testing. They should be in the same directory.
+The naming convention for a file containing unit tests for
+a feature located in a `feature.cpp` file is `feature_test.cpp`.
+
 ### File names
 
 C++ files are named in lower_snake_case, QML files are named

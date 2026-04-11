@@ -2,11 +2,27 @@ cmake_minimum_required(VERSION 3.23)
 
 project(epsilon VERSION 0.1.0)
 
+### Compiler configuration ###
+
+# Disallow warnings
+if (MSVC)
+  add_compile_options(/W4 /WX)
+else()
+  add_compile_options(-Wall -Wextra -pedantic -Werror)
+endif()
+
+# TODO: Compiler optimizations
+
+### Qt configuration ###
+
 find_package(Qt6 COMPONENTS Core Gui Quick Qml REQUIRED)
 
 qt_standard_project_setup()
 
+# Defaults the RESOURCE_PREFIX for qt_add_qml_module to /qt/qml
+# where the Qt resources actually live
 qt_policy(SET QTP0001 NEW)
+# Makes the Qt components available between subdirectories
 qt_policy(SET QTP0004 NEW)
 
 if(APPLE)
@@ -67,4 +83,30 @@ elseif(UNIX AND NOT APPLE)
         INSTALL_RPATH "${CMAKE_PREFIX_PATH}/lib"
         BUILD_WITH_INSTALL_RPATH TRUE
     )
+endif()
+
+### Google Test configuration ###
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  if(WIN32)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  endif()
+
+  find_package(GTest REQUIRED)
+
+  enable_testing()
+
+  add_executable(
+    epsilon_test
+    src/test.cpp
+  )
+
+  target_link_libraries(
+    epsilon_test
+    PRIVATE
+      GTest::gtest_main
+  )
+
+  include(GoogleTest)
+  gtest_discover_tests(epsilon_test)
 endif()
