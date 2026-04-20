@@ -42,6 +42,15 @@ name should be prefixed by:
  * `other/` - never - if some use case wasn't included in this list, you
  should first add it to this list in another pull request.
 
+## Application design
+
+The design in Figma can be accessed through
+[this link](https://www.figma.com/design/LblymqrUvXdxWcJ1oXwqXO/epsilon?node-id=12-81&t=pgZokOFpwr9GKXF6-1).
+If you want to design something yourself, you can ask me (Pietrek14)
+for edit permissions. When implementing a view, adhere to the design
+as close as possible. The design is desktop-only as of now, responsiveness
+is not yet a priority.
+
 ## Style
 
 Consult the style guide at `STYLE.md`.
