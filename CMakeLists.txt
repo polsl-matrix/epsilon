@@ -66,15 +66,19 @@ if(WIN32)
 endif()
 
 elseif(APPLE)
-  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt PATHS ENV PATH)
-  if(MACDEPLOYQT_EXECUTABLE)
+  get_target_property(_qt_qmake_executable Qt6::qmake IMPORTED_LOCATION)
+  get_filename_component(_qt_bin_dir "${_qt_qmake_executable}" DIRECTORY)
+
+  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
+
+  if(MACDEPLOYQT_EXECUTABLE AND CMAKE_BUILD_TYPE STREQUAL "Release")
     add_custom_command(TARGET epsilon POST_BUILD
-      COMMAND "${MACDEPLOYQT_EXECUTABLE}" 
-        "$<TARGET_BUNDLE_DIR:epsilon>" 
-        -qmldir="${CMAKE_CURRENT_SOURCE_DIR}"
-      COMMENT "Deploying Qt libraries for macOS..."
+            COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+            "$<TARGET_BUNDLE_DIR:epsilon>"
+            -qmldir="${CMAKE_CURRENT_SOURCE_DIR}"
+            -always-overwrite
     )
-endif()
+  endif()
 
 elseif(UNIX AND NOT APPLE)
     # Use RPATH to point the executable to the system Qt installation.
