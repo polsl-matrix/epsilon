@@ -1,20 +1,18 @@
----
-Checks:          'clang-diagnostic-*'
-WarningsAsErrors: ''
+Checks: '-*,clang-diagnostic-*,modernize-use-auto,cppcoreguidelines-owning-memory,cppcoreguidelines-no-malloc,modernize-make-unique,modernize-make-shared,misc-include-cleaner,misc-const-correctness,bugprone-*,performance-*,readability-*'
+WarningsAsErrors: '*'
 HeaderFileExtensions:
   - ''
   - h
   - hh
   - hpp
   - hxx
-ImplementationFileExtensions:        
+ImplementationFileExtensions:
   - c
   - cc
   - cpp
   - cxx
 HeaderFilterRegex: '.*'
 ExcludeHeaderFilterRegex: ''
-FormatStyle:     none
-CheckOptions:    {}
-SystemHeaders:   false
-...
+FormatStyle: none
+CheckOptions: {}
+SystemHeaders: false
