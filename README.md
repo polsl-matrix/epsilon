@@ -4,8 +4,6 @@ epsilon is a native Matrix client with a focus on performance. Minimalist
 by design, it aims to deliver a seamless user experience - you won't even
 know it's running.
 
-TODO: Agree on the project's name.
-
 # How to build the project?
 
 ## Debug mode
