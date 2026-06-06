@@ -1,0 +1,58 @@
+name: Continuous-Deployment
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  Deploy-Application:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          dir: '${{ github.workspace }}/Qt'
+      - name: Save Qt's path to .env
+        run: echo QT_PATH="$QT_ROOT_DIR"
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Clear PKG_CONFIG_PATH
+        shell: bash
+        run: echo "PKG_CONFIG_PATH=" >> $GITHUB_ENV
+      - name: Install Conan
+        uses: conan-io/setup-conan@v1
+      - name: Install python-dotenv
+        run: pip install python-dotenv
+      - name: Install Conan dependencies
+        run: conan install . -s build_type=Release --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
+      - name: Build the CMake preset
+        run: cmake --preset conan-release .
+      - name: Build the project
+        run: cmake --build --preset conan-release
+      - name: Generate Release Tag
+        id: tag
+        run: |
+          TAG_NAME="v$(date +'%Y.%m.%d')-${GITHUB_SHA::7}"
+          echo "release_tag=$TAG_NAME" >> $GITHUB_OUTPUT
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: Release ${{ steps.tag.outputs.release_tag }}
+          body: |
+            Automated deployment from push to main branch.
+            Commit: ${{ github.sha }}
+          draft: false
+          prerelease: false
+          files: |
+            build/conan-debug/bin/*

@@ -1,0 +1,87 @@
+name: Continuous-Integration
+on: [push]
+jobs:
+  Verify-Debug-Build-And-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          dir: '${{ github.workspace }}/Qt'
+      - name: Save Qt's path to .env
+        run: echo QT_PATH="$QT_ROOT_DIR"
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Clear PKG_CONFIG_PATH
+        shell: bash
+        run: echo "PKG_CONFIG_PATH=" >> $GITHUB_ENV
+      - name: Install Conan
+        uses: conan-io/setup-conan@v1
+      - name: Install python-dotenv
+        run: pip install python-dotenv
+      - name: Install Conan dependencies
+        run: conan install . -s build_type=Debug --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
+      - name: Build the CMake preset
+        run: cmake --preset conan-debug .
+      - name: Build the project
+        run: cmake --build --preset conan-debug
+      - name: Run tests
+        run: cd build/Debug && ctest
+  Verify-Release-Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          dir: '${{ github.workspace }}/Qt'
+      - name: Save Qt's path to .env
+        run: echo QT_PATH="$QT_ROOT_DIR"
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Clear PKG_CONFIG_PATH
+        shell: bash
+        run: echo "PKG_CONFIG_PATH=" >> $GITHUB_ENV
+      - name: Install Conan
+        uses: conan-io/setup-conan@v1
+      - name: Install python-dotenv
+        run: pip install python-dotenv
+      - name: Install Conan dependencies
+        run: conan install . -s build_type=Release --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
+      - name: Build the CMake preset
+        run: cmake --preset conan-release .
+      - name: Build the project
+        run: cmake --build --preset conan-release
+  Check-Formatting-And-Linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run clang-tidy
+        uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'
+          tidy-checks: ''
+          thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
+      - name: Fail fast?!
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1
+          
