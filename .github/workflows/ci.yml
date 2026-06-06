@@ -34,7 +34,7 @@ jobs:
       - name: Build the project
         run: cmake --build --preset conan-debug
       - name: Run tests
-        run: .\build\Debug\epsilon_test.exe
+        run: ./build/Debug/epsilon_test.exe
   Verify-Release-Build:
     runs-on: ubuntu-latest
     steps:
