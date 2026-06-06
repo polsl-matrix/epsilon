@@ -58,7 +58,7 @@ jobs:
       - name: Install python-dotenv
         run: pip install python-dotenv
       - name: Install Conan dependencies
-        run: conan install . -s build_type=Debug --build=missing
+        run: conan install . -s build_type=Release --build=missing
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
