@@ -2,6 +2,22 @@ cmake_minimum_required(VERSION 3.23)
 
 project(epsilon VERSION 0.1.0)
 
+set(CORE_SOURCES
+  src/core/event/detachment.cpp
+  src/core/event/event.cpp
+  src/core/event/observer.cpp
+  src/core/event/util/action.cpp
+)
+
+set(APP_SOURCES
+  src/main.cpp
+)
+
+set(SOURCES
+  ${CORE_SOURCES}
+  ${APP_SOURCES}
+)
+
 ### Compiler configuration ###
 
 # Disallow warnings
@@ -26,9 +42,9 @@ qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
 if(APPLE)
-  qt_add_executable(epsilon MACOSX_BUNDLE src/main.cpp)
+  qt_add_executable(epsilon MACOSX_BUNDLE ${SOURCES})
 else()
-  qt_add_executable(epsilon src/main.cpp)
+  qt_add_executable(epsilon ${SOURCES})
 endif()
 
 qt_add_qml_module(epsilon
