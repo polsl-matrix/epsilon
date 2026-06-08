@@ -6,6 +6,6 @@ template <typename... Args> class Observer {
     virtual void Attached();
     virtual void Detached();
 
-    virtual void Update(Args...) = 0;
+    virtual void Update(Args... args) = 0;
 };
 } // namespace epsilon::core::event

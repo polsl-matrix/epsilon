@@ -20,6 +20,10 @@ set(SOURCES
 
 ### Compiler configuration ###
 
+# Export compile commands for clang-tidy
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+
 # Disallow warnings
 if (MSVC)
   add_compile_options(/W4 /WX)

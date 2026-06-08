@@ -1,7 +1,9 @@
 #include "observer.hpp"
 
-template <typename... Args>
-void epsilon::core::event::Observer<Args...>::Attached() {}
+namespace epsilon::core::event {
 
-template <typename... Args>
-void epsilon::core::event::Observer<Args...>::Detached() {}
+template <typename... Args> void Observer<Args...>::Attached() {}
+
+template <typename... Args> void Observer<Args...>::Detached() {}
+
+} // namespace epsilon::core::event

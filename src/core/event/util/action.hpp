@@ -9,9 +9,9 @@ template <typename... Args> class Action : Observer<Args...> {
     std::function<void(Args...)> m_Action;
 
   public:
-    Action(std::function<void(Args...)>);
-    Action(Action<Args...> &&);
+    Action(std::function<void(Args...)> action) noexcept;
+    Action(Action<Args...> &&other) noexcept;
 
-    void Invoke(Args...);
+    void Invoke(Args... args);
 };
 } // namespace epsilon::core::event::util

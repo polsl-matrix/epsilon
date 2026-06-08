@@ -9,7 +9,7 @@
 namespace epsilon::core::event {
 template <typename... Args> class Event {
     struct Slot {
-        size_t id;
+        size_t id; // NOLINT(readability-identifier-length)
         std::unique_ptr<Observer<Args...>> observer;
     };
 
@@ -23,9 +23,9 @@ template <typename... Args> class Event {
     Detachment Attach(std::unique_ptr<Observer<Args...>> &&observer);
 
   private:
-    void DetachById(size_t id);
+    void DetachById(size_t id); // NOLINT(readability-identifier-length)
 
   public:
-    void Invoke(Args...);
+    void Invoke(Args... args);
 };
 } // namespace epsilon::core::event

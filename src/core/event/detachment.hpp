@@ -8,7 +8,7 @@ class Detachment {
     std::function<void()> m_DetachAction;
 
   public:
-    Detachment(std::function<void()> detachAction);
+    Detachment(std::function<void()> detachAction) noexcept;
 
     void Detach();
 };

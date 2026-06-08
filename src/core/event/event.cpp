@@ -1,20 +1,26 @@
 #include "event.hpp"
 
+#include "detachment.hpp"
+#include "observer.hpp"
+
 #include <algorithm>
+#include <cstddef>
+#include <memory>
 
-template <typename... Args>
-epsilon::core::event::Event<Args...>::Event() = default;
+namespace epsilon::core::event {
 
-template <typename... Args> epsilon::core::event::Event<Args...>::~Event() {
+template <typename... Args> Event<Args...>::Event() = default;
+
+template <typename... Args> Event<Args...>::~Event() {
     for (auto &slot : m_Observers) {
         slot.observer->Detached();
     }
 }
 
 template <typename... Args>
-epsilon::core::event::Detachment epsilon::core::event::Event<Args...>::Attach(
-    std::unique_ptr<Observer<Args...>> &&observer) {
-    size_t id = m_NextId;
+Detachment
+Event<Args...>::Attach(std::unique_ptr<Observer<Args...>> &&observer) {
+    size_t id = m_NextId; // NOLINT(readability-identifier-length)
     m_NextId++;
 
     m_Observers.push_back({id, observer});
@@ -25,7 +31,8 @@ epsilon::core::event::Detachment epsilon::core::event::Event<Args...>::Attach(
 }
 
 template <typename... Args>
-void epsilon::core::event::Event<Args...>::DetachById(size_t id) {
+void Event<Args...>::DetachById(
+    size_t id) { // NOLINT(readability-identifier-length)
     auto slot_iterator =
         std::find_if(m_Observers.begin(), m_Observers.end(),
                      [id](auto slot) { return slot.id == id; });
@@ -34,3 +41,5 @@ void epsilon::core::event::Event<Args...>::DetachById(size_t id) {
 
     m_Observers.erase(slot_iterator);
 }
+
+} // namespace epsilon::core::event
