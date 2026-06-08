@@ -2,11 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 
 project(epsilon VERSION 0.1.0)
 
-set(CORE_SOURCES
-  src/core/event/detachment.cpp
-  src/core/event/event.cpp
-  src/core/event/observer.cpp
-  src/core/event/util/action.cpp
+set(LIB_SOURCES
 )
 
 set(APP_SOURCES
@@ -14,8 +10,21 @@ set(APP_SOURCES
 )
 
 set(SOURCES
-  ${CORE_SOURCES}
+  ${LIB_SOURCES}
   ${APP_SOURCES}
+)
+
+set(CORE_TEST_SOURCES
+  src/core/event/event_test.cpp
+)
+
+set(APP_TEST_SOURCES
+  src/test.cpp
+)
+
+set(TEST_SOURCES
+  ${CORE_TEST_SOURCES}
+  ${APP_TEST_SOURCES}
 )
 
 ### Compiler configuration ###
@@ -122,7 +131,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
   add_executable(
     epsilon_test
-    src/test.cpp
+    ${LIB_SOURCES}
+    ${TEST_SOURCES}
   )
 
   target_link_libraries(

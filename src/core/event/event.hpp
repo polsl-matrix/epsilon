@@ -3,6 +3,7 @@
 #include "detachment.hpp"
 #include "observer.hpp"
 
+#include <concepts>
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -11,7 +12,7 @@ namespace epsilon::core::event {
 template <typename... Args> class Event {
     struct Slot {
         size_t id; // NOLINT(readability-identifier-length)
-        std::unique_ptr<Observer<Args...>> observer;
+        std::shared_ptr<Observer<Args...>> observer;
     };
 
     std::vector<Slot> m_Observers;
@@ -21,7 +22,10 @@ template <typename... Args> class Event {
     Event();
     ~Event();
 
-    Detachment Attach(std::unique_ptr<Observer<Args...>> &&observer);
+    Detachment Attach(std::shared_ptr<Observer<Args...>> observer);
+    template<std::derived_from<Observer<Args...>> TObserver, typename... ConstructorArgs>
+    requires std::is_constructible_v<TObserver, ConstructorArgs&&...>
+    Detachment Attach(ConstructorArgs&&... args);
 
   private:
     void DetachById(size_t id); // NOLINT(readability-identifier-length)
@@ -30,3 +34,5 @@ template <typename... Args> class Event {
     void Invoke(Args... args);
 };
 } // namespace epsilon::core::event
+
+#include "event.tpp"

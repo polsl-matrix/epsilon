@@ -1,5 +1,3 @@
-#include "action.hpp"
-
 #include <functional>
 #include <utility>
 
@@ -13,7 +11,7 @@ template <typename... Args>
 Action<Args...>::Action(Action<Args...> &&other) noexcept
     : m_Action(std::move(other.m_Action)) {}
 
-template <typename... Args> void Action<Args...>::Invoke(Args... args) {
+template <typename... Args> void Action<Args...>::Update(Args... args) {
     m_Action(args...);
 }
 
