@@ -3,6 +3,7 @@
 #include "detachment.hpp"
 #include "observer.hpp"
 
+#include <cstddef>
 #include <memory>
 #include <vector>
 
