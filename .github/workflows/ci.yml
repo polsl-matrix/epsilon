@@ -6,11 +6,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15
+      - name: Install GCC 15 and Clang-Tidy 18
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 -y
+          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -52,11 +53,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15
+      - name: Install GCC 15 and Clang-Tidy 18
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 -y
+          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -96,11 +98,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15
+      - name: Install GCC 15 and Clang-Tidy 18
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 -y
+          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -142,4 +145,3 @@ jobs:
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         run: exit 1
-        
