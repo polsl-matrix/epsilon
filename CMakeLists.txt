@@ -33,7 +33,13 @@ endif()
 
 qt_add_qml_module(epsilon
   URI Main
-  QML_FILES src/Main.qml
+  QML_FILES
+        src/Main.qml
+        src/Login.qml
+        src/Expose.qml
+        src/SidebarMenu.qml
+        src/DefaultContent.qml
+        src/ChatContent.qml
 )
 
 target_link_libraries(epsilon 
