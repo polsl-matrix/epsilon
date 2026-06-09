@@ -9,6 +9,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
+          version: 6.11.0
           dir: '${{ github.workspace }}/Qt'
       - name: Save Qt's path to .env
         run: echo QT_PATH="$QT_ROOT_DIR"
@@ -43,6 +44,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
+          version: 6.11.0
           dir: '${{ github.workspace }}/Qt'
       - name: Save Qt's path to .env
         run: echo QT_PATH="$QT_ROOT_DIR"
@@ -72,6 +74,32 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.11.0
+          dir: '${{ github.workspace }}/Qt'
+      - name: Save Qt's path to .env
+        run: echo QT_PATH="$QT_ROOT_DIR"
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Clear PKG_CONFIG_PATH
+        shell: bash
+        run: echo "PKG_CONFIG_PATH=" >> $GITHUB_ENV
+      - name: Install Conan
+        uses: conan-io/setup-conan@v1
+      - name: Install python-dotenv
+        run: pip install python-dotenv
+      - name: Install Conan dependencies
+        run: conan install . -s build_type=Release --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
+      - name: Build the CMake preset
+        run: cmake --preset conan-release .
       - name: Run clang-tidy
         uses: cpp-linter/cpp-linter-action@v2
         id: linter
