@@ -36,6 +36,15 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: '3.23.x'
+      - name: Configure CMake
+        env:
+          CC: gcc-15
+          CXX: g++-15
+        run: >
+          cmake -B build -S . 
+          -DCMAKE_BUILD_TYPE=Release 
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+          -DCMAKE_CXX_CLANG_TIDY="clang-tidy"
       - name: Build the CMake preset
         run: cmake --preset conan-debug .
       - name: Build the project
@@ -83,6 +92,15 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: '3.23.x'
+      - name: Configure CMake
+        env:
+          CC: gcc-15
+          CXX: g++-15
+        run: >
+          cmake -B build -S . 
+          -DCMAKE_BUILD_TYPE=Release 
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+          -DCMAKE_CXX_CLANG_TIDY="clang-tidy"
       - name: Build the CMake preset
         env:
           CC: gcc-15
@@ -128,6 +146,15 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: '3.23.x'
+      - name: Configure CMake
+        env:
+          CC: gcc-15
+          CXX: g++-15
+        run: >
+          cmake -B build -S . 
+          -DCMAKE_BUILD_TYPE=Release 
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+          -DCMAKE_CXX_CLANG_TIDY="clang-tidy"
       - name: Build the CMake preset
         env:
           CC: gcc-15
