@@ -1,4 +1,7 @@
+#include <QCoreApplication>
 #include <QGuiApplication>
+#include <QObject>
+#include <Qt>
 #include <QQmlApplicationEngine>
 
 int main(int argc, char *argv[]) {
@@ -11,5 +14,5 @@ int main(int argc, char *argv[]) {
 
     engine.loadFromModule("Main", "Main");
 
-    return app.exec();
+    return QGuiApplication::exec();
 }
