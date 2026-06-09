@@ -45,7 +45,7 @@ jobs:
         
           # Configure completely from scratch
           cmake -B build -S . \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Build the CMake preset
@@ -161,7 +161,7 @@ jobs:
         
           # Configure completely from scratch
           cmake -B build -S . \
-            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Build the CMake preset
