@@ -12,18 +12,8 @@ jobs:
           sudo apt update
           sudo apt install gcc-15 g++-15 clang-tidy-18 -y
           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.23.x'
-      - name: Configure CMake
-        env:
-          CC: gcc-15
-          CXX: g++-15
-        run: >
-          rm -rf build
-        
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
+      - name: Clear the build directory
+        run: rm -rf build
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -44,13 +34,17 @@ jobs:
         run: pip install python-dotenv
       - name: Install Conan dependencies
         run: conan install . -s build_type=Debug --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
       - name: Build the CMake preset
         run: cmake --preset conan-debug .
       - name: Build the project
         env:
           CC: gcc-15
           CXX: g++-15
-        run: cmake --build --preset conan-debug
+        run: cmake --build --preset conan-debug -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Run tests
         env:
           CC: gcc-15
@@ -67,18 +61,9 @@ jobs:
           sudo apt update
           sudo apt install gcc-15 g++-15 clang-tidy-18 -y
           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.23.x'
-      - name: Configure CMake
-        env:
-          CC: gcc-15
-          CXX: g++-15
+      - name: Clear the build directory
         run: >
           rm -rf build
-        
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -99,6 +84,10 @@ jobs:
         run: pip install python-dotenv
       - name: Install Conan dependencies
         run: conan install . -s build_type=Release --build=missing
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.23.x'
       - name: Build the CMake preset
         env:
           CC: gcc-15
@@ -124,14 +113,8 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: '3.23.x'
-      - name: Configure CMake
-        env:
-          CC: gcc-15
-          CXX: g++-15
-        run: >
-          rm -rf build
-        
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
+      - name: Clear the build directory
+        run: rm -rf build
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
