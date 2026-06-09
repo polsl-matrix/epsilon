@@ -122,6 +122,12 @@ elseif(UNIX AND NOT APPLE)
     )
 endif()
 
+# Force clang to use LLVM's stdlib
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(MyQtApp PRIVATE -stdlib=libc++)
+    target_link_options(MyQtApp PRIVATE -stdlib=libc++)
+endif()
+
 ### Google Test configuration ###
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
