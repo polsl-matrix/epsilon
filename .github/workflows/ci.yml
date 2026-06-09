@@ -44,10 +44,7 @@ jobs:
           rm -rf build
         
           # Configure completely from scratch
-          cmake -B build -S . \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Build the CMake preset
         run: cmake --preset conan-debug .
       - name: Build the project
@@ -103,10 +100,7 @@ jobs:
           rm -rf build
         
           # Configure completely from scratch
-          cmake -B build -S . \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Build the CMake preset
         env:
           CC: gcc-15
@@ -160,10 +154,7 @@ jobs:
           rm -rf build
         
           # Configure completely from scratch
-          cmake -B build -S . \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_CLANG_TIDY="clang-tidy-18;--header-filter=src/.*"
       - name: Build the CMake preset
         env:
           CC: gcc-15
