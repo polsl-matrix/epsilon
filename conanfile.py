@@ -9,6 +9,9 @@ from conan.tools.cmake import cmake_layout, CMakeDeps, CMakeToolchain
 class EpsilonRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     
+    def configure(self):
+        self.settings.compiler.cppstd = "23"
+
     def requirements(self):
         self.requires("gtest/1.17.0")
 
