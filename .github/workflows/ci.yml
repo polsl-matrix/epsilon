@@ -12,6 +12,17 @@ jobs:
           sudo apt update
           sudo apt install gcc-15 g++-15 clang-tidy-22 -y
           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+      - name: Update Clang-Format to version 22
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          
+          sudo ./llvm.sh 22
+          
+          sudo apt-get install -y clang-tidy-22 clang-format-22
+          
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100
       - name: Clear the build directory
         run: rm -rf build
       - name: Install Qt
@@ -61,6 +72,17 @@ jobs:
           sudo apt update
           sudo apt install gcc-15 g++-15 clang-tidy-22 -y
           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+      - name: Update Clang-Format to version 22
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          
+          sudo ./llvm.sh 22
+          
+          sudo apt-get install -y clang-tidy-22 clang-format-22
+          
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100
       - name: Clear the build directory
         run: >
           rm -rf build
@@ -109,6 +131,17 @@ jobs:
           sudo apt update
           sudo apt install gcc-15 g++-15 clang-tidy-22 -y
           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+      - name: Update Clang-Format to version 22
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          
+          sudo ./llvm.sh 22
+          
+          sudo apt-get install -y clang-tidy-22 clang-format-22
+          
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
