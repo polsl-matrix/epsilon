@@ -6,12 +6,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15 and Clang-Tidy 18
+      - name: Install GCC 15 and Clang-Tidy 22
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
-          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+          sudo apt install gcc-15 g++-15 clang-tidy-22 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
       - name: Clear the build directory
         run: rm -rf build
       - name: Install Qt
@@ -55,12 +55,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15 and Clang-Tidy 18
+      - name: Install GCC 15 and Clang-Tidy 22
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
-          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+          sudo apt install gcc-15 g++-15 clang-tidy-22 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
       - name: Clear the build directory
         run: >
           rm -rf build
@@ -103,12 +103,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install GCC 15 and Clang-Tidy 18
+      - name: Install GCC 15 and Clang-Tidy 22
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
-          sudo apt install gcc-15 g++-15 clang-tidy-18 -y
-          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-18 100
+          sudo apt install gcc-15 g++-15 clang-tidy-22 -y
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
