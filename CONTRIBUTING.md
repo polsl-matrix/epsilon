@@ -2,7 +2,7 @@
 
 ## Tooling
 
-The code is in C++ 20. We use `CMake` as the build system, `Conan` as the package
+The code is in C++ 23. We use `CMake` as the build system, `Conan` as the package
 manager, `clang-format` as the formatter and `clang-tidy` as the linter. For issue
 tracking we will probably use `Jira`, although I'd be much happier with 
 `GitHub Issues`, so we'll see. We write unit tests in `Google Test`.

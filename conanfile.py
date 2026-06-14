@@ -21,7 +21,7 @@ class EpsilonRecipe(ConanFile):
         else:
             print(f"Qt's path is \"{os.getenv("QT_PATH")}\"")
         tc.variables["CMAKE_PREFIX_PATH"] = os.getenv("QT_PATH")
-        tc.variables["CMAKE_CXX_STANDARD"] = "20"
+        tc.variables["CMAKE_CXX_STANDARD"] = "23"
         tc.variables["CMAKE_CXX_STANDARD_REQUIRED"] = "TRUE"
         
         tc.generate()
