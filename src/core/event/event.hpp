@@ -23,9 +23,10 @@ template <typename... Args> class Event {
     ~Event();
 
     Detachment Attach(std::shared_ptr<Observer<Args...>> observer);
-    template<std::derived_from<Observer<Args...>> TObserver, typename... ConstructorArgs>
-    requires std::is_constructible_v<TObserver, ConstructorArgs&&...>
-    Detachment Attach(ConstructorArgs&&... args);
+    template <std::derived_from<Observer<Args...>> TObserver,
+              typename... ConstructorArgs>
+        requires std::is_constructible_v<TObserver, ConstructorArgs &&...>
+    Detachment Attach(ConstructorArgs &&...args);
 
   private:
     void DetachById(size_t id); // NOLINT(readability-identifier-length)
