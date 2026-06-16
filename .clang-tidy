@@ -11,8 +11,7 @@ ImplementationFileExtensions:
   - cc
   - cpp
   - cxx
-HeaderFilterRegex: '.*'
-ExcludeHeaderFilterRegex: ''
+HeaderFilterRegex: 'src/.*'
 FormatStyle: none
 CheckOptions: {}
 SystemHeaders: false

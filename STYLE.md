@@ -7,6 +7,25 @@ precedence.
 If there is an unconsidered case, don't make up your own rules on
 the fly. Instead, suggest it in a pull request editing this file.
 
+## OOP
+
+Class names should be UpperCamelCase. Public member variables and
+methods should also be UpperCamelCase. Private member variables
+should be prefixed with `m_` and written in m_UpperCamelCase.
+
+## Includes
+
+If you're writing an implementation file, the first line should
+include the header file you're implementing. Then, you should include
+all the necessary headers internal to the project. Then, you should
+include all the necessary headers from the external libraries.
+Then, you should include all the necessary headers from the standard
+library.
+
+You should try to include all the necessary header files, even if some
+are redundant (e.g., include `string`, even when also including
+`iostream`).
+
 ## File management
 
 Application source is fully contained within the `src` directory.

@@ -1,14 +1,29 @@
 name: Continuous-Integration
-on: [push]
+on: [push, pull_request]
 jobs:
   Verify-Debug-Build-And-Tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install GCC 15
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt update
+          sudo apt install -y gcc-15 g++-15
+      - name: Update LLVM to version 22
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 22 all
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100
+      - name: Clear the build directory
+        run: rm -rf build
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
+          version: 6.11.0
           dir: '${{ github.workspace }}/Qt'
       - name: Save Qt's path to .env
         run: echo QT_PATH="$QT_ROOT_DIR"
@@ -32,17 +47,39 @@ jobs:
       - name: Build the CMake preset
         run: cmake --preset conan-debug .
       - name: Build the project
+        env:
+          CC: gcc-15
+          CXX: g++-15
         run: cmake --build --preset conan-debug
       - name: Run tests
+        env:
+          CC: gcc-15
+          CXX: g++-15
         run: cd build/Debug && ctest
-  Verify-Release-Build:
+  Verify-Release-Build-Also-Formatting-And-Linter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install GCC 15
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt update
+          sudo apt install -y gcc-15 g++-15
+      - name: Update LLVM to version 22
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 22 all
+          sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+          sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100
+      - name: Clear the build directory
+        run: >
+          rm -rf build
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
+          version: 6.11.0
           dir: '${{ github.workspace }}/Qt'
       - name: Save Qt's path to .env
         run: echo QT_PATH="$QT_ROOT_DIR"
@@ -64,14 +101,15 @@ jobs:
         with:
           cmake-version: '3.23.x'
       - name: Build the CMake preset
+        env:
+          CC: gcc-15
+          CXX: g++-15
         run: cmake --preset conan-release .
       - name: Build the project
+        env:
+          CC: gcc-15
+          CXX: g++-15
         run: cmake --build --preset conan-release
-  Check-Formatting-And-Linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Run clang-tidy
         uses: cpp-linter/cpp-linter-action@v2
         id: linter
@@ -84,4 +122,3 @@ jobs:
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         run: exit 1
-          
