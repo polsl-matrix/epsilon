@@ -44,7 +44,7 @@ endif()
 
 ### Qt configuration ###
 
-find_package(Qt6 COMPONENTS Core Gui Quick Qml REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Quick Qml Svg REQUIRED)
 
 qt_standard_project_setup()
 
@@ -64,15 +64,24 @@ qt_add_qml_module(epsilon
   URI Main
   QML_FILES
         src/Main.qml
-        src/Login.qml
+        src/features/login/view/Login.qml
+        src/features/main_page/view/Home.qml
+        src/features/main_page/view/EmptySpace.qml
+        src/features/main_page/view/SideMenu.qml
+  RESOURCES
+        resources/settings.svg
+        resources/search.svg
+        resources/users.svg
+        resources/plus.svg
 )
 
-target_link_libraries(epsilon 
-  PRIVATE 
-    Qt6::Core 
-    Qt6::Gui 
+target_link_libraries(epsilon
+  PRIVATE
+    Qt6::Core
+    Qt6::Gui
     Qt6::Quick
     Qt6::Qml
+    Qt6::Svg
 )
 
 # Disallow warnings
@@ -88,9 +97,9 @@ if(WIN32)
   find_program(WINDEPLOYQT_EXECUTABLE windeployqt PATHS ENV PATH)
   if(WINDEPLOYQT_EXECUTABLE)
     add_custom_command(TARGET epsilon POST_BUILD
-    COMMAND "${WINDEPLOYQT_EXECUTABLE}" 
-      --no-compiler-runtime 
-      --qmldir "${CMAKE_CURRENT_SOURCE_DIR}" 
+    COMMAND "${WINDEPLOYQT_EXECUTABLE}"
+      --no-compiler-runtime
+      --qmldir "${CMAKE_CURRENT_SOURCE_DIR}"
       "$<TARGET_FILE:epsilon>"
     COMMENT "Deploying Qt libraries for Windows..."
   )

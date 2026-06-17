@@ -2,19 +2,14 @@ import QtQuick
 import QtQuick.Window
 
 Window {
-    width: 640
-    height: 480
-    minimumWidth: 600
-    minimumHeight: 330
+    width: 980
+    height: 650
+    minimumWidth: 840
+    minimumHeight: 580
     visible: true
     title: qsTr("epsilon")
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#1d1d1d"
-    }
-
-    Login {
+    Home {
         anchors.fill: parent
     }
 }

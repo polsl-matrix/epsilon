@@ -3,7 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
 
-Item {
+Rectangle {
+    color: "#1d1d1d"
+
     component FormLabel : Text {
         color: "white"
         font.pixelSize: 14
