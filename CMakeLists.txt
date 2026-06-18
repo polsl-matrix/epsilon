@@ -8,8 +8,8 @@ project(epsilon VERSION 0.1.0)
 
 set(SERVICES_SOURCES
   src/services/serialization/iserializable.cpp
-  src/services/serialization/json_serialization_strategy.cpp
   src/services/serialization/serializer.cpp
+  src/services/serialization/json/json_serialization_strategy.cpp
 )
 
 set(LIB_SOURCES

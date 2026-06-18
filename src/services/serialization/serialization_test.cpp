@@ -1,5 +1,5 @@
 #include "serialization_primitive.hpp"
-#include "json_serialization_strategy.hpp"
+#include "json/json_serialization_strategy.hpp"
 #include "iserializable.hpp"
 #include "serializer.hpp"
 
@@ -11,6 +11,7 @@
 #include <vector>
 
 using namespace epsilon::services::matrix::serialization;
+using namespace epsilon::services::matrix::serialization::json;
 
 class MockSerializable : public ISerializable {
     SerializationPrimitive m_primitive;

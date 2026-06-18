@@ -1,6 +1,6 @@
 #include "json_serialization_strategy.hpp"
 
-#include "serialization_primitive.hpp"
+#include "../serialization_primitive.hpp"
 
 #include <format>
 #include <string>
@@ -10,7 +10,7 @@
 template<class... Ts>
 struct overloaded : Ts... { using Ts::operator()...; };
 
-namespace epsilon::services::matrix::serialization {
+namespace epsilon::services::matrix::serialization::json {
 
 std::string JsonSerializationStrategy::Serialize(SerializationPrimitive primitive) const {
     return std::visit(overloaded {

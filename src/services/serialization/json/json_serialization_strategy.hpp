@@ -1,11 +1,11 @@
 #pragma once
 
-#include "serialization_primitive.hpp"
-#include "iserialization_strategy.hpp"
+#include "../serialization_primitive.hpp"
+#include "../iserialization_strategy.hpp"
 
 #include <string>
 
-namespace epsilon::services::matrix::serialization {
+namespace epsilon::services::matrix::serialization::json {
 
 class JsonSerializationStrategy : public ISerializationStrategy {
 public:
