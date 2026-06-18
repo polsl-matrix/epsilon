@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.23)
 
-set (CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(epsilon VERSION 0.1.0)
 
+set(SERVICES_SOURCES
+  src/services/serialization/iserializable.cpp
+  src/services/serialization/json_serialization_strategy.cpp
+  src/services/serialization/serializer.cpp
+)
+
 set(LIB_SOURCES
+  ${SERVICES_SOURCES}
 )
 
 set(APP_SOURCES
@@ -22,12 +29,17 @@ set(CORE_TEST_SOURCES
   src/core/event/event_test.cpp
 )
 
+set(SERVICES_TEST_SOURCES
+  src/services/serialization/serialization_test.cpp
+)
+
 set(APP_TEST_SOURCES
   src/test.cpp
 )
 
 set(TEST_SOURCES
   ${CORE_TEST_SOURCES}
+  ${SERVICES_TEST_SOURCES}
   ${APP_TEST_SOURCES}
 )
 
@@ -41,6 +53,8 @@ else()
 endif()
 
 # TODO: Compiler optimizations
+
+### Libraries ###
 
 ### Qt configuration ###
 
