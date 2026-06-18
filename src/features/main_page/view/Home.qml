@@ -23,6 +23,12 @@ Rectangle {
             SplitView.minimumWidth: 270
             SplitView.maximumWidth: 350
             color: "#111111"
+
+            onLogoutRequested: {
+                if (typeof homeViewBackend !== "undefined") {
+                    homeViewBackend.AttemptLogout()
+                }
+            }
         }
 
         EmptySpace {

@@ -10,12 +10,28 @@ set(LIB_SOURCES
 )
 
 set(APP_SOURCES
-  src/main.cpp
+        src/main.cpp
+        src/features/login/model/LoginModel.cpp
+        src/features/login/model/LoginModel.hpp
+        src/features/login/presenter/LoginPresenter.cpp
+        src/features/login/presenter/LoginPresenter.hpp
+        src/features/login/presenter/contracts/ILoginPresenter.hpp
+        src/features/login/presenter/contracts/ILoginView.hpp
+        src/features/login/view/LoginView.cpp
+        src/features/login/view/LoginView.hpp
+
+        src/features/main_page/presenter/HomePresenter.cpp
+        src/features/main_page/presenter/HomePresenter.hpp
+        src/features/main_page/presenter/contracts/IHomePresenter.hpp
+        src/features/main_page/presenter/contracts/IHomeView.hpp
+        src/features/main_page/view/HomeView.cpp
+        src/features/main_page/view/HomeView.hpp
 )
 
 set(SOURCES
   ${LIB_SOURCES}
   ${APP_SOURCES}
+        src/features/login/model/LoginModel.hpp
 )
 
 set(CORE_TEST_SOURCES
@@ -73,6 +89,8 @@ qt_add_qml_module(epsilon
         resources/search.svg
         resources/users.svg
         resources/plus.svg
+        resources/exit.svg
+        resources/check.svg
 )
 
 target_link_libraries(epsilon
