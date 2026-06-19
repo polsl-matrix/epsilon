@@ -1,23 +1,18 @@
 #pragma once
 
-#include <QObject>
 #include "../presenter/contracts/IHomeView.hpp"
-#include "../presenter/contracts/IHomePresenter.hpp"
+#include <QObject>
 
 class HomeView : public QObject, public IHomeView {
     Q_OBJECT
 
-public:
-    explicit HomeView(QObject* parent = nullptr);
-    void setPresenter(IHomePresenter* presenter);
+  public:
+    explicit HomeView(QObject *parent = nullptr);
 
     Q_INVOKABLE void AttemptLogout();
 
     void ShowLogoutSuccess() override;
 
-    signals:
-        void logoutSucceeded();
-
-private:
-    IHomePresenter* m_presenter;
+  signals:
+    void logoutSucceeded();
 };

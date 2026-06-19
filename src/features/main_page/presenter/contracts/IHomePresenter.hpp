@@ -1,7 +1,7 @@
 #pragma once
 
 class IHomePresenter {
-public:
+  public:
     virtual ~IHomePresenter() = default;
     virtual void HandleLogout() = 0;
 };

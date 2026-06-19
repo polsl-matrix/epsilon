@@ -11,6 +11,10 @@ set(LIB_SOURCES
 
 set(APP_SOURCES
         src/main.cpp
+
+        src/router/PageRouter.cpp
+        src/router/PageRouter.hpp
+
         src/features/login/model/LoginModel.cpp
         src/features/login/model/LoginModel.hpp
         src/features/login/presenter/LoginPresenter.cpp

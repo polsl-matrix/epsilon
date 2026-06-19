@@ -3,7 +3,8 @@
 #include <string>
 
 class ILoginPresenter {
-public:
+  public:
     virtual ~ILoginPresenter() = default;
-    virtual void HandleLogin(const std::string& email, const std::string& password) = 0;
+    virtual void HandleLogin(const std::string &email,
+                             const std::string &password) = 0;
 };

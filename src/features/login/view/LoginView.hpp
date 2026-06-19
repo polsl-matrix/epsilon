@@ -1,30 +1,32 @@
 #pragma once
 
+#include "../presenter/contracts/ILoginPresenter.hpp"
+#include "../presenter/contracts/ILoginView.hpp"
 #include <QObject>
 #include <QString>
-#include "../presenter/contracts/ILoginView.hpp"
-#include "../presenter/contracts/ILoginPresenter.hpp"
+#include <memory>
 
 class LoginView : public QObject, public ILoginView {
     Q_OBJECT
 
-public:
-    explicit LoginView(QObject* parent = nullptr);
-    void setPresenter(ILoginPresenter* presenter);
+  public:
+    explicit LoginView(QObject *parent = nullptr);
+    void setPresenter(std::shared_ptr<ILoginPresenter> presenter);
 
-    Q_INVOKABLE void AttemptLogin(const QString& email, const QString& password);
+    Q_INVOKABLE void AttemptLogin(const QString &email,
+                                  const QString &password);
 
-    void ShowLoginError(const std::string& error) override;
+    void ShowLoginError(const std::string &error) override;
     void ShowLoginSuccess() override;
 
-public slots:
+  public slots:
     void displayLogoutSuccess();
 
-    signals:
-        void loginFailed(const QString& errorMessage);
+  signals:
+    void loginFailed(const QString &errorMessage);
     void loginSucceeded();
     void showSuccessPopup();
 
-private:
-    ILoginPresenter* m_presenter;
+  private:
+    std::shared_ptr<ILoginPresenter> m_presenter;
 };

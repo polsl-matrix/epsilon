@@ -2,12 +2,13 @@
 
 #include "contracts/IHomePresenter.hpp"
 #include "contracts/IHomeView.hpp"
+#include <memory>
 
 class HomePresenter : public IHomePresenter {
-public:
-    explicit HomePresenter(IHomeView* view);
+  public:
+    explicit HomePresenter(std::weak_ptr<IHomeView> view);
     void HandleLogout() override;
 
-private:
-    IHomeView* m_view;
+  private:
+    std::weak_ptr<IHomeView> m_view;
 };
