@@ -38,7 +38,7 @@ public:
 
     template<class TBody, class TResult, class TError>
         requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
-    void Execute(const Request<TBody, TResult>& request, std::function<void(std::optional<RequestManager::Reply<TResult, TError>>)> callback) const;
+    void Execute(const Request<TBody, TResult, TError>& request, std::function<void(std::optional<RequestManager::Reply<TResult, TError>>)> callback) const;
 
     std::string GetBaselineUrl() const;
 };
