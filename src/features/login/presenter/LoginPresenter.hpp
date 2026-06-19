@@ -1,9 +1,12 @@
 #pragma once
 
+#include "../../../core/event/detachment.hpp"
 #include "../model/LoginModel.hpp"
 #include "contracts/ILoginPresenter.hpp"
 #include "contracts/ILoginView.hpp"
+
 #include <memory>
+#include <string>
 
 class LoginPresenter : public ILoginPresenter {
   public:
@@ -13,6 +16,7 @@ class LoginPresenter : public ILoginPresenter {
                      const std::string &password) override;
 
   private:
-    std::weak_ptr<ILoginView> m_view;
-    std::shared_ptr<LoginModel> m_model;
+    std::weak_ptr<ILoginView> m_View;
+    std::shared_ptr<LoginModel> m_Model;
+    epsilon::core::event::Detachment m_LoginRequestDetachment;
 };

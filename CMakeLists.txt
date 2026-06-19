@@ -6,7 +6,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(epsilon VERSION 0.1.0)
 
+set(CORE_SOURCES
+  src/core/event/detachment.cpp
+)
+
 set(LIB_SOURCES
+  ${CORE_SOURCES}
 )
 
 set(APP_SOURCES

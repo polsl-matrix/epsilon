@@ -1,9 +1,9 @@
-#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <Qt>
+
 #include <memory>
 
 #include "src/features/login/model/LoginModel.hpp"
@@ -23,22 +23,22 @@ int main(int argc, char *argv[]) {
 
     auto loginModel = std::make_shared<LoginModel>();
     auto loginView = std::make_shared<LoginView>();
+
     auto loginPresenter =
         std::make_shared<LoginPresenter>(loginView, loginModel);
-    loginView->setPresenter(loginPresenter);
 
     auto homeView = std::make_shared<HomeView>();
     auto homePresenter = std::make_shared<HomePresenter>(homeView);
 
     QObject::connect(loginView.get(), &LoginView::loginSucceeded,
                      pageRouter.get(), [pageRouter]() {
-                         pageRouter->navigateTo(
+                         pageRouter->NavigateTo(
                              "features/main_page/view/Home.qml");
                      });
 
     QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
                      pageRouter.get(), [pageRouter]() {
-                         pageRouter->navigateTo(
+                         pageRouter->NavigateTo(
                              "features/login/view/Login.qml");
                      });
 

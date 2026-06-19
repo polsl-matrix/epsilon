@@ -1,17 +1,17 @@
 #pragma once
 
-#include "../presenter/contracts/ILoginPresenter.hpp"
 #include "../presenter/contracts/ILoginView.hpp"
+
 #include <QObject>
 #include <QString>
-#include <memory>
+
+#include <string>
 
 class LoginView : public QObject, public ILoginView {
     Q_OBJECT
 
   public:
     explicit LoginView(QObject *parent = nullptr);
-    void setPresenter(std::shared_ptr<ILoginPresenter> presenter);
 
     Q_INVOKABLE void AttemptLogin(const QString &email,
                                   const QString &password);
@@ -23,10 +23,7 @@ class LoginView : public QObject, public ILoginView {
     void displayLogoutSuccess();
 
   signals:
-    void loginFailed(const QString &errorMessage);
+    void loginFailed(const QString &error_message);
     void loginSucceeded();
     void showSuccessPopup();
-
-  private:
-    std::shared_ptr<ILoginPresenter> m_presenter;
 };
