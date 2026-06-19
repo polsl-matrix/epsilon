@@ -1,13 +1,15 @@
 #pragma once
 
+#include "raw_reply.hpp"
 #include "raw_request.hpp"
-#include "../../serialization/serialization_primitive.hpp"
+
+#include <functional>
 
 namespace epsilon::services::matrix::requests {
 
 class IRawRequestManager {
 public:
-    virtual serialization::SerializationPrimitive Execute(RawRequest&& request) const = 0;
+    virtual void Execute(RawRequest&& request, std::function<void(RawReply)> callback) = 0;
 };
 
 }

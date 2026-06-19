@@ -36,7 +36,7 @@ public:
 
     template<class TBody, class TResult>
         requires std::derived_from<TBody, serialization::ISerializable>
-    TResult Execute(const Request<TBody, TResult>& request) const;
+    void Execute(const Request<TBody, TResult>& request, std::function<void(TResult)> callback) const;
 };
 
 }

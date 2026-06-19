@@ -30,7 +30,6 @@ template<>
         throw DeserializationUnexpectedPrimitiveException(Object{}, primitive);
     }
     
-    // Extracted using the wrapper's .get() method
     const auto& wrapped_obj = std::get<RObject>(primitive);
     const Object& obj = wrapped_obj.get(); 
     ::DummyUserType result;
@@ -62,7 +61,6 @@ template<>
             throw DeserializationUnexpectedPrimitiveException(Array{}, users_primitive);
         }
         
-        // Extracted using the wrapper's .get() method
         const auto& wrapped_arr = std::get<RArray>(users_primitive);
         const Array& array_data = wrapped_arr.get();
         result.users.reserve(array_data.values.size());
@@ -92,7 +90,6 @@ TEST(JsonDeserializationStrategyTest, DeserializesPrimitivesCorrectly) {
     auto primitive = strategy.Deserialize(json_input);
     ASSERT_TRUE(std::holds_alternative<RObject>(primitive));
     
-    // Unwrap the top-level object via .get()
     const auto& obj = std::get<RObject>(primitive).get();
     
     EXPECT_EQ(std::get<String>(obj.values.at("str")).value, "hejo");
@@ -109,7 +106,6 @@ TEST(JsonDeserializationStrategyTest, DeserializesNestedArrayCorrectly) {
     auto primitive = strategy.Deserialize(json_input);
     ASSERT_TRUE(std::holds_alternative<RArray>(primitive));
     
-    // Unwrap the top-level array via .get()
     const auto& arr = std::get<RArray>(primitive).get();
     ASSERT_EQ(arr.values.size(), 3);
     

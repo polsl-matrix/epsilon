@@ -13,10 +13,20 @@ set(SERVICES_SOURCES
   src/services/serialization/deserialization_exception.cpp
   src/services/serialization/json/json_serialization_strategy.cpp
   src/services/serialization/json/json_deserialization_strategy.cpp
+
+  src/services/matrix/requests/request.cpp
+  src/services/matrix/requests/request_manager.cpp
+  src/services/matrix/requests/authenticated_request_manager.cpp
+  src/services/matrix/requests/qt_raw_request_manager.cpp
+)
+
+set(UTIL_SOURCES
+  src/util/qt.cpp
 )
 
 set(LIB_SOURCES
   ${SERVICES_SOURCES}
+  ${UTIL_SOURCES}
 )
 
 set(APP_SOURCES
@@ -91,6 +101,7 @@ target_link_libraries(epsilon
     Qt6::Gui 
     Qt6::Quick
     Qt6::Qml
+    Qt6::Network
 )
 
 # Disallow warnings
@@ -173,6 +184,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       Qt6::Gui 
       Qt6::Quick
       Qt6::Qml
+      Qt6::Network
   )
 
   include(GoogleTest)

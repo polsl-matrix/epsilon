@@ -1,3 +1,5 @@
+#pragma once
+
 namespace epsilon::services::matrix::requests {
 
 enum class HttpMethod {

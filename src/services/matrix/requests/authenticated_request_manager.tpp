@@ -39,10 +39,10 @@ std::unordered_map<std::string, std::string> AuthenticatedRequestManager::Authen
 // AuthenticatedRequestManager implementations
 template<class TBody, class TResult>
     requires std::derived_from<TBody, serialization::ISerializable>
-TResult AuthenticatedRequestManager::Execute(const Request<TBody, TResult>& request) const {
+void AuthenticatedRequestManager::Execute(const Request<TBody, TResult>& request, std::function<void(TResult)> callback) const {
     AuthenticatedRequestProxy<TBody, TResult> auth_request(request, m_AccessToken);
     
-    return m_InnerManager.Execute(auth_request);
+    m_InnerManager.Execute(auth_request, callback);
 }
 
 }
