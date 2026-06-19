@@ -20,7 +20,10 @@ struct Null   { };
 struct Array;
 struct Object;
 
-using SerializationPrimitive = std::variant<String, Number, True, False, Null, RecursiveWrapper<Array>, RecursiveWrapper<Object>>;
+using RArray = RecursiveWrapper<Array>;
+using RObject = RecursiveWrapper<Object>;
+
+using SerializationPrimitive = std::variant<String, Number, True, False, Null, RArray, RObject>;
 
 struct Array {
   std::vector<SerializationPrimitive> values;
