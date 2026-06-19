@@ -6,16 +6,18 @@
 #include "../../serialization/iserializable.hpp"
 
 #include <concepts>
+#include <expected>
 #include <format>
-#include <iostream>
+#include <functional>
+#include <optional>
 #include <unordered_map>
 #include <utility>
 
 namespace epsilon::services::matrix::requests {
 
-template<class TBody, class TResult>
-    requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult>
-void RequestManager::Execute(const Request<TBody, TResult>& request, std::function<void(TResult)> callback) const {
+template<class TBody, class TResult, class TError>
+    requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
+void RequestManager::Execute(const Request<TBody, TResult>& request, std::function<void(std::optional<RequestManager::Reply<TResult, TError>>)> callback) const {
     auto raw_request = RawRequest {
         request.Method,
         std::format("{}/{}", m_BaselineUrl, request.Endpoint),
@@ -26,12 +28,25 @@ void RequestManager::Execute(const Request<TBody, TResult>& request, std::functi
     };
 
     m_RawRequestManager->Execute(std::move(raw_request), [this, callback](RawReply reply) {
+        if(reply.StatusCode == 0) {
+            callback(std::nullopt);
+            return;
+        }
+
         if(reply.StatusCode >= 200 && reply.StatusCode < 300) {
             TResult deserialized = this->m_Deserializer->Deserialize<TResult>(reply.Body);
 
-            callback();
+            callback(Reply<TResult, TError> {
+                reply.StatusCode,
+                deserialized
+            });
         } else {
-            std::cerr << "TODO: Implement error handling for HTTP requests\n";
+            TError deserialized = this->m_Deserializer->Deserialize<TError>(reply.Body);
+
+            callback(Reply<TResult, TError> {
+                reply.StatusCode,
+                std::unexpected(deserialized)
+            });
         }
     });
 }

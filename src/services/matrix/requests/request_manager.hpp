@@ -8,8 +8,10 @@
 #include "../../serialization/deserializer.hpp"
 
 #include <concepts>
+#include <expected>
 #include <functional>
 #include <memory>
+#include <optional>
 
 namespace epsilon::services::matrix::requests {
 
@@ -28,13 +30,15 @@ public:
         std::unique_ptr<serialization::Deserializer>&& deserializer
     );
 
-    // TODO: Add another generic argument for a TBody when the server returns an error
-    // We'll also probably have to return something more than a bare TResult
-    // like a custom Reply<TResult, TError> class, which would also provide a status code
-    // and make the result a std::expected with TError on the other side.
-    template<class TBody, class TResult>
-        requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult>
-    void Execute(const Request<TBody, TResult>& request, std::function<void(TResult)> callback) const;
+    template<class TResult, class TError>
+    struct Reply {
+        int StatusCode;
+        std::expected<TResult, TError> Body;
+    };
+
+    template<class TBody, class TResult, class TError>
+        requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
+    void Execute(const Request<TBody, TResult>& request, std::function<void(std::optional<RequestManager::Reply<TResult, TError>>)> callback) const;
 
     std::string GetBaselineUrl() const;
 };
