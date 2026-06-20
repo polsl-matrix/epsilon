@@ -27,14 +27,9 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/qt_raw_request_manager.cpp
 )
 
-set(UTIL_SOURCES
-  src/util/qt.cpp
-)
-
 set(LIB_SOURCES
   ${CORE_SOURCES}
   ${SERVICES_SOURCES}
-  ${UTIL_SOURCES}
 )
 
 set(APP_SOURCES

@@ -1,6 +1,5 @@
 #include "qt_raw_request_manager.hpp"
 
-#include "../../../util/qt.hpp"
 #include "http_method.hpp"
 #include "raw_reply.hpp"
 #include "raw_request.hpp"
@@ -10,6 +9,7 @@
 #include <stdexcept>
 #include <utility>
 
+#include <QByteArray>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -25,8 +25,8 @@ void QtRawRequestManager::Execute(RawRequest &&raw_request,
     QNetworkRequest request;
     request.setUrl(QUrl(QString::fromStdString(raw_request.Url)));
     for (const auto &[header, value] : raw_request.Headers) {
-        request.setRawHeader(util::qt::StdStringToQByteArray(header),
-                             util::qt::StdStringToQByteArray(value));
+        request.setRawHeader(QByteArray::fromStdString(header),
+                             QByteArray::fromStdString(value));
     }
 
     QNetworkReply *reply = PerformRequest(request, raw_request);
@@ -74,7 +74,7 @@ QtRawRequestManager::PerformRequest(const QNetworkRequest &request,
     case HttpMethod::GET:
         if (raw_request.Body.has_value()) {
             return m_NetworkAccessManager.get(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+                request, QByteArray::fromStdString(*raw_request.Body));
         } else {
             return m_NetworkAccessManager.get(request);
         }
@@ -83,7 +83,7 @@ QtRawRequestManager::PerformRequest(const QNetworkRequest &request,
     case HttpMethod::POST:
         if (raw_request.Body.has_value()) {
             return m_NetworkAccessManager.post(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+                request, QByteArray::fromStdString(*raw_request.Body));
         } else {
             return m_NetworkAccessManager.post(request, QByteArray());
         }
@@ -92,7 +92,7 @@ QtRawRequestManager::PerformRequest(const QNetworkRequest &request,
     case HttpMethod::PUT:
         if (raw_request.Body.has_value()) {
             return m_NetworkAccessManager.put(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+                request, QByteArray::fromStdString(*raw_request.Body));
         } else {
             return m_NetworkAccessManager.put(request, QByteArray());
         }

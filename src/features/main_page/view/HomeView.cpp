@@ -1,4 +1,6 @@
 #include "HomeView.hpp"
+#include <qobject.h>
+#include <qtmetamacros.h>
 
 HomeView::HomeView(QObject *parent) : QObject(parent) {}
 
