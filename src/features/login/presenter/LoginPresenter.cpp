@@ -1,19 +1,19 @@
 #include "LoginPresenter.hpp"
 #include "../../../core/event/util/action.hpp"
+#include "../model/LoginModel.hpp"
 #include "contracts/ILoginView.hpp"
 
 #include <memory>
 #include <string>
+#include <utility>
 
 LoginPresenter::LoginPresenter(std::weak_ptr<ILoginView> view,
                                std::shared_ptr<LoginModel> model)
     : m_View(std::move(view)), m_Model(std::move(model)),
-      // Inicjalizujemy detachment puste, nadpiszemy je zaraz jeśli widok jest
-      // dostępny
       m_LoginRequestDetachment([]() {}) {
 
-    if (auto v = m_View.lock()) {
-        m_LoginRequestDetachment = v->OnLoginRequested.Attach<
+    if (auto view_ptr = m_View.lock()) {
+        m_LoginRequestDetachment = view_ptr->OnLoginRequested.template Attach<
             epsilon::core::event::util::Action<std::string, std::string>>(
             [this](std::string email, std::string password) {
                 HandleLogin(email, password);

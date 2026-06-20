@@ -1,5 +1,7 @@
 #include "LoginView.hpp"
 
+#include <string>
+
 LoginView::LoginView(QObject *parent) : QObject(parent) {}
 
 void LoginView::AttemptLogin(const QString &email, const QString &password) {
