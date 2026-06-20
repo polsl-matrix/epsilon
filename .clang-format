@@ -186,7 +186,6 @@ IntegerLiteralSeparator:
   DecimalMaxDigitsRemove: 0
   Hex:             0
   HexMinDigitsInsert: 0
-  HexMaxDigitsRemove: 0
   BinaryMinDigits: 0
   DecimalMinDigits: 0
   HexMinDigits:    0
