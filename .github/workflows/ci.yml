@@ -57,7 +57,7 @@ jobs:
           CXX: g++-15
         run: cd build/Debug && ctest
   Verify-Release-Build-Also-Formatting-And-Linter:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
