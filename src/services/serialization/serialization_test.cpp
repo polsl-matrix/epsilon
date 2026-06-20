@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 
+#include <format>
 #include <memory>
 #include <string>
 #include <unordered_map>
