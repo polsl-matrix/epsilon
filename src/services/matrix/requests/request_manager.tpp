@@ -39,7 +39,10 @@ void RequestManager::Execute(const Request<TBody, TResult, TError>& request, std
             return;
         }
 
-        if(reply.StatusCode >= 200 && reply.StatusCode < 300) {
+        constexpr int http_status_ok = 200;
+        constexpr int http_status_redirect = 300;
+
+        if (reply.StatusCode >= http_status_ok && reply.StatusCode < http_status_redirect) {
             TResult deserialized = deserializer->Deserialize<TResult>(reply.Body.value_or(""));
             
             callback(Reply<TResult, TError> {

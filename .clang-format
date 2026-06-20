@@ -82,7 +82,6 @@ AttributeMacros:
   - __capability
 BinPackArguments: true
 BinPackLongBracedList: true
-BinPackParameters: BinPack
 BitFieldColonSpacing: Both
 BracedInitializerIndentWidth: -1
 BraceWrapping:
