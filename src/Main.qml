@@ -1,20 +1,27 @@
 import QtQuick
 import QtQuick.Window
+import QtQuick.Controls
 
 Window {
-    width: 640
-    height: 480
-    minimumWidth: 600
-    minimumHeight: 330
+    id: mainWindow
+    width: 980
+    height: 650
+    minimumWidth: 840
+    minimumHeight: 580
     visible: true
     title: qsTr("epsilon")
 
-    Rectangle {
+    StackView {
+        id: rootStack
         anchors.fill: parent
-        color: "#1d1d1d"
+        initialItem: "features/login/view/Login.qml"
     }
 
-    Login {
-        anchors.fill: parent
+    Connections {
+        target: typeof pageRouter !== "undefined" ? pageRouter : null
+
+        function onNavigateRequested(path) {
+            rootStack.replace(path)
+        }
     }
 }
