@@ -11,7 +11,8 @@ ImplementationFileExtensions:
   - cc
   - cpp
   - cxx
-HeaderFilterRegex: 'src/.*'
+  - tpp
+HeaderFilterRegex: '^(.*/src/.*)$'
 FormatStyle: none
 CheckOptions: {}
 SystemHeaders: false
