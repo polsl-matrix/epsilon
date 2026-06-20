@@ -1,4 +1,4 @@
-#include "HomeView.hpp"
+#include "home_view.hpp"
 #include <qobject.h>
 #include <qtmetamacros.h>
 

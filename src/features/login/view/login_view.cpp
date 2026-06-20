@@ -1,4 +1,4 @@
-#include "LoginView.hpp"
+#include "login_view.hpp"
 
 #include <qobject.h>
 #include <qtmetamacros.h>

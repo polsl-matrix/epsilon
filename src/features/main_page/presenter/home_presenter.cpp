@@ -1,5 +1,5 @@
-#include "HomePresenter.hpp"
-#include "src/features/main_page/presenter/contracts/IHomeView.hpp"
+#include "home_presenter.hpp"
+#include "src/features/main_page/presenter/contracts/ihome_view.hpp"
 #include <memory>
 #include <utility>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../presenter/contracts/IHomeView.hpp"
+#include "../presenter/contracts/ihome_view.hpp"
 #include <QObject>
 
 class HomeView : public QObject, public IHomeView {

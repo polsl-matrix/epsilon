@@ -1,7 +1,7 @@
 #pragma once
 
-#include "contracts/IHomePresenter.hpp"
-#include "contracts/IHomeView.hpp"
+#include "contracts/ihome_presenter.hpp"
+#include "contracts/ihome_view.hpp"
 #include <memory>
 
 class HomePresenter : public IHomePresenter {

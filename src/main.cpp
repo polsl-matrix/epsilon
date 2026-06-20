@@ -6,14 +6,14 @@
 
 #include <memory>
 
-#include "src/features/login/model/LoginModel.hpp"
-#include "src/features/login/presenter/LoginPresenter.hpp"
-#include "src/features/login/view/LoginView.hpp"
+#include "src/features/login/model/login_model.hpp"
+#include "src/features/login/presenter/login_presenter.hpp"
+#include "src/features/login/view/login_view.hpp"
 
-#include "src/features/main_page/presenter/HomePresenter.hpp"
-#include "src/features/main_page/view/HomeView.hpp"
+#include "src/features/main_page/presenter/home_presenter.hpp"
+#include "src/features/main_page/view/home_view.hpp"
 
-#include "src/router/PageRouter.hpp"
+#include "src/router/page_router.hpp"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);

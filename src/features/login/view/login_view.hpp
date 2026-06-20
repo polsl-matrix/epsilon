@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../presenter/contracts/ILoginView.hpp"
+#include "../presenter/contracts/ilogin_view.hpp"
 
 #include <QObject>
 #include <QString>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "contracts/ILoginView.hpp"
-#include "../model/LoginModel.hpp"
+#include "contracts/ilogin_view.hpp"
+#include "../model/login_model.hpp"
 #include "../../../core/event/detachment.hpp"
 
 #include <memory>

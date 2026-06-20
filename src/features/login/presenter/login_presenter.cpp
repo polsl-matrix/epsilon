@@ -1,7 +1,7 @@
-#include "LoginPresenter.hpp"
+#include "login_presenter.hpp"
 #include "../../../core/event/util/action.hpp"
-#include "../model/LoginModel.hpp"
-#include "contracts/ILoginView.hpp"
+#include "../model/login_model.hpp"
+#include "contracts/ilogin_view.hpp"
 
 #include <memory>
 #include <string>
