@@ -8,9 +8,9 @@ class PageRouter : public QObject {
   public:
     explicit PageRouter(QObject *parent = nullptr);
 
-  public slots:
+  
     void NavigateTo(const QString &path);
 
   signals:
-    void navigateRequested(const QString &path);
+    void navigateRequested(const QString &_t1);
 };

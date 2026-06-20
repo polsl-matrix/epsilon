@@ -1,5 +1,7 @@
 #include "LoginView.hpp"
 
+#include <qobject.h>
+#include <qtmetamacros.h>
 #include <string>
 
 LoginView::LoginView(QObject *parent) : QObject(parent) {}

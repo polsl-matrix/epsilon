@@ -11,6 +11,10 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
           sudo apt update
           sudo apt install -y gcc-15 g++-15
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-15 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-15 100
+          sudo update-alternatives --set gcc /usr/bin/gcc-15
+          sudo update-alternatives --set g++ /usr/bin/g++-15
       - name: Update LLVM to version 22
         run: |
           wget https://apt.llvm.org/llvm.sh
@@ -50,7 +54,7 @@ jobs:
         env:
           CC: gcc-15
           CXX: g++-15
-        run: cmake --build --preset conan-debug
+        run: cmake --build --preset conan-debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="--gcc-toolchain=/usr/lib/gcc/x86_64-linux-gnu/15"
       - name: Run tests
         env:
           CC: gcc-15

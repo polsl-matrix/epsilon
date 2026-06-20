@@ -10,5 +10,5 @@ class HomePresenter : public IHomePresenter {
     void HandleLogout() override;
 
   private:
-    std::weak_ptr<IHomeView> m_view;
+    std::weak_ptr<IHomeView> m_View;
 };

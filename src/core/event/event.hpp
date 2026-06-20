@@ -6,6 +6,7 @@
 #include <concepts>
 #include <cstddef>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace epsilon::core::event {
@@ -23,6 +24,7 @@ template <typename... Args> class Event {
     ~Event();
 
     Detachment Attach(std::shared_ptr<Observer<Args...>> observer);
+
     template <std::derived_from<Observer<Args...>> TObserver,
               typename... ConstructorArgs>
         requires std::is_constructible_v<TObserver, ConstructorArgs &&...>
@@ -34,6 +36,6 @@ template <typename... Args> class Event {
   public:
     void Invoke(Args... args);
 };
-} // namespace epsilon::core::event
+}
 
 #include "event.tpp"

@@ -15,7 +15,7 @@ LoginPresenter::LoginPresenter(std::weak_ptr<ILoginView> view,
     if (auto view_ptr = m_View.lock()) {
         m_LoginRequestDetachment = view_ptr->OnLoginRequested.template Attach<
             epsilon::core::event::util::Action<std::string, std::string>>(
-            [this](std::string email, std::string password) {
+            [this](const std::string &email, const std::string &password) {
                 HandleLogin(email, password);
             });
     }
@@ -28,14 +28,19 @@ void LoginPresenter::HandleLogin(const std::string &email,
         return;
     }
 
-    if (email.empty() || password.empty()) {
-        view->ShowLoginError("Pola nie mogą być puste.");
+    if (email.empty()) {
+        view->ShowLoginError("Email cannot be empty");
+        return;
+    }
+
+    if (password.empty()) {
+        view->ShowLoginError("Password cannot be empty");
         return;
     }
 
     if (m_Model && m_Model->Authenticate(email, password)) {
         view->ShowLoginSuccess();
     } else {
-        view->ShowLoginError("Nieprawidłowy email lub hasło.");
+        view->ShowLoginError("Incorrect email or password");
     }
 }

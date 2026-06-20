@@ -19,11 +19,11 @@ class LoginView : public QObject, public ILoginView {
     void ShowLoginError(const std::string &error) override;
     void ShowLoginSuccess() override;
 
-  public slots:
+  
     void displayLogoutSuccess();
 
   signals:
-    void loginFailed(const QString &error_message);
+    void loginFailed(const QString &_t1);
     void loginSucceeded();
     void showSuccessPopup();
 };
