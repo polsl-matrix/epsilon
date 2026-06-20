@@ -1,1 +1,0 @@
-Get-ChildItem -Recurse -Include *.cpp, *.h, *.qml | ForEach-Object { clang-format -i $_.FullName }

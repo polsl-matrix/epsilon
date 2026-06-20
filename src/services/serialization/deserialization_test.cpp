@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <memory>
 #include <string>
 #include <variant>
 #include <vector>
@@ -79,10 +78,12 @@ Deserialize<::DummyNestedType>(SerializationPrimitive primitive) {
 
 } // namespace epsilon::services::matrix::serialization
 
-TEST(JsonDeserializationStrategyTest, DeserializesPrimitivesCorrectly) {
-    JsonDeserializationStrategy strategy;
+// NOLINTBEGIN(readability-function-cognitive-complexity)
 
-    std::string json_input = R"({
+TEST(JsonDeserializationStrategyTest, DeserializesPrimitivesCorrectly) {
+    const JsonDeserializationStrategy strategy;
+
+    const std::string json_input = R"({
         "str": "hejo",
         "num": 42.67,
         "flag_true": true,
@@ -103,8 +104,8 @@ TEST(JsonDeserializationStrategyTest, DeserializesPrimitivesCorrectly) {
 }
 
 TEST(JsonDeserializationStrategyTest, DeserializesNestedArrayCorrectly) {
-    JsonDeserializationStrategy strategy;
-    std::string json_input = "[10, \"mixed\", true]";
+    const JsonDeserializationStrategy strategy;
+    const std::string json_input = "[10, \"mixed\", true]";
 
     auto primitive = strategy.Deserialize(json_input);
     ASSERT_TRUE(std::holds_alternative<RArray>(primitive));
@@ -118,8 +119,8 @@ TEST(JsonDeserializationStrategyTest, DeserializesNestedArrayCorrectly) {
 }
 
 TEST(JsonDeserializationStrategyTest, ThrowsOnMalformedJsonSyntax) {
-    JsonDeserializationStrategy strategy;
-    std::string malformed_json = "{ name: \"missing_quotes_on_key\" ";
+    const JsonDeserializationStrategy strategy;
+    const std::string malformed_json = "{ name: \"missing_quotes_on_key\" ";
 
     EXPECT_THROW(
         {
@@ -136,9 +137,9 @@ TEST(JsonDeserializationStrategyTest, ThrowsOnMalformedJsonSyntax) {
 TEST(DeserializerTest, StaticConstructAndPipelineIntegration) {
     auto deserializer = Deserializer::Construct<JsonDeserializationStrategy>();
 
-    std::string json_payload = "{\"name\":\"Alice\",\"score\":98.5}";
+    const std::string json_payload = "{\"name\":\"Alice\",\"score\":98.5}";
 
-    DummyUserType user = deserializer.Deserialize<DummyUserType>(json_payload);
+    const auto user = deserializer.Deserialize<DummyUserType>(json_payload);
 
     EXPECT_EQ(user.name, "Alice");
     EXPECT_DOUBLE_EQ(user.score, 98.5);
@@ -147,14 +148,14 @@ TEST(DeserializerTest, StaticConstructAndPipelineIntegration) {
 TEST(DeserializerTest, DeserializesNestedTypeStructure) {
     auto deserializer = Deserializer::Construct<JsonDeserializationStrategy>();
 
-    std::string complex_json = R"({
+    const std::string complex_json = R"({
         "users": [
             {"name": "Bob", "score": 85.0},
             {"name": "Charlie", "score": 92.3}
         ]
     })";
 
-    DummyNestedType nested_data =
+    const auto nested_data =
         deserializer.Deserialize<DummyNestedType>(complex_json);
 
     ASSERT_EQ(nested_data.users.size(), 2);
@@ -165,3 +166,5 @@ TEST(DeserializerTest, DeserializesNestedTypeStructure) {
     EXPECT_EQ(nested_data.users[1].name, "Charlie");
     EXPECT_DOUBLE_EQ(nested_data.users[1].score, 92.3);
 }
+
+// NOLINTEND(readability-function-cognitive-complexity)

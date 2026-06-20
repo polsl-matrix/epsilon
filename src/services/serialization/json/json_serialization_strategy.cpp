@@ -2,6 +2,7 @@
 
 #include "../serialization_primitive.hpp"
 
+#include <cstddef>
 #include <format>
 #include <string>
 #include <variant>
@@ -22,7 +23,7 @@ JsonSerializationStrategy::Serialize(SerializationPrimitive primitive) const {
             [](True) { return std::string("true"); },
             [](False) { return std::string("false"); },
             [](Null) { return std::string("null"); },
-            [this](Array array) {
+            [this](const Array &array) {
                 std::string result = "[";
 
                 for (size_t i = 0; i < array.values.size(); i++) {
@@ -37,7 +38,7 @@ JsonSerializationStrategy::Serialize(SerializationPrimitive primitive) const {
 
                 return result;
             },
-            [this](Object object) {
+            [this](const Object &object) {
                 std::string result = "{";
 
                 bool first = true;

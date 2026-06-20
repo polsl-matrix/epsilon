@@ -4,6 +4,7 @@
 
 #include <format>
 #include <stdexcept>
+#include <string>
 #include <utility>
 
 namespace epsilon::services::matrix::serialization {

@@ -8,6 +8,8 @@ namespace epsilon::services::matrix::serialization {
 
 class ISerializationStrategy {
 public:
+    virtual ~ISerializationStrategy() = default;
+
     virtual std::string Serialize(SerializationPrimitive) const = 0;
 };
 

@@ -4,6 +4,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Export compile commands for clang-tidy
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+
 project(epsilon VERSION 0.1.0)
 
 set(SERVICES_SOURCES
@@ -205,7 +209,3 @@ get_target_property(AUTOGEN_TARGET epsilon AUTOGEN_TARGET_NAME)
 if(AUTOGEN_TARGET)
     set_target_properties(${AUTOGEN_TARGET} PROPERTIES CXX_CLANG_TIDY "")
 endif()
-
-# Export compile commands for clang-tidy
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy")

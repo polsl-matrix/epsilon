@@ -9,6 +9,8 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 namespace epsilon::services::matrix::requests::qt {
 
@@ -16,6 +18,8 @@ class QtRawRequestManager : public QObject, public IRawRequestManager {
     Q_OBJECT
 
     QNetworkAccessManager m_NetworkAccessManager;
+
+    QNetworkReply* PerformRequest(const QNetworkRequest& request, const RawRequest& raw_request);
 
 public:
     QtRawRequestManager(QObject* parent = nullptr);

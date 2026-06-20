@@ -5,7 +5,7 @@
 namespace epsilon::services::matrix::serialization {
 
 template<typename T>
-T Deserialize(SerializationPrimitive serialized);
+T Deserialize(SerializationPrimitive primitive);
 
 template<typename T>
 concept Deserializable = requires(SerializationPrimitive primitive) {

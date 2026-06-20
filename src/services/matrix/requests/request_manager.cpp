@@ -1,9 +1,11 @@
 #include "request_manager.hpp"
 
+#include "../../serialization/deserializer.hpp"
 #include "../../serialization/serializer.hpp"
 #include "iraw_request_manager.hpp"
 
 #include <memory>
+#include <string>
 #include <utility>
 
 namespace epsilon::services::matrix::requests {

@@ -1,13 +1,14 @@
 #include "qt_raw_request_manager.hpp"
 
 #include "../../../util/qt.hpp"
-#include "../../serialization/serialization_primitive.hpp"
 #include "http_method.hpp"
-#include "iraw_request_manager.hpp"
+#include "raw_reply.hpp"
 #include "raw_request.hpp"
 
-#include <format>
-#include <iostream>
+#include <functional>
+#include <optional>
+#include <stdexcept>
+#include <utility>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -28,36 +29,7 @@ void QtRawRequestManager::Execute(RawRequest &&raw_request,
                              util::qt::StdStringToQByteArray(value));
     }
 
-    QNetworkReply *reply;
-
-    switch (raw_request.Method) {
-    case HttpMethod::GET:
-        if (raw_request.Body.has_value()) {
-            reply = m_NetworkAccessManager.get(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
-        } else {
-            reply = m_NetworkAccessManager.get(request);
-        }
-        break;
-
-    case HttpMethod::POST:
-        if (raw_request.Body.has_value()) {
-            reply = m_NetworkAccessManager.post(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
-        } else {
-            reply = m_NetworkAccessManager.post(request, QByteArray());
-        }
-        break;
-
-    case HttpMethod::PUT:
-        if (raw_request.Body.has_value()) {
-            reply = m_NetworkAccessManager.put(
-                request, util::qt::StdStringToQByteArray(*raw_request.Body));
-        } else {
-            reply = m_NetworkAccessManager.put(request, QByteArray());
-        }
-        break;
-    }
+    QNetworkReply *reply = PerformRequest(request, raw_request);
 
     connect(reply, &QNetworkReply::finished, this, [reply, callback]() {
         reply->deleteLater();
@@ -65,13 +37,13 @@ void QtRawRequestManager::Execute(RawRequest &&raw_request,
         RawReply async_reply;
 
         if (reply->error() != QNetworkReply::NoError) {
-            QVariant statusCodeVar =
+            auto statusCodeVar =
                 reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 
             async_reply.StatusCode =
                 statusCodeVar.isValid() ? statusCodeVar.toInt() : 0;
 
-            QByteArray errorResponseBody = reply->readAll();
+            const auto errorResponseBody = reply->readAll();
 
             if (!errorResponseBody.isEmpty()) {
                 async_reply.Body = errorResponseBody.toStdString();
@@ -93,6 +65,41 @@ void QtRawRequestManager::Execute(RawRequest &&raw_request,
             callback(std::move(async_reply));
         }
     });
+}
+
+QNetworkReply *
+QtRawRequestManager::PerformRequest(const QNetworkRequest &request,
+                                    const RawRequest &raw_request) {
+    switch (raw_request.Method) {
+    case HttpMethod::GET:
+        if (raw_request.Body.has_value()) {
+            return m_NetworkAccessManager.get(
+                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+        } else {
+            return m_NetworkAccessManager.get(request);
+        }
+        break;
+
+    case HttpMethod::POST:
+        if (raw_request.Body.has_value()) {
+            return m_NetworkAccessManager.post(
+                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+        } else {
+            return m_NetworkAccessManager.post(request, QByteArray());
+        }
+        break;
+
+    case HttpMethod::PUT:
+        if (raw_request.Body.has_value()) {
+            return m_NetworkAccessManager.put(
+                request, util::qt::StdStringToQByteArray(*raw_request.Body));
+        } else {
+            return m_NetworkAccessManager.put(request, QByteArray());
+        }
+        break;
+    }
+
+    throw std::runtime_error("Received an unknown HttpMethod");
 }
 
 } // namespace epsilon::services::matrix::requests::qt

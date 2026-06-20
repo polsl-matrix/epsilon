@@ -2,7 +2,6 @@
 
 #include "iserializable.hpp"
 #include "iserialization_strategy.hpp"
-#include "serialization_primitive.hpp"
 
 #include <memory>
 #include <string>

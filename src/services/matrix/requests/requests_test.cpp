@@ -5,10 +5,11 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <variant>
-#include <vector>
 
 #include "authenticated_request_manager.hpp"
+#include "http_method.hpp"
 #include "iraw_request_manager.hpp"
 #include "raw_reply.hpp"
 #include "raw_request.hpp"
@@ -17,7 +18,9 @@
 
 #include "../../serialization/deserializable.hpp"
 #include "../../serialization/deserializer.hpp"
+#include "../../serialization/ideserialization_strategy.hpp"
 #include "../../serialization/iserializable.hpp"
+#include "../../serialization/iserialization_strategy.hpp"
 #include "../../serialization/serialization_primitive.hpp"
 #include "../../serialization/serializer.hpp"
 
@@ -130,6 +133,8 @@ class RequestManagerStatefulTest : public ::testing::Test {
     void TearDown() override { manager.reset(); }
 };
 
+// NOLINTBEGIN(readability-function-cognitive-complexity)
+
 TEST_F(RequestManagerStatefulTest,
        ProperlyAssemblesAndRoutesRawRequestProperties) {
     ArchitecturalTestRequest request;
@@ -137,15 +142,17 @@ TEST_F(RequestManagerStatefulTest,
 
     bool pipeline_callback_executed = false;
 
+    const int success_status_code = 200;
+
     manager->Execute<PipelineTestBody, PipelineTestSuccess, PipelineTestError>(
         request,
-        [&pipeline_callback_executed](
+        [&pipeline_callback_executed, success_status_code](
             std::optional<
                 RequestManager::Reply<PipelineTestSuccess, PipelineTestError>>
                 reply) {
             pipeline_callback_executed = true;
             ASSERT_TRUE(reply.has_value());
-            EXPECT_EQ(reply->StatusCode, 200);
+            EXPECT_EQ(reply->StatusCode, success_status_code);
             ASSERT_TRUE(reply->Body.has_value());
             EXPECT_EQ(reply->Body.value().mock_result_data,
                       "successful_network_stream");
@@ -160,7 +167,7 @@ TEST_F(RequestManagerStatefulTest,
 
     ASSERT_TRUE(raw_mgr_ptr->captured_callback != nullptr);
     RawReply reply;
-    reply.StatusCode = 200;
+    reply.StatusCode = success_status_code;
     reply.Body = "successful_network_stream";
     raw_mgr_ptr->captured_callback(reply);
 
@@ -169,18 +176,20 @@ TEST_F(RequestManagerStatefulTest,
 
 TEST_F(RequestManagerStatefulTest,
        CorrectlyHandlesErrorStatusAndMapsExpectedVariant) {
-    ArchitecturalTestRequest request;
+    const ArchitecturalTestRequest request;
     bool pipeline_callback_executed = false;
+
+    const int server_error_status_code = 500;
 
     manager->Execute<PipelineTestBody, PipelineTestSuccess, PipelineTestError>(
         request,
-        [&pipeline_callback_executed](
+        [&pipeline_callback_executed, server_error_status_code](
             std::optional<
                 RequestManager::Reply<PipelineTestSuccess, PipelineTestError>>
                 reply) {
             pipeline_callback_executed = true;
             ASSERT_TRUE(reply.has_value());
-            EXPECT_EQ(reply->StatusCode, 500);
+            EXPECT_EQ(reply->StatusCode, server_error_status_code);
             ASSERT_FALSE(reply->Body.has_value());
             EXPECT_EQ(reply->Body.error().mock_error_code,
                       "internal_server_error_token");
@@ -190,7 +199,7 @@ TEST_F(RequestManagerStatefulTest,
 
     ASSERT_TRUE(raw_mgr_ptr->captured_callback != nullptr);
     RawReply reply;
-    reply.StatusCode = 500;
+    reply.StatusCode = server_error_status_code;
     reply.Body = "internal_server_error_token";
     raw_mgr_ptr->captured_callback(reply);
 
@@ -199,23 +208,25 @@ TEST_F(RequestManagerStatefulTest,
 
 TEST_F(RequestManagerStatefulTest,
        AuthenticatedProxyPipelineAppendsBearerToken) {
-    std::string access_token = "OAUTH_BEARER_SECRET_456";
+    const std::string access_token = "OAUTH_BEARER_SECRET_456";
+    const int success_status_code = 200;
 
-    AuthenticatedRequestManager auth_manager(std::move(manager), access_token);
+    const AuthenticatedRequestManager auth_manager(std::move(manager),
+                                                   access_token);
 
-    ArchitecturalTestRequest request;
+    const ArchitecturalTestRequest request;
     bool pipeline_callback_executed = false;
 
     auth_manager.Execute<PipelineTestBody, PipelineTestSuccess,
                          PipelineTestError>(
         request,
-        [&pipeline_callback_executed](
+        [&pipeline_callback_executed, success_status_code](
             std::optional<
                 RequestManager::Reply<PipelineTestSuccess, PipelineTestError>>
                 reply) {
             pipeline_callback_executed = true;
             ASSERT_TRUE(reply.has_value());
-            EXPECT_EQ(reply->StatusCode, 200);
+            EXPECT_EQ(reply->StatusCode, success_status_code);
             ASSERT_TRUE(reply->Body.has_value());
             EXPECT_EQ(reply->Body.value().mock_result_data,
                       "authenticated_data_stream");
@@ -229,9 +240,11 @@ TEST_F(RequestManagerStatefulTest,
 
     ASSERT_TRUE(raw_mgr_ptr->captured_callback != nullptr);
     RawReply reply;
-    reply.StatusCode = 200;
+    reply.StatusCode = success_status_code;
     reply.Body = "authenticated_data_stream";
     raw_mgr_ptr->captured_callback(reply);
 
     EXPECT_TRUE(pipeline_callback_executed);
 }
+
+// NOLINTEND(readability-function-cognitive-complexity)

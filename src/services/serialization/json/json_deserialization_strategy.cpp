@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include <QByteArray>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -15,10 +16,10 @@ namespace epsilon::services::matrix::serialization::json {
 
 SerializationPrimitive
 JsonDeserializationStrategy::Deserialize(const std::string &serialized) const {
-    QByteArray jsonData = QByteArray::fromStdString(serialized);
+    auto jsonData = QByteArray::fromStdString(serialized);
 
     QJsonParseError parseError;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
+    auto jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
         throw DeserializationUnrecognizedFormatException("JSON");
@@ -26,9 +27,13 @@ JsonDeserializationStrategy::Deserialize(const std::string &serialized) const {
 
     if (jsonDoc.isObject()) {
         return ConvertJsonValue(jsonDoc.object());
-    } else if (jsonDoc.isArray()) {
+    }
+
+    if (jsonDoc.isArray()) {
         return ConvertJsonValue(jsonDoc.array());
-    } else if (jsonDoc.isNull()) {
+    }
+
+    if (jsonDoc.isNull()) {
         return Null{};
     }
 
@@ -55,22 +60,22 @@ SerializationPrimitive JsonDeserializationStrategy::ConvertJsonValue(
         return String{jsonValue.toString().toStdString()};
 
     case QJsonValue::Array: {
-        QJsonArray jsonArray = jsonValue.toArray();
+        auto jsonArray = jsonValue.toArray();
         Array customArray;
         customArray.values.reserve(jsonArray.size());
 
-        for (const QJsonValue &element : jsonArray) {
+        for (const auto &element : jsonArray) {
             customArray.values.push_back(ConvertJsonValue(element));
         }
         return customArray;
     }
 
     case QJsonValue::Object: {
-        QJsonObject jsonObject = jsonValue.toObject();
+        auto jsonObject = jsonValue.toObject();
         Object customObject;
 
         for (auto it = jsonObject.begin(); it != jsonObject.end(); ++it) {
-            std::string key = it.key().toStdString();
+            auto key = it.key().toStdString();
             customObject.values[key] = ConvertJsonValue(it.value());
         }
         return customObject;
