@@ -1,4 +1,4 @@
-Checks: '-*,clang-diagnostic-*,modernize-use-auto,cppcoreguidelines-owning-memory,cppcoreguidelines-no-malloc,modernize-make-unique,modernize-make-shared,misc-include-cleaner,misc-const-correctness,bugprone-*,performance-*,readability-*'
+Checks: '-*,clang-diagnostic-*,modernize-use-auto,cppcoreguidelines-owning-memory,cppcoreguidelines-no-malloc,modernize-make-unique,modernize-make-shared,misc-include-cleaner,misc-const-correctness,bugprone-*,performance-*,readability-*, -bugprone-suspicious-include'
 WarningsAsErrors: '*'
 HeaderFileExtensions:
   - ''

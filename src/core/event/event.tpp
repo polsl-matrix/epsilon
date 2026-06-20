@@ -1,3 +1,5 @@
+#pragma once
+
 #include "detachment.hpp"
 #include "observer.hpp"
 
@@ -40,14 +42,6 @@ Detachment Event<Args...>::Attach(std::shared_ptr<Observer<Args...>> observer) {
 }
 
 template <typename... Args>
-template <std::derived_from<Observer<Args...>> TObserver, typename... ConstructorArgs>
-    requires std::is_constructible_v<TObserver, ConstructorArgs &&...>
-Detachment Event<Args...>::Attach(ConstructorArgs &&...args) {
-    return Attach(std::static_pointer_cast<Observer<Args...>>(
-        std::make_shared<TObserver>(std::forward<ConstructorArgs>(args)...)));
-}
-
-template <typename... Args>
 void Event<Args...>::DetachById(
     size_t id) { // NOLINT(readability-identifier-length)
     auto slot_iterator =
@@ -65,4 +59,4 @@ template <typename... Args> void Event<Args...>::Invoke(Args... args) {
     }
 }
 
-} // namespace epsilon::core::event
+}
