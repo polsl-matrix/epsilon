@@ -24,7 +24,6 @@ set(APP_SOURCES
         src/features/login/model/LoginModel.hpp
         src/features/login/presenter/LoginPresenter.cpp
         src/features/login/presenter/LoginPresenter.hpp
-        src/features/login/presenter/contracts/ILoginPresenter.hpp
         src/features/login/presenter/contracts/ILoginView.hpp
         src/features/login/view/LoginView.cpp
         src/features/login/view/LoginView.hpp
