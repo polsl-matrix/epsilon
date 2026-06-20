@@ -60,7 +60,6 @@ AlignConsecutiveTableGenDefinitionColons:
 AlignEscapedNewlines: Right
 AlignOperands:   Align
 AlignTrailingComments:
-  AlignPPAndNotPP: true
   Kind:            Always
   OverEmptyLines:  0
 AllowAllArgumentsOnNextLine: true

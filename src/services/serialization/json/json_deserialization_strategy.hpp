@@ -14,7 +14,7 @@ class JsonDeserializationStrategy : public IDeserializationStrategy {
     SerializationPrimitive ConvertJsonValue(const QJsonValue& jsonValue) const;
 
 public:
-    virtual SerializationPrimitive Deserialize(const std::string&) const override;
+    virtual SerializationPrimitive Deserialize(const std::string& serialized) const override;
 };
 
 }

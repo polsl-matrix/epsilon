@@ -9,7 +9,7 @@ namespace epsilon::services::matrix::serialization::json {
 
 class JsonSerializationStrategy : public ISerializationStrategy {
 public:
-    virtual std::string Serialize(SerializationPrimitive) const override;
+    virtual std::string Serialize(SerializationPrimitive primitive) const override;
 };
 
 }
