@@ -1,8 +1,8 @@
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QObject>
-#include <Qt>
 #include <QQmlApplicationEngine>
+#include <Qt>
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);

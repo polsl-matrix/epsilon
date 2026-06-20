@@ -6,7 +6,7 @@
 
 namespace epsilon::util::qt {
 
-QByteArray StdStringToQByteArray(const std::string& string) {
+QByteArray StdStringToQByteArray(const std::string &string) {
     return QByteArray(string.c_str(), string.length());
 }
 
