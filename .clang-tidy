@@ -6,12 +6,12 @@ HeaderFileExtensions:
   - hh
   - hpp
   - hxx
+  - tpp
 ImplementationFileExtensions:
   - c
   - cc
   - cpp
   - cxx
-  - tpp
 HeaderFilterRegex: '^(.*/src/.*)$'
 FormatStyle: none
 CheckOptions: {}
