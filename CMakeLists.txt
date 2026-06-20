@@ -6,7 +6,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Export compile commands for clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 
 project(epsilon VERSION 0.1.0)
 
@@ -33,31 +32,21 @@ set(LIB_SOURCES
 )
 
 set(APP_SOURCES
-        src/main.cpp
+  src/main.cpp
 
-        src/router/PageRouter.cpp
-        src/router/PageRouter.hpp
+  src/router/PageRouter.cpp
 
-        src/features/login/model/LoginModel.cpp
-        src/features/login/model/LoginModel.hpp
-        src/features/login/presenter/LoginPresenter.cpp
-        src/features/login/presenter/LoginPresenter.hpp
-        src/features/login/presenter/contracts/ILoginView.hpp
-        src/features/login/view/LoginView.cpp
-        src/features/login/view/LoginView.hpp
+  src/features/login/model/LoginModel.cpp
+  src/features/login/presenter/LoginPresenter.cpp
+  src/features/login/view/LoginView.cpp
 
-        src/features/main_page/presenter/HomePresenter.cpp
-        src/features/main_page/presenter/HomePresenter.hpp
-        src/features/main_page/presenter/contracts/IHomePresenter.hpp
-        src/features/main_page/presenter/contracts/IHomeView.hpp
-        src/features/main_page/view/HomeView.cpp
-        src/features/main_page/view/HomeView.hpp
+  src/features/main_page/presenter/HomePresenter.cpp
+  src/features/main_page/view/HomeView.cpp
 )
 
 set(SOURCES
   ${LIB_SOURCES}
   ${APP_SOURCES}
-        src/features/login/model/LoginModel.hpp
 )
 
 set(CORE_TEST_SOURCES
@@ -115,18 +104,18 @@ endif()
 qt_add_qml_module(epsilon
   URI Main
   QML_FILES
-        src/Main.qml
-        src/features/login/view/Login.qml
-        src/features/main_page/view/Home.qml
-        src/features/main_page/view/EmptySpace.qml
-        src/features/main_page/view/SideMenu.qml
+    src/Main.qml
+    src/features/login/view/Login.qml
+    src/features/main_page/view/Home.qml
+    src/features/main_page/view/EmptySpace.qml
+    src/features/main_page/view/SideMenu.qml
   RESOURCES
-        resources/settings.svg
-        resources/search.svg
-        resources/users.svg
-        resources/plus.svg
-        resources/exit.svg
-        resources/check.svg
+    resources/settings.svg
+    resources/search.svg
+    resources/users.svg
+    resources/plus.svg
+    resources/exit.svg
+    resources/check.svg
 )
 
 target_link_libraries(epsilon
@@ -145,6 +134,11 @@ if (MSVC)
 else()
   add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
+
+# Add clang-tidy to the compilation pipeline
+set_target_properties(epsilon PROPERTIES
+  CXX_CLANG_TIDY "clang-tidy"
+)
 
 # TODO: Compiler optimizations
 
@@ -221,6 +215,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       Qt6::Quick
       Qt6::Qml
       Qt6::Network
+  )
+
+  set_target_properties(epsilon_test PROPERTIES
+    CXX_CLANG_TIDY "clang-tidy"
   )
 
   include(GoogleTest)
