@@ -14,7 +14,6 @@ set(SERVICES_SOURCES
   src/services/serialization/json/json_serialization_strategy.cpp
   src/services/serialization/json/json_deserialization_strategy.cpp
 
-  src/services/matrix/requests/request.cpp
   src/services/matrix/requests/request_manager.cpp
   src/services/matrix/requests/authenticated_request_manager.cpp
   src/services/matrix/requests/qt_raw_request_manager.cpp
@@ -45,6 +44,8 @@ set(CORE_TEST_SOURCES
 set(SERVICES_TEST_SOURCES
   src/services/serialization/serialization_test.cpp
   src/services/serialization/deserialization_test.cpp
+
+  src/services/matrix/requests/requests_test.cpp
 )
 
 set(APP_TEST_SOURCES
@@ -176,6 +177,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     epsilon_test
     PRIVATE
       GTest::gtest_main
+      GTest::gmock
   )
 
   target_link_libraries(epsilon_test 

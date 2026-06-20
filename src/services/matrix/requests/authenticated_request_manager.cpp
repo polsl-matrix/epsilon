@@ -8,15 +8,10 @@
 
 namespace epsilon::services::matrix::requests {
 
-// AuthenticatedRequestManager implementations
-AuthenticatedRequestManager::AuthenticatedRequestManager(RequestManager&& inner, std::string token)
+AuthenticatedRequestManager::AuthenticatedRequestManager(std::unique_ptr<RequestManager>&& inner, std::string token)
     : m_InnerManager(std::move(inner)), m_AccessToken(std::move(token)) {}
 
-AuthenticatedRequestManager AuthenticatedRequestManager::FromRequestManager(RequestManager&& request_manager, std::string access_token) {
-    return AuthenticatedRequestManager(std::move(request_manager), std::move(access_token));
-}
-
-RequestManager AuthenticatedRequestManager::Release() && {
+std::unique_ptr<RequestManager> AuthenticatedRequestManager::Release() && {
     return std::move(m_InnerManager);
 }
 

@@ -12,17 +12,17 @@ namespace epsilon::services::matrix::requests {
 
 class AuthenticatedRequestManager {
 private:
-    RequestManager m_InnerManager;
+    std::unique_ptr<RequestManager> m_InnerManager;
     std::string m_AccessToken;
 
     template<class TBody, class TResult, class TError>
         requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
     class AuthenticatedRequestProxy : public Request<TBody, TResult, TError> {
     private:
-        const Request<TBody, TResult>& m_OriginalRequest;
+        const Request<TBody, TResult, TError>& m_OriginalRequest;
         std::string m_Token;
     public:
-        AuthenticatedRequestProxy(const Request<TBody, TResult, TError>& req, std::string token);
+        AuthenticatedRequestProxy(const Request<TBody, TResult, TError>& request, std::string token);
 
         HttpMethod Method() const override;
         std::string Endpoint() const override;
@@ -30,10 +30,9 @@ private:
     };
 
 public:
-    AuthenticatedRequestManager(RequestManager&& inner, std::string token);
+    AuthenticatedRequestManager(std::unique_ptr<RequestManager>&& inner, std::string token);
 
-    static AuthenticatedRequestManager FromRequestManager(RequestManager&& request_manager, std::string access_token);
-    RequestManager Release() &&;
+    std::unique_ptr<RequestManager> Release() &&;
 
     template<class TBody, class TResult, class TError>
         requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>

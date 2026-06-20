@@ -20,14 +20,14 @@ protected:
     std::string m_BaselineUrl;
     std::unique_ptr<IRawRequestManager> m_RawRequestManager;
     std::unique_ptr<serialization::Serializer> m_Serializer;
-    std::unique_ptr<serialization::Deserializer> m_Deserializer;
+    std::shared_ptr<serialization::Deserializer> m_Deserializer;
 
 public:
     RequestManager(
         std::string baseline_url,
         std::unique_ptr<IRawRequestManager>&& raw_request_manager,
         std::unique_ptr<serialization::Serializer>&& serializer,
-        std::unique_ptr<serialization::Deserializer>&& deserializer
+        std::shared_ptr<serialization::Deserializer>&& deserializer
     );
 
     template<class TResult, class TError>

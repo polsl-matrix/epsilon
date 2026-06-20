@@ -11,8 +11,8 @@ namespace epsilon::services::matrix::requests {
 // AuthenticatedRequestProxy implementations
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
-AuthenticatedRequestManager::AuthenticatedRequestProxy<TBody, TResult, TError>::AuthenticatedRequestProxy(const Request<TBody, TResult, TError>& req, std::string token)
-    : m_OriginalRequest(req), m_Token(std::move(token))
+AuthenticatedRequestManager::AuthenticatedRequestProxy<TBody, TResult, TError>::AuthenticatedRequestProxy(const Request<TBody, TResult, TError>& request, std::string token)
+    : m_OriginalRequest(request), m_Token(std::move(token))
 {
     this->SetBody(m_OriginalRequest.GetBody());
 }
@@ -28,7 +28,7 @@ std::string AuthenticatedRequestManager::AuthenticatedRequestProxy<TBody, TResul
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
 std::unordered_map<std::string, std::string> AuthenticatedRequestManager::AuthenticatedRequestProxy<TBody, TResult, TError>::AdditionalHeaders() const {
-    auto user_headers = m_OriginalRequest.GetAdditionalHeaders();
+    auto user_headers = m_OriginalRequest.AdditionalHeaders();
 
     // If the request configures its own authorization, we let it
     if (user_headers.contains("Authorization")) {
@@ -44,9 +44,9 @@ std::unordered_map<std::string, std::string> AuthenticatedRequestManager::Authen
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
 void AuthenticatedRequestManager::Execute(const Request<TBody, TResult, TError>& request, std::function<void(std::optional<RequestManager::Reply<TResult, TError>>)> callback) const {
-    AuthenticatedRequestProxy<TBody, TResult> auth_request(request, m_AccessToken);
+    AuthenticatedRequestProxy<TBody, TResult, TError> auth_request(request, m_AccessToken);
     
-    m_InnerManager.Execute(auth_request, callback);
+    m_InnerManager->Execute(auth_request, std::move(callback));
 }
 
 }

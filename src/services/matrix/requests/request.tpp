@@ -15,7 +15,7 @@ std::unordered_map<std::string, std::string> Request<TBody, TResult, TError>::Ad
 
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
-void Request<TBody, TResult, TError>::SetBody(std::optional<TBody> body) {
+void Request<TBody, TResult, TError>::SetBody(const std::optional<TBody>& body) {
     m_Body = body;
 }
 
@@ -27,7 +27,7 @@ void Request<TBody, TResult, TError>::SetBody(std::optional<TBody>&& body) {
 
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
-std::optional<TBody> Request<TBody, TResult, TError>::GetBody() {
+std::optional<TBody> Request<TBody, TResult, TError>::GetBody() const {
     return m_Body;
 }
 

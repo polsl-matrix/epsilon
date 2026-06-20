@@ -21,9 +21,11 @@ public:
     virtual std::string Endpoint() const = 0;
     virtual std::unordered_map<std::string, std::string> AdditionalHeaders() const;
 
-    void SetBody(std::optional<TBody> body);
+    void SetBody(const std::optional<TBody>& body);
     void SetBody(std::optional<TBody>&& body);
-    std::optional<TBody> GetBody();
+    std::optional<TBody> GetBody() const;
 };
 
 }
+
+#include "request.tpp"
