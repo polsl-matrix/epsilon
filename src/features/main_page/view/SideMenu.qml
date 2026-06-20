@@ -3,6 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Rectangle {
+    id: sideMenuRoot
+
+    signal logoutRequested()
+
     component Divider : Rectangle {
         Layout.fillWidth: true
         height: 1
@@ -94,11 +98,13 @@ Rectangle {
 
                 ColumnLayout {
                     spacing: 2
+
                     BaseText {
                         text: "username123"
                         font.pixelSize: 15
                         font.bold: true
                     }
+
                     Text {
                         text: "online"
                         color: "#80848e"
@@ -115,9 +121,110 @@ Rectangle {
                     HandMouseArea {}
                 }
 
-                SvgIcon {
-                    source: "../../../../resources/settings.svg"
-                    HandMouseArea {}
+                Item {
+                    width: 18
+                    height: 18
+
+                    SvgIcon {
+                        anchors.fill: parent
+                        source: "../../../../resources/settings.svg"
+                    }
+
+                    HandMouseArea {
+                        onClicked: settingsPopup.open()
+                    }
+
+                    Popup {
+                        id: settingsPopup
+                        y: 25
+                        x: -120
+                        width: 160
+                        padding: 8
+
+                        background: Rectangle {
+                            color: "#2b2d31"
+                            radius: 8
+                            border.color: "#1e1f22"
+                            border.width: 1
+                        }
+
+                        ColumnLayout {
+                            anchors.fill: parent
+                            spacing: 4
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 32
+                                radius: 4
+                                color: settingsItemHover.containsMouse ? "#313338" : "transparent"
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 8
+                                    anchors.rightMargin: 8
+                                    spacing: 8
+
+                                    SvgIcon {
+                                        source: "../../../../resources/settings.svg"
+                                        width: 16
+                                        height: 16
+                                    }
+
+                                    BaseText {
+                                        text: "Settings"
+                                        color: "#dbdee1"
+                                        Layout.fillWidth: true
+                                    }
+                                }
+
+                                HandMouseArea {
+                                    id: settingsItemHover
+                                    onClicked: {
+                                        settingsPopup.close()
+                                    }
+                                }
+                            }
+
+                            Divider {
+                                Layout.fillWidth: true
+                                color: "#1e1f22"
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 32
+                                radius: 4
+                                color: logoutItemHover.containsMouse ? "#313338" : "transparent"
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 8
+                                    anchors.rightMargin: 8
+                                    spacing: 8
+
+                                    SvgIcon {
+                                        source: "../../../../resources/exit.svg"
+                                        width: 16
+                                        height: 16
+                                    }
+
+                                    BaseText {
+                                        text: "Log Out"
+                                        color: "#da373c"
+                                        Layout.fillWidth: true
+                                    }
+                                }
+
+                                HandMouseArea {
+                                    id: logoutItemHover
+                                    onClicked: {
+                                        settingsPopup.close()
+                                        sideMenuRoot.logoutRequested()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -175,11 +282,26 @@ Rectangle {
             }
 
             model: ListModel {
-                ListElement { name: "Cat Lovers"; notif: 0 }
-                ListElement { name: "My Server #1"; notif: 67 }
-                ListElement { name: "Dog Aficionados"; notif: 1 }
-                ListElement { name: "FriendlyNeighbour23"; notif: 0 }
-                ListElement { name: "Furry Corn"; notif: 0 }
+                ListElement {
+                    name: "Cat Lovers"
+                    notif: 0
+                }
+                ListElement {
+                    name: "My Server #1"
+                    notif: 67
+                }
+                ListElement {
+                    name: "Dog Aficionados"
+                    notif: 1
+                }
+                ListElement {
+                    name: "FriendlyNeighbour23"
+                    notif: 0
+                }
+                ListElement {
+                    name: "Furry Corn"
+                    notif: 0
+                }
             }
 
             delegate: Rectangle {
@@ -224,7 +346,9 @@ Rectangle {
                         }
                     }
                 }
+
                 ListDivider {}
+
                 HandMouseArea {
                     id: itemMouseArea
                 }
@@ -261,6 +385,7 @@ Rectangle {
                     Layout.fillWidth: true
                 }
             }
+
             HandMouseArea {
                 id: addServerMouseArea
             }

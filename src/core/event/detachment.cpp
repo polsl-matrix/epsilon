@@ -1,3 +1,5 @@
+#include "detachment.hpp"
+
 #include <functional>
 #include <utility>
 
