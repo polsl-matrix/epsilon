@@ -7,6 +7,8 @@
 
 #include <string>
 
+namespace epsilon::features::login {
+
 class LoginView : public QObject, public ILoginView {
     Q_OBJECT
 
@@ -27,3 +29,5 @@ class LoginView : public QObject, public ILoginView {
     void loginSucceeded();
     void showSuccessPopup();
 };
+
+}

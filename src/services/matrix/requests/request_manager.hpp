@@ -23,6 +23,7 @@ protected:
     std::shared_ptr<serialization::Deserializer> m_Deserializer;
 
 public:
+    // TODO: Add a builder for the RequestManager class
     RequestManager(
         std::string baseline_url,
         std::unique_ptr<IRawRequestManager>&& raw_request_manager,

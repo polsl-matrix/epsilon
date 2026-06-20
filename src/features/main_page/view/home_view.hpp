@@ -3,6 +3,8 @@
 #include "../presenter/contracts/ihome_view.hpp"
 #include <QObject>
 
+namespace epsilon::features::home {
+
 class HomeView : public QObject, public IHomeView {
     Q_OBJECT
 
@@ -16,3 +18,5 @@ class HomeView : public QObject, public IHomeView {
   signals:
     void logoutSucceeded();
 };
+
+}

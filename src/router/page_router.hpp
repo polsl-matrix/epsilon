@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QString>
 
+namespace epsilon::router {
+
 class PageRouter : public QObject {
     Q_OBJECT
   public:
@@ -14,3 +16,5 @@ class PageRouter : public QObject {
   signals:
     void navigateRequested(const QString &_t1);
 };
+
+}

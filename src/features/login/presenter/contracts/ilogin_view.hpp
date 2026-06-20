@@ -4,6 +4,8 @@
 
 #include <string>
 
+namespace epsilon::features::login {
+
 class ILoginView {
   public:
     virtual ~ILoginView() = default;
@@ -12,3 +14,5 @@ class ILoginView {
 
     epsilon::core::event::Event<std::string, std::string> OnLoginRequested;
 };
+
+}

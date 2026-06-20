@@ -4,6 +4,8 @@
 #include "contracts/ihome_view.hpp"
 #include <memory>
 
+namespace epsilon::features::home {
+
 class HomePresenter : public IHomePresenter {
   public:
     explicit HomePresenter(std::weak_ptr<IHomeView> view);
@@ -12,3 +14,5 @@ class HomePresenter : public IHomePresenter {
   private:
     std::weak_ptr<IHomeView> m_View;
 };
+
+}

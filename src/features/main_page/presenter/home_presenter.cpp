@@ -3,6 +3,8 @@
 #include <memory>
 #include <utility>
 
+namespace epsilon::features::home {
+
 HomePresenter::HomePresenter(std::weak_ptr<IHomeView> view)
     : m_View(std::move(view)) {
     if (auto view_lock = m_View.lock()) {
@@ -14,4 +16,6 @@ void HomePresenter::HandleLogout() {
     if (auto view = m_View.lock()) {
         view->ShowLogoutSuccess();
     }
+}
+
 }

@@ -17,10 +17,9 @@ should be prefixed with `m_` and written in m_UpperCamelCase.
 
 If you're writing an implementation file, the first line should
 include the header file you're implementing. Then, you should include
-all the necessary headers internal to the project. Then, you should
+all the necessary headers internal to the project. Then, you should include
+all the necessary headers from the standard library. Then, you should
 include all the necessary headers from the external libraries.
-Then, you should include all the necessary headers from the standard
-library.
 
 You should try to include all the necessary header files, even if some
 are redundant (e.g., include `string`, even when also including
@@ -55,7 +54,7 @@ T add (T left, T right) {
 }
 ```
 
-At the start of every header file and every implementation
+At the start of every header file and every template implementation
 file, you should include the `#pragma once` directive.
 
 ### Unit tests

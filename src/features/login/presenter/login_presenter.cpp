@@ -7,6 +7,8 @@
 #include <string>
 #include <utility>
 
+namespace epsilon::features::login {
+
 LoginPresenter::LoginPresenter(std::weak_ptr<ILoginView> view,
                                std::shared_ptr<LoginModel> model)
     : m_View(std::move(view)), m_Model(std::move(model)),
@@ -43,4 +45,6 @@ void LoginPresenter::HandleLogin(const std::string &email,
     } else {
         view->ShowLoginError("Incorrect email or password");
     }
+}
+
 }

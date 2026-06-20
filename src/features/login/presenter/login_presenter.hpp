@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 
+namespace epsilon::features::login {
+
 class LoginPresenter {
 public:
     LoginPresenter(std::weak_ptr<ILoginView> view, std::shared_ptr<LoginModel> model);
@@ -17,3 +19,5 @@ private:
     std::shared_ptr<LoginModel> m_Model;
     epsilon::core::event::Detachment m_LoginRequestDetachment;
 };
+
+}

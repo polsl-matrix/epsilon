@@ -4,6 +4,8 @@
 #include <qtmetamacros.h>
 #include <string>
 
+namespace epsilon::features::login {
+
 LoginView::LoginView(QObject *parent) : QObject(parent) {}
 
 void LoginView::AttemptLogin(const QString &email, const QString &password) {
@@ -17,3 +19,5 @@ void LoginView::ShowLoginError(const std::string &error) {
 void LoginView::ShowLoginSuccess() { emit loginSucceeded(); }
 
 void LoginView::displayLogoutSuccess() { emit showSuccessPopup(); }
+
+}

@@ -2,6 +2,8 @@
 #include <qobject.h>
 #include <qtmetamacros.h>
 
+namespace epsilon::features::home {
+
 HomeView::HomeView(QObject *parent) : QObject(parent) {}
 
 void HomeView::AttemptLogout() {
@@ -11,3 +13,5 @@ void HomeView::AttemptLogout() {
 }
 
 void HomeView::ShowLogoutSuccess() { emit logoutSucceeded(); }
+
+}
