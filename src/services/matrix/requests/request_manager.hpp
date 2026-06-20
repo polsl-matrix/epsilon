@@ -12,7 +12,6 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <expected>
 
 namespace epsilon::services::matrix::requests {
 

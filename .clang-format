@@ -83,7 +83,6 @@ AttributeMacros:
 BinPackArguments: true
 BinPackLongBracedList: true
 BitFieldColonSpacing: Both
-BracedInitializerIndentWidth: -1
 BraceWrapping:
   AfterCaseLabel:  false
   AfterClass:      false
