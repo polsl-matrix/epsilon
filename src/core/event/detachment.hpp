@@ -13,5 +13,3 @@ class Detachment {
     void Detach();
 };
 } // namespace epsilon::core::event
-
-#include "detachment.tpp"
