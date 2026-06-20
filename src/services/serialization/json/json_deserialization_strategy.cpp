@@ -54,10 +54,10 @@ SerializationPrimitive JsonDeserializationStrategy::ConvertJsonValue(
         }
 
     case QJsonValue::Double:
-        return Number{jsonValue.toDouble()};
+        return Number{ jsonValue.toDouble() };
 
     case QJsonValue::String:
-        return String{jsonValue.toString().toStdString()};
+        return String{ jsonValue.toString().toStdString() };
 
     case QJsonValue::Array: {
         auto jsonArray = jsonValue.toArray();

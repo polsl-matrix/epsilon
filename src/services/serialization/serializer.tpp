@@ -1,3 +1,5 @@
+#pragma once
+
 #include "serializer.hpp"
 
 #include "iserialization_strategy.hpp"

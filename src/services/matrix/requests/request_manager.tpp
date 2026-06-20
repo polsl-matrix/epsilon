@@ -1,3 +1,5 @@
+#pragma once
+
 #include "request_manager.hpp"
 
 #include "request.hpp"

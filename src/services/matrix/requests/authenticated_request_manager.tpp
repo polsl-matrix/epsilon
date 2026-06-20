@@ -1,3 +1,5 @@
+#pragma once
+
 #include "authenticated_request_manager.hpp"
 
 #include "request_manager.hpp"

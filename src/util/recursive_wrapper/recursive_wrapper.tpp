@@ -1,3 +1,5 @@
+#pragma once
+
 #include "recursive_wrapper.hpp"
 
 #include <memory>

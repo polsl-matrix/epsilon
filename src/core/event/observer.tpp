@@ -1,3 +1,7 @@
+#pragma once
+
+#include "observer.hpp"
+
 namespace epsilon::core::event {
 
 template <typename... Args> Observer<Args...>::~Observer() = default;

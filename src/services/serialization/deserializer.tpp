@@ -1,3 +1,5 @@
+#pragma once
+
 #include "deserializer.hpp"
 
 #include "deserializable.hpp"

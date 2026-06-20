@@ -56,7 +56,7 @@ JsonSerializationStrategy::Serialize(SerializationPrimitive primitive) const {
                 result += "}";
 
                 return result;
-            }},
+            } },
         primitive);
 }
 

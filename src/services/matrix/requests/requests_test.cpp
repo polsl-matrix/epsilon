@@ -34,7 +34,7 @@ struct PipelineTestBody : public ISerializable {
 
   protected:
     SerializationPrimitive GetPrimitiveRepresentation() const override {
-        return String{test_value};
+        return String{ test_value };
     }
 };
 
@@ -52,18 +52,18 @@ template <>
 ::PipelineTestSuccess
 Deserialize<::PipelineTestSuccess>(SerializationPrimitive primitive) {
     if (std::holds_alternative<String>(primitive)) {
-        return ::PipelineTestSuccess{std::get<String>(primitive).value};
+        return ::PipelineTestSuccess{ std::get<String>(primitive).value };
     }
-    return ::PipelineTestSuccess{"stub_fallback_success"};
+    return ::PipelineTestSuccess{ "stub_fallback_success" };
 }
 
 template <>
 ::PipelineTestError
 Deserialize<::PipelineTestError>(SerializationPrimitive primitive) {
     if (std::holds_alternative<String>(primitive)) {
-        return ::PipelineTestError{std::get<String>(primitive).value};
+        return ::PipelineTestError{ std::get<String>(primitive).value };
     }
-    return ::PipelineTestError{"stub_fallback_error"};
+    return ::PipelineTestError{ "stub_fallback_error" };
 }
 
 } // namespace epsilon::services::matrix::serialization
@@ -80,7 +80,7 @@ class StubSerializationStrategy : public ISerializationStrategy,
 
     SerializationPrimitive
     Deserialize(const std::string &serialized) const override {
-        return String{serialized};
+        return String{ serialized };
     }
 };
 
@@ -138,7 +138,7 @@ class RequestManagerStatefulTest : public ::testing::Test {
 TEST_F(RequestManagerStatefulTest,
        ProperlyAssemblesAndRoutesRawRequestProperties) {
     ArchitecturalTestRequest request;
-    request.SetBody(PipelineTestBody{"sync_token_alpha"});
+    request.SetBody(PipelineTestBody{ "sync_token_alpha" });
 
     bool pipeline_callback_executed = false;
 

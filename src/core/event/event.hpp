@@ -28,10 +28,7 @@ template <typename... Args> class Event {
     template <std::derived_from<Observer<Args...>> TObserver,
               typename... ConstructorArgs>
         requires std::is_constructible_v<TObserver, ConstructorArgs &&...>
-    Detachment Attach(ConstructorArgs &&...args) {
-        return Attach(std::static_pointer_cast<Observer<Args...>>(
-            std::make_shared<TObserver>(std::forward<ConstructorArgs>(args)...)));
-    }
+    Detachment Attach(ConstructorArgs &&...args);
 
   private:
     void DetachById(size_t id); // NOLINT(readability-identifier-length)
