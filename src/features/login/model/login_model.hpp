@@ -15,6 +15,7 @@ class LoginModel {
   public:
     LoginModel(std::unique_ptr<RequestManager>&& request_manager);
 
+    // TODO: It's not an email, it's a username
     bool Authenticate(const std::string &email, const std::string &password);
 };
 

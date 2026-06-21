@@ -21,6 +21,11 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/request_manager.cpp
   src/services/matrix/requests/authenticated_request_manager.cpp
   src/services/matrix/requests/qt_raw_request_manager.cpp
+
+  src/services/matrix/requests/implementation/common/error.cpp
+  src/services/matrix/requests/implementation/login/login_request_body.cpp
+  src/services/matrix/requests/implementation/login/login_request_response.cpp
+  src/services/matrix/requests/implementation/login/login_request.cpp
 )
 
 set(LIB_SOURCES

@@ -9,6 +9,7 @@
 
 namespace epsilon::services::matrix::serialization {
 
+// DeserializationUnexpectedPrimitiveException implementation
 DeserializationUnexpectedPrimitiveException::
     DeserializationUnexpectedPrimitiveException(
         SerializationPrimitive expected, SerializationPrimitive encountered)
@@ -26,6 +27,15 @@ DeserializationUnexpectedPrimitiveException::Encountered() const {
     return m_Encountered;
 }
 
+// DeserializationFieldNotFoundException implementation
+DeserializationFieldNotFoundException::DeserializationFieldNotFoundException(std::string expected_field)
+    : std::runtime_error(std::format("Expected {} field was not found", expected_field)), m_ExpectedField(std::move(expected_field)) {}
+
+std::string DeserializationFieldNotFoundException::ExpectedField() const {
+    return m_ExpectedField;
+}
+
+// DeserializationUnrecognizedFormatException implementation
 DeserializationUnrecognizedFormatException::
     DeserializationUnrecognizedFormatException(std::string expected_format)
     : std::runtime_error(std::format("Deserialization failed because of an "
