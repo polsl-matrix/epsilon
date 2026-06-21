@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    const auto backend_url = "";
+    const auto backend_url = "http://127.0.0.1:8080";
 
     auto pageRouter = std::make_shared<PageRouter>();
 

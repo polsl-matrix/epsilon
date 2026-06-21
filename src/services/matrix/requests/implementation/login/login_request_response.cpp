@@ -3,6 +3,7 @@
 #include "../../../../serialization/deserializable.hpp"
 #include "../../../../serialization/deserialization_helpers.hpp"
 
+#include <optional>
 #include <string>
 
 namespace epsilon::services::matrix::serialization {
@@ -12,12 +13,12 @@ requests::implementation::login::LoginRequestResponse Deserialize<requests::impl
     const auto reply = Expect<RObject>(primitive).get();
 
     const auto access_token = ReadField<String>(reply, "access_token");
-    const auto device_id = ReadField<String>(reply, "device_id");
+    const auto device_id = ReadFieldOptional<String>(reply, "device_id");
     const auto user_id = ReadField<String>(reply, "user_id");
 
     return requests::implementation::login::LoginRequestResponse {
         access_token.value,
-        device_id.value,
+        device_id.transform([](const auto device_id) { return device_id.value; }),
         user_id.value
     };
 }

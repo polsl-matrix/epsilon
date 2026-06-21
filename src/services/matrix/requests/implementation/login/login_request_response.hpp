@@ -2,13 +2,14 @@
 
 #include "../../../../serialization/deserializable.hpp"
 
+#include <optional>
 #include <string>
 
 namespace epsilon::services::matrix::requests::implementation::login {
 
 struct LoginRequestResponse {
     std::string AccessToken;
-    std::string DeviceId;
+    std::optional<std::string> DeviceId;
     std::string UserId;
 };
 

@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <iostream>
 
 namespace epsilon::features::login {
 
@@ -40,10 +41,38 @@ void LoginPresenter::HandleLogin(const std::string &email,
         return;
     }
 
-    if (m_Model && m_Model->Authenticate(email, password)) {
-        view->ShowLoginSuccess();
-    } else {
-        view->ShowLoginError("Incorrect email or password");
+    if (m_Model) {
+        m_Model->Authenticate(email, password)->Then([view](auto login_data) {
+            if(login_data.has_value()) {
+                view->ShowLoginSuccess();
+            } else {
+                const auto error = login_data.error();
+    
+                switch (error)
+                {
+                case LoginError::IncorrectAuthenticationData:
+                    view->ShowLoginError("Incorrect email or password");
+                    break;
+                    
+                case LoginError::UserDeactivated:
+                    view->ShowLoginError("This user has been deactivated");
+                    break;
+                    
+                case LoginError::ReachedRequestLimit:
+                    view->ShowLoginError("Slow down! Too many requests at once");
+                    break;
+                    
+                case LoginError::RequestFailed:
+                    view->ShowLoginError("HTTP request failed. Make sure you're connected to the Internet");
+                    break;
+                
+                default:
+                    view->ShowLoginError("Unknown error has occured");
+                }
+            }
+        });
+
+        std::cout << "set up the future\n";
     }
 }
 

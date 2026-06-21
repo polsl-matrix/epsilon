@@ -17,6 +17,8 @@ class Request {
     std::optional<TBody> m_Body;
 
 public:
+    Request(std::optional<TBody> body = std::nullopt);
+
     virtual HttpMethod Method() const = 0;
     virtual std::string Endpoint() const = 0;
     virtual std::unordered_map<std::string, std::string> AdditionalHeaders() const;

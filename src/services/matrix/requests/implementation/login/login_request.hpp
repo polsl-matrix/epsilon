@@ -11,6 +11,8 @@ namespace epsilon::services::matrix::requests::implementation::login {
 
 class LoginRequest : public Request<LoginRequestBody, LoginRequestResponse, common::Error> {
 public:
+    using Request<LoginRequestBody, LoginRequestResponse, common::Error>::Request;
+
     virtual HttpMethod Method() const override;
     virtual std::string Endpoint() const override;
 };

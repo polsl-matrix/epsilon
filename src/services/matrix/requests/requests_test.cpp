@@ -88,7 +88,7 @@ class ArchitecturalTestRequest
     : public Request<PipelineTestBody, PipelineTestSuccess, PipelineTestError> {
   public:
     HttpMethod Method() const override { return HttpMethod::PUT; }
-    std::string Endpoint() const override { return "matrix/client/r0/sync"; }
+    std::string Endpoint() const override { return "/matrix/client/r0/sync"; }
 };
 
 class StatefulRawRequestManager : public IRawRequestManager {

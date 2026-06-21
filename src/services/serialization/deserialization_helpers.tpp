@@ -7,6 +7,7 @@
 
 #include "../../util/alternative_of/alternative_of.hpp"
 
+#include <optional>
 #include <string>
 
 namespace epsilon::services::matrix::serialization {
@@ -24,6 +25,17 @@ template<util::alternative_of<SerializationPrimitive> TField>
 TField ReadField(const Object& object, const std::string& field_name) {
     if(!object.values.contains(field_name)) {
         throw DeserializationFieldNotFoundException(field_name);
+    }
+
+    const auto &field = object.values.at(field_name);
+
+    return Expect<TField>(field);
+}
+
+template<util::alternative_of<SerializationPrimitive> TField>
+std::optional<TField> ReadFieldOptional(const Object& object, const std::string& field_name) {
+    if(!object.values.contains(field_name)) {
+        return std::nullopt;
     }
 
     const auto &field = object.values.at(field_name);

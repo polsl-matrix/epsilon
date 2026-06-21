@@ -10,6 +10,8 @@ class Detachment {
   public:
     Detachment(std::function<void()> detachAction) noexcept;
 
+    /// @brief Detaches the observer from an event.
+    /// You should NEVER detach from an event which went out of scope.
     void Detach();
 };
 } // namespace epsilon::core::event

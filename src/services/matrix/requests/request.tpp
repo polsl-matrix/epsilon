@@ -11,6 +11,11 @@ namespace epsilon::services::matrix::requests {
 
 template<class TBody, class TResult, class TError>
     requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
+Request<TBody, TResult, TError>::Request(std::optional<TBody> body)
+    : m_Body(body) {}
+
+template<class TBody, class TResult, class TError>
+    requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
 std::unordered_map<std::string, std::string> Request<TBody, TResult, TError>::AdditionalHeaders() const {
     return {};
 }

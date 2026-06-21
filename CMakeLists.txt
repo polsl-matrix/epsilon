@@ -36,14 +36,14 @@ set(LIB_SOURCES
 set(APP_SOURCES
   src/main.cpp
 
-        src/router/page_router.cpp
+  src/router/page_router.cpp
 
-        src/features/login/model/login_model.cpp
-        src/features/login/presenter/login_presenter.cpp
-        src/features/login/view/login_view.cpp
+  src/features/login/model/login_model.cpp
+  src/features/login/presenter/login_presenter.cpp
+  src/features/login/view/login_view.cpp
 
-        src/features/main_page/presenter/home_presenter.cpp
-        src/features/main_page/view/home_view.cpp
+  src/features/main_page/presenter/home_presenter.cpp
+  src/features/main_page/view/home_view.cpp
 )
 
 set(SOURCES
@@ -53,6 +53,7 @@ set(SOURCES
 
 set(CORE_TEST_SOURCES
   src/core/event/event_test.cpp
+  src/core/future/future_test.cpp
 )
 
 set(SERVICES_TEST_SOURCES
