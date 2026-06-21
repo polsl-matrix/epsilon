@@ -106,6 +106,14 @@ qt_add_qml_module(epsilon
     src/features/main_page/view/Home.qml
     src/features/main_page/view/EmptySpace.qml
     src/features/main_page/view/SideMenu.qml
+    src/features/main_page/view/ChatRoom.qml
+    src/features/main_page/view/components/CustomScrollBar.qml
+    src/features/main_page/view/components/CircleAvatar.qml
+    src/features/main_page/view/components/MenuDivider.qml
+    src/features/main_page/view/components/UserProfileBar.qml
+    src/features/main_page/view/components/SpaceSearchBar.qml
+    src/features/main_page/view/components/RoomListView.qml
+    src/features/main_page/view/components/CreateServerButton.qml
   RESOURCES
     resources/settings.svg
     resources/search.svg
@@ -113,6 +121,8 @@ qt_add_qml_module(epsilon
     resources/plus.svg
     resources/exit.svg
     resources/check.svg
+    resources/send.svg
+    resources/arrow.svg
 )
 
 target_link_libraries(epsilon
