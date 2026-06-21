@@ -12,7 +12,7 @@ namespace epsilon::features::login {
 class LoginPresenter {
 public:
     LoginPresenter(std::weak_ptr<ILoginView> view, std::shared_ptr<LoginModel> model);
-    void HandleLogin(const std::string& email, const std::string& password);
+    void HandleLogin(const std::string& username, const std::string& password);
 
 private:
     std::weak_ptr<ILoginView> m_View;

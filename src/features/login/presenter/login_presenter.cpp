@@ -18,21 +18,21 @@ LoginPresenter::LoginPresenter(std::weak_ptr<ILoginView> view,
     if (auto view_ptr = m_View.lock()) {
         m_LoginRequestDetachment = view_ptr->OnLoginRequested.template Attach<
             epsilon::core::event::util::Action<std::string, std::string>>(
-            [this](const std::string &email, const std::string &password) {
-                HandleLogin(email, password);
+            [this](const std::string &username, const std::string &password) {
+                HandleLogin(username, password);
             });
     }
 }
 
-void LoginPresenter::HandleLogin(const std::string &email,
+void LoginPresenter::HandleLogin(const std::string &username,
                                  const std::string &password) {
     auto view = m_View.lock();
     if (!view) {
         return;
     }
 
-    if (email.empty()) {
-        view->ShowLoginError("Email cannot be empty");
+    if (username.empty()) {
+        view->ShowLoginError("Username cannot be empty");
         return;
     }
 
@@ -42,7 +42,7 @@ void LoginPresenter::HandleLogin(const std::string &email,
     }
 
     if (m_Model) {
-        m_Model->Authenticate(email, password)->Then([view](auto login_data) {
+        m_Model->Authenticate(username, password)->Then([view](auto login_data) {
             if(login_data.has_value()) {
                 view->ShowLoginSuccess();
             } else {
@@ -51,7 +51,7 @@ void LoginPresenter::HandleLogin(const std::string &email,
                 switch (error)
                 {
                 case LoginError::IncorrectAuthenticationData:
-                    view->ShowLoginError("Incorrect email or password");
+                    view->ShowLoginError("Incorrect username or password");
                     break;
                     
                 case LoginError::UserDeactivated:

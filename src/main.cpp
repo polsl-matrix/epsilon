@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
                      });
 
     QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
-                     loginView.get(), &LoginView::displayLogoutSuccess);
+                     loginView.get(), &LoginView::DisplayLogoutSuccess);
 
     engine.rootContext()->setContextProperty("loginViewBackend",
                                              loginView.get());

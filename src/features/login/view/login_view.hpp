@@ -15,14 +15,14 @@ class LoginView : public QObject, public ILoginView {
   public:
     explicit LoginView(QObject *parent = nullptr);
 
-    Q_INVOKABLE void AttemptLogin(const QString &email,
+    Q_INVOKABLE void AttemptLogin(const QString &username,
                                   const QString &password);
 
     void ShowLoginError(const std::string &error) override;
     void ShowLoginSuccess() override;
 
   
-    void displayLogoutSuccess();
+    void DisplayLogoutSuccess();
 
   signals:
     void loginFailed(const QString &_t1);

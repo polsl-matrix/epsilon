@@ -23,14 +23,14 @@ namespace epsilon::features::login {
 
 LoginModel::LoginModel(std::unique_ptr<RequestManager>&& request_manager) : m_RequestManager(std::move(request_manager)) {}
 
-std::shared_ptr<Future<LoginModel::Result>::Handle> LoginModel::Authenticate(const std::string &email,
+std::shared_ptr<Future<LoginModel::Result>::Handle> LoginModel::Authenticate(const std::string &username,
                               const std::string &password)
 {
     auto login_future = std::make_shared<Future<Result>>();
 
     auto request = LoginRequest();
 
-    request.SetBody(LoginRequestBody { email, password });
+    request.SetBody(LoginRequestBody { username, password });
 
     m_RequestManager->Execute<LoginRequestBody, LoginRequestResponse, Error>(
         request,
