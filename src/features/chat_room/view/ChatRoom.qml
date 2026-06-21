@@ -61,6 +61,12 @@ Rectangle {
                 messageText: model.text
                 isSenderMe: model.isMe
             }
+
+            onAtYBeginningChanged: {
+                if (atYBeginning && typeof chatViewBackend !== "undefined") {
+                    chatViewBackend.RequestEarlierMessages()
+                }
+            }
         }
 
         Item {
@@ -236,6 +242,12 @@ Rectangle {
         target: typeof chatViewBackend !== "undefined" ? chatViewBackend : null
         function onMessageAppended(text, isMe) {
             chatListModel.append({"text": text, "isMe": isMe})
+        }
+        function onMessagePrepended(text, isMe) {
+            let beforeHeight = chatListView.contentHeight
+            chatListModel.insert(0, {"text": text, "isMe": isMe})
+            chatListView.forceLayout()
+            chatListView.contentY += (chatListView.contentHeight - beforeHeight)
         }
     }
 

@@ -21,8 +21,16 @@ void ChatRoomView::NotifyViewReady() {
     OnViewReady.Invoke();
 }
 
+void ChatRoomView::RequestEarlierMessages() {
+    OnLoadEarlierRequested.Invoke();
+}
+
 void ChatRoomView::AppendMessage(const std::string& text, bool isMe) {
     emit messageAppended(QString::fromStdString(text), isMe);
+}
+
+void ChatRoomView::PrependMessage(const std::string& text, bool isMe) {
+    emit messagePrepended(QString::fromStdString(text), isMe);
 }
 
 }

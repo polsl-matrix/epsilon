@@ -17,10 +17,13 @@ public:
     QString roomAvatar() const;
     Q_INVOKABLE void SendMessage(const QString& text);
     Q_INVOKABLE void NotifyViewReady();
+    Q_INVOKABLE void RequestEarlierMessages();
     void AppendMessage(const std::string& text, bool isMe) override;
+    void PrependMessage(const std::string& text, bool isMe) override;
 
     signals:
         void messageAppended(const QString& text, bool isMe);
+    void messagePrepended(const QString& text, bool isMe);
 
 private:
     QString m_RoomName;
