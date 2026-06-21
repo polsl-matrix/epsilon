@@ -39,6 +39,9 @@ set(APP_SOURCES
 
         src/features/main_page/presenter/home_presenter.cpp
         src/features/main_page/view/home_view.cpp
+
+        src/features/chat_room/presenter/chat_room_presenter.cpp
+        src/features/chat_room/view/chat_room_view.cpp
 )
 
 set(SOURCES
@@ -106,9 +109,9 @@ qt_add_qml_module(epsilon
     src/features/main_page/view/Home.qml
     src/features/main_page/view/EmptySpace.qml
     src/features/main_page/view/SideMenu.qml
-    src/features/main_page/view/ChatRoom.qml
-    src/features/main_page/view/components/CustomScrollBar.qml
-    src/features/main_page/view/components/CircleAvatar.qml
+    src/features/chat_room/view/ChatRoom.qml
+    src/components/CustomScrollBar.qml
+    src/components/CircleAvatar.qml
     src/features/main_page/view/components/MenuDivider.qml
     src/features/main_page/view/components/UserProfileBar.qml
     src/features/main_page/view/components/SpaceSearchBar.qml

@@ -5,9 +5,6 @@ import QtQuick.Layouts
 Rectangle {
     id: chatRoomRoot
 
-    property string roomName: ""
-    property string roomAvatar: ""
-
     color: "#1e1f22"
 
     component MessageItem : ColumnLayout {
@@ -57,62 +54,7 @@ Rectangle {
             }
 
             model: ListModel {
-                ListElement {
-                    text: "Hey! Are we still working on the epsilon architecture?"
-                    isMe: false
-                }
-                ListElement {
-                    text: "Yes, backend is fully detached now. Working on the chat UI."
-                    isMe: true
-                }
-                ListElement {
-                    text: "Awesome. The custom event system is extremely fast."
-                    isMe: false
-                }
-                ListElement {
-                    text: "Did you check the new CMake configuration?"
-                    isMe: true
-                }
-                ListElement {
-                    text: "Everything compiles without any warnings or errors."
-                    isMe: false
-                }
-                ListElement {
-                    text: "Great! Now let's test how the scrolling behaves with many messages."
-                    isMe: true
-                }
-                ListElement {
-                    text: "Adding a few more lines to fill up the screen completely."
-                    isMe: false
-                }
-                ListElement {
-                    text: "This should push the top messages under the fading overlay."
-                    isMe: true
-                }
-                ListElement {
-                    text: "Looks really clean, exactly like iMessage."
-                    isMe: false
-                }
-                ListElement {
-                    text: "We also need animations for the send button and the header."
-                    isMe: true
-                }
-                ListElement {
-                    text: "And replacing the text arrow with an SVG icon."
-                    isMe: false
-                }
-                ListElement {
-                    text: "Now testing the refined top gradient overlay."
-                    isMe: true
-                }
-                ListElement {
-                    text: "It uses pure alpha channel interpolation to avoid gray smudges."
-                    isMe: false
-                }
-                ListElement {
-                    text: "And the scrollbar appears dynamically only while moving."
-                    isMe: true
-                }
+                id: chatListModel
             }
 
             delegate: MessageItem {
@@ -138,8 +80,9 @@ Rectangle {
                     spacing: 10
 
                     TextField {
+                        id: messageInputField
                         Layout.fillWidth: true
-                        placeholderText: "Message " + chatRoomRoot.roomName
+                        placeholderText: "Message " + (typeof chatViewBackend !== "undefined" ? chatViewBackend.roomName : "")
                         placeholderTextColor: "#80848e"
                         color: "white"
                         font.pixelSize: 14
@@ -173,6 +116,12 @@ Rectangle {
                             id: sendMouseArea
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (typeof chatViewBackend !== "undefined" && messageInputField.text.trim() !== "") {
+                                    chatViewBackend.SendMessage(messageInputField.text)
+                                    messageInputField.text = ""
+                                }
+                            }
                         }
                     }
                 }
@@ -230,7 +179,7 @@ Rectangle {
 
                 Text {
                     anchors.centerIn: parent
-                    text: chatRoomRoot.roomAvatar.length === 1 ? chatRoomRoot.roomAvatar : ""
+                    text: (typeof chatViewBackend !== "undefined" && chatViewBackend.roomAvatar.length === 1) ? chatViewBackend.roomAvatar : ""
                     color: "white"
                     font.pixelSize: 18
                     font.bold: true
@@ -238,9 +187,9 @@ Rectangle {
 
                 Image {
                     anchors.fill: parent
-                    source: chatRoomRoot.roomAvatar.length > 1 ? chatRoomRoot.roomAvatar : ""
+                    source: (typeof chatViewBackend !== "undefined" && chatViewBackend.roomAvatar.length > 1) ? chatViewBackend.roomAvatar : ""
                     fillMode: Image.PreserveAspectCrop
-                    visible: chatRoomRoot.roomAvatar.length > 1
+                    visible: typeof chatViewBackend !== "undefined" && chatViewBackend.roomAvatar.length > 1
                 }
             }
 
@@ -259,7 +208,7 @@ Rectangle {
                     spacing: 6
 
                     Text {
-                        text: chatRoomRoot.roomName
+                        text: typeof chatViewBackend !== "undefined" ? chatViewBackend.roomName : ""
                         color: "white"
                         font.pixelSize: 13
                         font.bold: true
@@ -280,6 +229,19 @@ Rectangle {
             id: headerMouseArea
             anchors.fill: headerColumn
             cursorShape: Qt.PointingHandCursor
+        }
+    }
+
+    Connections {
+        target: typeof chatViewBackend !== "undefined" ? chatViewBackend : null
+        function onMessageAppended(text, isMe) {
+            chatListModel.append({"text": text, "isMe": isMe})
+        }
+    }
+
+    Component.onCompleted: {
+        if (typeof chatViewBackend !== "undefined") {
+            chatViewBackend.NotifyViewReady()
         }
     }
 }
