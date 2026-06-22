@@ -17,14 +17,16 @@ class LoginModel {
     using Future = epsilon::core::future::Future<T>;
     using Result = std::expected<LoginResult, LoginError>;
   
-    std::unique_ptr<RequestManager> m_RequestManager;
+    std::shared_ptr<RequestManager> m_RequestManager;
 
   public:
-    LoginModel(std::unique_ptr<RequestManager>&& request_manager);
+    LoginModel(std::shared_ptr<RequestManager> request_manager);
 
     /// @brief Authenticates the user with the given credentials
     /// @returns The received access token or an authentication error
     std::shared_ptr<Future<Result>::Handle> Authenticate(const std::string &username, const std::string &password);
+
+    std::shared_ptr<RequestManager> GetRequestManager();
 };
 
 }

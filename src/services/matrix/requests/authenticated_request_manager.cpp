@@ -9,11 +9,11 @@
 namespace epsilon::services::matrix::requests {
 
 AuthenticatedRequestManager::AuthenticatedRequestManager(
-    std::unique_ptr<RequestManager> &&inner, std::string token)
+    std::shared_ptr<RequestManager> inner, std::string token)
     : m_InnerManager(std::move(inner)), m_AccessToken(std::move(token)) {}
 
-std::unique_ptr<RequestManager> AuthenticatedRequestManager::Release() && {
-    return std::move(m_InnerManager);
+std::shared_ptr<RequestManager> AuthenticatedRequestManager::GetInner() {
+    return m_InnerManager;
 }
 
 } // namespace epsilon::services::matrix::requests

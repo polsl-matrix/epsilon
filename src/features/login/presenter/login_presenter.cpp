@@ -2,49 +2,64 @@
 #include "../../../core/event/util/action.hpp"
 #include "../model/login_model.hpp"
 #include "contracts/ilogin_view.hpp"
+#include "../../../services/navigation/inavigation_service.hpp"
+#include "../../../services/navigation/screen.hpp"
+#include "../../../services/navigation/args/home_screen_args.hpp"
+#include "../../../services/matrix/requests/authenticated_request_manager.hpp"
 
 #include <memory>
 #include <string>
 #include <utility>
-#include <iostream>
+
+using AuthenticatedRequestManager = epsilon::services::matrix::requests::AuthenticatedRequestManager;
 
 namespace epsilon::features::login {
 
-LoginPresenter::LoginPresenter(std::weak_ptr<ILoginView> view,
-                               std::shared_ptr<LoginModel> model)
-    : m_View(std::move(view)), m_Model(std::move(model)),
-      m_LoginRequestDetachment([]() {}) {
-
-    if (auto view_ptr = m_View.lock()) {
-        m_LoginRequestDetachment = view_ptr->OnLoginRequested.template Attach<
-            epsilon::core::event::util::Action<std::string, std::string>>(
-            [this](const std::string &username, const std::string &password) {
-                HandleLogin(username, password);
-            });
-    }
+LoginPresenter::LoginPresenter(std::unique_ptr<ILoginView> view,
+                               std::unique_ptr<LoginModel> model,
+                               std::shared_ptr<services::navigation::INavigationService> navigation_service)
+    : m_View(std::move(view)), m_Model(std::move(model)), m_NavigationService(std::move(navigation_service)) {
+    m_LoginRequestDetachment = m_View->OnLoginRequested.Attach<
+        epsilon::core::event::util::Action<std::string, std::string>>(
+        [this](const std::string &username, const std::string &password) {
+            HandleLogin(username, password);
+        });
 }
 
 void LoginPresenter::HandleLogin(const std::string &username,
                                  const std::string &password) {
-    auto view = m_View.lock();
-    if (!view) {
-        return;
-    }
-
     if (username.empty()) {
-        view->ShowLoginError("Username cannot be empty");
+        m_View->ShowLoginError("Username cannot be empty");
         return;
     }
 
     if (password.empty()) {
-        view->ShowLoginError("Password cannot be empty");
+        m_View->ShowLoginError("Password cannot be empty");
         return;
     }
 
     if (m_Model) {
-        m_Model->Authenticate(username, password)->Then([view](auto login_data) {
+        std::weak_ptr<ILoginView> view_pointer = m_View;
+        std::weak_ptr<LoginModel> model_pointer = m_Model;
+        std::weak_ptr<services::navigation::INavigationService> navigation_service_pointer = m_NavigationService;
+
+        m_Model->Authenticate(username, password)->Then([view_pointer, model_pointer, navigation_service_pointer](auto login_data) {
+            if(view_pointer.expired() || model_pointer.expired() || navigation_service_pointer.expired()) {
+                return;
+            }
+
+            auto view = view_pointer.lock();
+            auto model = model_pointer.lock();
+            auto navigation_service = navigation_service_pointer.lock();
+
             if(login_data.has_value()) {
-                view->ShowLoginSuccess();
+                navigation_service->NavigateTo(
+                    services::navigation::Screen::Home,
+                    services::navigation::args::HomeScreenArgs {
+                        std::make_shared<AuthenticatedRequestManager>(model->GetRequestManager(), login_data.value().AccessToken),
+                        navigation_service
+                    }
+                );
             } else {
                 const auto error = login_data.error();
     
@@ -71,8 +86,6 @@ void LoginPresenter::HandleLogin(const std::string &username,
                 }
             }
         });
-
-        std::cout << "set up the future\n";
     }
 }
 

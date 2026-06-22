@@ -11,7 +11,6 @@
 #include <optional>
 #include <string>
 #include <utility>
-#include <iostream>
 
 using epsilon::core::future::Future;
 using epsilon::services::matrix::requests::implementation::common::Error;
@@ -21,7 +20,7 @@ using epsilon::services::matrix::requests::implementation::login::LoginRequest;
 
 namespace epsilon::features::login {
 
-LoginModel::LoginModel(std::unique_ptr<RequestManager>&& request_manager) : m_RequestManager(std::move(request_manager)) {}
+LoginModel::LoginModel(std::shared_ptr<RequestManager> request_manager) : m_RequestManager(std::move(request_manager)) {}
 
 std::shared_ptr<Future<LoginModel::Result>::Handle> LoginModel::Authenticate(const std::string &username,
                               const std::string &password)
@@ -39,8 +38,6 @@ std::shared_ptr<Future<LoginModel::Result>::Handle> LoginModel::Authenticate(con
                 login_future->Realize(std::unexpected(LoginError::RequestFailed));
                 return;
             }
-
-            std::cout << "Received reply. Status code: " << reply->StatusCode << '\n';
 
             if(reply->StatusCode != 200 || !reply->Body.has_value()) {
                 const auto error = reply->Body.error();
@@ -65,6 +62,10 @@ std::shared_ptr<Future<LoginModel::Result>::Handle> LoginModel::Authenticate(con
     );
 
     return login_future->GetHandle();
+}
+
+std::shared_ptr<LoginModel::RequestManager> LoginModel::GetRequestManager() {
+    return m_RequestManager;
 }
 
 }

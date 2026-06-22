@@ -1,18 +1,19 @@
 #pragma once
 
-#include "contracts/ihome_presenter.hpp"
+#include "../../base/ipresenter.hpp"
 #include "contracts/ihome_view.hpp"
+
 #include <memory>
 
 namespace epsilon::features::home {
 
-class HomePresenter : public IHomePresenter {
+class HomePresenter : public base::IPresenter {
   public:
-    explicit HomePresenter(std::weak_ptr<IHomeView> view);
-    void HandleLogout() override;
+    explicit HomePresenter(std::unique_ptr<IHomeView> view);
+    void HandleLogout();
 
   private:
-    std::weak_ptr<IHomeView> m_View;
+    std::unique_ptr<IHomeView> m_View;
 };
 
 }

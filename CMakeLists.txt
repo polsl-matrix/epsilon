@@ -26,6 +26,8 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/login/login_request_body.cpp
   src/services/matrix/requests/implementation/login/login_request_response.cpp
   src/services/matrix/requests/implementation/login/login_request.cpp
+
+  src/services/router/page_router.cpp
 )
 
 set(LIB_SOURCES
@@ -36,14 +38,14 @@ set(LIB_SOURCES
 set(APP_SOURCES
   src/main.cpp
 
-  src/router/page_router.cpp
-
   src/features/login/model/login_model.cpp
   src/features/login/presenter/login_presenter.cpp
   src/features/login/view/login_view.cpp
 
   src/features/main_page/presenter/home_presenter.cpp
   src/features/main_page/view/home_view.cpp
+
+  src/services/navigation/navigation_service.cpp
 )
 
 set(SOURCES

@@ -8,6 +8,7 @@ class Detachment {
     std::function<void()> m_DetachAction;
 
   public:
+    Detachment() = default;
     Detachment(std::function<void()> detachAction) noexcept;
 
     /// @brief Detaches the observer from an event.

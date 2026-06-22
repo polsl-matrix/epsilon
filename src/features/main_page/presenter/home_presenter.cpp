@@ -5,17 +5,12 @@
 
 namespace epsilon::features::home {
 
-HomePresenter::HomePresenter(std::weak_ptr<IHomeView> view)
-    : m_View(std::move(view)) {
-    if (auto view_lock = m_View.lock()) {
-        view_lock->OnLogoutRequested = [this]() { HandleLogout(); };
-    }
+HomePresenter::HomePresenter(std::unique_ptr<IHomeView> view) : m_View(std::move(view)) {
+    m_View->OnLogoutRequested = [this]() { HandleLogout(); };
 }
 
 void HomePresenter::HandleLogout() {
-    if (auto view = m_View.lock()) {
-        view->ShowLogoutSuccess();
-    }
+    m_View->ShowLogoutSuccess();
 }
 
 }
