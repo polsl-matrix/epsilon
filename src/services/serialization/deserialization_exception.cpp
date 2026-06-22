@@ -28,8 +28,11 @@ DeserializationUnexpectedPrimitiveException::Encountered() const {
 }
 
 // DeserializationFieldNotFoundException implementation
-DeserializationFieldNotFoundException::DeserializationFieldNotFoundException(std::string expected_field)
-    : std::runtime_error(std::format("Expected {} field was not found", expected_field)), m_ExpectedField(std::move(expected_field)) {}
+DeserializationFieldNotFoundException::DeserializationFieldNotFoundException(
+    std::string expected_field)
+    : std::runtime_error(
+          std::format("Expected {} field was not found", expected_field)),
+      m_ExpectedField(std::move(expected_field)) {}
 
 std::string DeserializationFieldNotFoundException::ExpectedField() const {
     return m_ExpectedField;

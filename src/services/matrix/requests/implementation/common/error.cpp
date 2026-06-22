@@ -13,22 +13,24 @@ using epsilon::services::matrix::serialization::ReadField;
 
 namespace epsilon::services::matrix::requests::implementation::common {
 
-Error::Error(std::string error_code, std::optional<std::string> error_message) : m_ErrorCode(std::move(error_code)), m_ErrorMessage(std::move(error_message)) {}
+Error::Error(std::string error_code, std::optional<std::string> error_message)
+    : m_ErrorCode(std::move(error_code)),
+      m_ErrorMessage(std::move(error_message)) {}
 
-std::string Error::ErrorCode() const {
-    return m_ErrorCode;
-}
+std::string Error::ErrorCode() const { return m_ErrorCode; }
 
 std::optional<std::string> Error::ErrorMessage() const {
     return m_ErrorMessage;
 }
 
-}
+} // namespace epsilon::services::matrix::requests::implementation::common
 
 namespace epsilon::services::matrix::serialization {
 
 template <>
-requests::implementation::common::Error Deserialize<requests::implementation::common::Error>(SerializationPrimitive primitive) {
+requests::implementation::common::Error
+Deserialize<requests::implementation::common::Error>(
+    SerializationPrimitive primitive) {
     const auto reply = Expect<RObject>(primitive).get();
 
     const auto error_code = ReadField<String>(reply, "errcode");
@@ -36,8 +38,8 @@ requests::implementation::common::Error Deserialize<requests::implementation::co
 
     return requests::implementation::common::Error(
         error_code.value,
-        error_message.transform([](const auto& error_message) { return error_message.value; })
-    );
+        error_message.transform(
+            [](const auto &error_message) { return error_message.value; }));
 }
 
-}
+} // namespace epsilon::services::matrix::serialization

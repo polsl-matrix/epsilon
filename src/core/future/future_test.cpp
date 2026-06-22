@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
+#include <functional>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <memory>
 #include <string>
-#include <functional>
 
 #include "future.hpp"
 
@@ -30,7 +30,7 @@ TEST(FutureTest, InvokesCallbackWhenRealizedAsynchronously) {
 
 TEST(FutureTest, InvokesCallbackImmediatelyIfAlreadyRealized) {
     Future<int> int_future;
-    
+
     int_future.Realize(42);
 
     auto handle = int_future.GetHandle();
@@ -49,7 +49,7 @@ TEST(FutureTest, InvokesCallbackImmediatelyIfAlreadyRealized) {
 
 TEST(FutureTest, SupportsMultipleIndependentObservers) {
     Future<double> double_future;
-    
+
     auto handle_alpha = double_future.GetHandle();
     auto handle_beta = double_future.GetHandle();
 

@@ -7,15 +7,15 @@
 #include <memory>
 #include <utility>
 
+#include "services/navigation/args/login_screen_args.hpp"
 #include "services/navigation/navigation_service.hpp"
 #include "services/navigation/screen.hpp"
-#include "services/navigation/args/login_screen_args.hpp"
 
 #include "services/router/page_router.hpp"
 
 #include "services/matrix/requests/iraw_request_manager.hpp"
-#include "services/matrix/requests/request_manager.hpp"
 #include "services/matrix/requests/qt_raw_request_manager.hpp"
+#include "services/matrix/requests/request_manager.hpp"
 
 #include "services/serialization/json/json_deserialization_strategy.hpp"
 #include "services/serialization/json/json_serialization_strategy.hpp"
@@ -34,7 +34,8 @@ using epsilon::services::matrix::serialization::Deserializer;
 using epsilon::services::matrix::serialization::IDeserializationStrategy;
 using epsilon::services::matrix::serialization::ISerializationStrategy;
 using epsilon::services::matrix::serialization::Serializer;
-using epsilon::services::matrix::serialization::json::JsonDeserializationStrategy;
+using epsilon::services::matrix::serialization::json::
+    JsonDeserializationStrategy;
 using epsilon::services::matrix::serialization::json::JsonSerializationStrategy;
 
 using epsilon::services::router::PageRouter;
@@ -49,22 +50,21 @@ int main(int argc, char *argv[]) {
 
     auto page_router = std::make_shared<PageRouter>(engine.rootContext());
 
-    auto serializer = std::make_unique<Serializer>(std::make_unique<JsonSerializationStrategy>());
-    auto deserializer = std::make_shared<Deserializer>(std::make_unique<JsonDeserializationStrategy>());
+    auto serializer = std::make_unique<Serializer>(
+        std::make_unique<JsonSerializationStrategy>());
+    auto deserializer = std::make_shared<Deserializer>(
+        std::make_unique<JsonDeserializationStrategy>());
 
     auto request_manager = std::make_shared<RequestManager>(
         backend_url,
-        unique_pointer_cast<IRawRequestManager>(std::make_unique<QtRawRequestManager>()),
-        std::move(serializer),
-        std::move(deserializer)
-    );
+        unique_pointer_cast<IRawRequestManager>(
+            std::make_unique<QtRawRequestManager>()),
+        std::move(serializer), std::move(deserializer));
 
     auto navigation_service = std::make_shared<NavigationService>(page_router);
 
-    auto login_screen_args = LoginScreenArgs {
-        request_manager,
-        navigation_service
-    };
+    auto login_screen_args =
+        LoginScreenArgs{ request_manager, navigation_service };
 
     navigation_service->NavigateTo(Screen::Login, login_screen_args);
 

@@ -5,12 +5,11 @@
 
 namespace epsilon::features::home {
 
-HomePresenter::HomePresenter(std::unique_ptr<IHomeView> view) : m_View(std::move(view)) {
+HomePresenter::HomePresenter(std::unique_ptr<IHomeView> view)
+    : m_View(std::move(view)) {
     m_View->OnLogoutRequested = [this]() { HandleLogout(); };
 }
 
-void HomePresenter::HandleLogout() {
-    m_View->ShowLogoutSuccess();
-}
+void HomePresenter::HandleLogout() { m_View->ShowLogoutSuccess(); }
 
-}
+} // namespace epsilon::features::home
