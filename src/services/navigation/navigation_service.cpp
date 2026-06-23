@@ -34,7 +34,8 @@ void NavigationService::NavigateTo(Screen screen, std::any args) {
     case Screen::Home: {
         auto home_args = std::any_cast<args::HomeScreenArgs>(args);
         auto view = std::make_unique<home::HomeView>(m_PageRouter);
-        new_presenter = std::make_unique<home::HomePresenter>(std::move(view));
+        new_presenter = std::make_unique<home::HomePresenter>(
+            std::move(view), std::move(home_args.NavigationService));
         // `home_args.AuthenticatedRequestManager` will be used in HomeModel
         break;
     }

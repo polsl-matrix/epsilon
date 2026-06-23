@@ -16,7 +16,8 @@ namespace epsilon::features::home {
 HomePresenter::HomePresenter(
     std::unique_ptr<IHomeView> view,
     std::shared_ptr<INavigationService> navigation_service)
-    : m_View(std::move(view)), m_NavigationService(navigation_service) {
+    : m_NavigationService(std::move(navigation_service)),
+      m_View(std::move(view)) {
     m_View->OnLogoutRequested = [this]() { HandleLogout(); };
 }
 
