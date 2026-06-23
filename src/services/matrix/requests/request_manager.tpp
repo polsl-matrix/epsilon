@@ -12,10 +12,9 @@
 #include <format>
 #include <functional>
 #include <optional>
+#include <thread>
 #include <unordered_map>
 #include <utility>
-
-#include <iostream>
 
 namespace epsilon::services::matrix::requests {
 
@@ -30,7 +29,7 @@ void RequestManager::Execute(const Request<TBody, TResult, TError>& request, std
 
     auto raw_request = RawRequest {
         request.Method(),
-        std::format("{}/{}", m_BaselineUrl, request.Endpoint()),
+        std::format("{}{}", m_BaselineUrl, request.Endpoint()),
         request.GetBody().transform([this](TBody body) { return this->m_Serializer->Serialize(body); }),
         request_headers
     };

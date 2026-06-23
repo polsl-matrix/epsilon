@@ -5,50 +5,79 @@
 #include <Qt>
 
 #include <memory>
+#include <utility>
 
-#include "src/features/login/model/login_model.hpp"
-#include "src/features/login/presenter/login_presenter.hpp"
-#include "src/features/login/view/login_view.hpp"
+#include "services/navigation/args/login_screen_args.hpp"
+#include "services/navigation/navigation_service.hpp"
+#include "services/navigation/screen.hpp"
 
-#include "src/features/main_page/presenter/home_presenter.hpp"
-#include "src/features/main_page/view/home_view.hpp"
+#include "services/router/page_router.hpp"
 
-#include "src/router/page_router.hpp"
+#include "services/matrix/requests/iraw_request_manager.hpp"
+#include "services/matrix/requests/qt_raw_request_manager.hpp"
+#include "services/matrix/requests/request_manager.hpp"
+
+#include "services/serialization/json/json_deserialization_strategy.hpp"
+#include "services/serialization/json/json_serialization_strategy.hpp"
+
+#include "util/unique_pointer_cast/unique_pointer_cast.hpp"
+
+using epsilon::services::navigation::NavigationService;
+using epsilon::services::navigation::Screen;
+using epsilon::services::navigation::args::LoginScreenArgs;
+
+using epsilon::services::matrix::requests::IRawRequestManager;
+using epsilon::services::matrix::requests::RequestManager;
+using epsilon::services::matrix::requests::qt::QtRawRequestManager;
+
+using epsilon::services::matrix::serialization::Deserializer;
+using epsilon::services::matrix::serialization::IDeserializationStrategy;
+using epsilon::services::matrix::serialization::ISerializationStrategy;
+using epsilon::services::matrix::serialization::Serializer;
+using epsilon::services::matrix::serialization::json::
+    JsonDeserializationStrategy;
+using epsilon::services::matrix::serialization::json::JsonSerializationStrategy;
+
+using epsilon::services::router::PageRouter;
+
+using epsilon::util::unique_pointer_cast;
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    auto pageRouter = std::make_shared<PageRouter>();
+    const auto backend_url = "http://127.0.0.1:8080";
 
-    auto loginModel = std::make_shared<LoginModel>();
-    auto loginView = std::make_shared<LoginView>();
+    auto page_router = std::make_shared<PageRouter>(engine.rootContext());
 
-    auto loginPresenter =
-        std::make_shared<LoginPresenter>(loginView, loginModel);
+    auto serializer = std::make_unique<Serializer>(
+        std::make_unique<JsonSerializationStrategy>());
+    auto deserializer = std::make_shared<Deserializer>(
+        std::make_unique<JsonDeserializationStrategy>());
 
-    auto homeView = std::make_shared<HomeView>();
-    auto homePresenter = std::make_shared<HomePresenter>(homeView);
+    auto request_manager = std::make_shared<RequestManager>(
+        backend_url,
+        unique_pointer_cast<IRawRequestManager>(
+            std::make_unique<QtRawRequestManager>()),
+        std::move(serializer), std::move(deserializer));
 
-    QObject::connect(loginView.get(), &LoginView::loginSucceeded,
-                     pageRouter.get(), [pageRouter]() {
-                         pageRouter->NavigateTo(
-                             "features/main_page/view/Home.qml");
-                     });
+    auto navigation_service = std::make_shared<NavigationService>(page_router);
 
-    QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
-                     pageRouter.get(), [pageRouter]() {
-                         pageRouter->NavigateTo(
-                             "features/login/view/Login.qml");
-                     });
+    auto login_screen_args =
+        LoginScreenArgs{ request_manager, navigation_service };
 
-    QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
-                     loginView.get(), &LoginView::displayLogoutSuccess);
+    navigation_service->NavigateTo(Screen::Login, login_screen_args);
 
-    engine.rootContext()->setContextProperty("loginViewBackend",
-                                             loginView.get());
-    engine.rootContext()->setContextProperty("homeViewBackend", homeView.get());
-    engine.rootContext()->setContextProperty("pageRouter", pageRouter.get());
+    // QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
+    //                  pageRouter.get(), [pageRouter]() {
+    //                      pageRouter->NavigateTo(
+    //                          "features/login/view/Login.qml");
+    //                  });
+
+    // QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
+    //                  loginView.get(), &LoginView::DisplayLogoutSuccess);
+
+    engine.rootContext()->setContextProperty("pageRouter", page_router.get());
 
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreationFailed, &app,

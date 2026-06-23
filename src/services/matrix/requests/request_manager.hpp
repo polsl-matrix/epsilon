@@ -18,14 +18,15 @@ namespace epsilon::services::matrix::requests {
 class RequestManager {
 protected:
     std::string m_BaselineUrl;
-    std::unique_ptr<IRawRequestManager> m_RawRequestManager;
+    std::shared_ptr<IRawRequestManager> m_RawRequestManager;
     std::unique_ptr<serialization::Serializer> m_Serializer;
     std::shared_ptr<serialization::Deserializer> m_Deserializer;
 
 public:
+    // TODO: Add a builder for the RequestManager class
     RequestManager(
         std::string baseline_url,
-        std::unique_ptr<IRawRequestManager>&& raw_request_manager,
+        std::shared_ptr<IRawRequestManager>&& raw_request_manager,
         std::unique_ptr<serialization::Serializer>&& serializer,
         std::shared_ptr<serialization::Deserializer>&& deserializer
     );

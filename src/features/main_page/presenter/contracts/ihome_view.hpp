@@ -2,6 +2,8 @@
 
 #include <functional>
 
+namespace epsilon::features::home {
+
 class IHomeView {
   public:
     virtual ~IHomeView() = default;
@@ -9,3 +11,5 @@ class IHomeView {
 
     std::function<void()> OnLogoutRequested;
 };
+
+}

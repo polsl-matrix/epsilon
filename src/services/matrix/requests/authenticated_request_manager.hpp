@@ -12,7 +12,7 @@ namespace epsilon::services::matrix::requests {
 
 class AuthenticatedRequestManager {
 private:
-    std::unique_ptr<RequestManager> m_InnerManager;
+    std::shared_ptr<RequestManager> m_InnerManager;
     std::string m_AccessToken;
 
     template<class TBody, class TResult, class TError>
@@ -30,9 +30,9 @@ private:
     };
 
 public:
-    AuthenticatedRequestManager(std::unique_ptr<RequestManager>&& inner, std::string token);
+    AuthenticatedRequestManager(std::shared_ptr<RequestManager> inner, std::string token);
 
-    std::unique_ptr<RequestManager> Release() &&;
+    std::shared_ptr<RequestManager> GetInner();
 
     template<class TBody, class TResult, class TError>
         requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>
