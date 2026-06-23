@@ -18,6 +18,7 @@ private:
     void LoadEarlierBatch();
 
     struct MessageRecord {
+        std::string sender_name;
         std::string text;
         bool is_me;
     };

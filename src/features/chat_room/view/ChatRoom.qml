@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "./components"
 
 Rectangle {
     id: chatRoomRoot
@@ -8,10 +9,21 @@ Rectangle {
     color: "#1e1f22"
 
     component MessageItem : ColumnLayout {
+        property string senderName: ""
         property string messageText: ""
         property bool isSenderMe: false
 
         width: ListView.view.width
+        spacing: 3
+
+        Text {
+            visible: !isSenderMe
+            text: senderName
+            color: "#80848e"
+            font.pixelSize: 12
+            font.bold: true
+            Layout.leftMargin: 24
+        }
 
         Rectangle {
             Layout.alignment: isSenderMe ? Qt.AlignRight : Qt.AlignLeft
@@ -36,6 +48,13 @@ Rectangle {
         }
     }
 
+    ChatDetailsPopup {
+        id: roomDetailsModal
+        parent: Overlay.overlay
+        roomName: typeof chatViewBackend !== "undefined" ? chatViewBackend.roomName : ""
+        roomAvatar: (typeof chatViewBackend !== "undefined" && chatViewBackend.roomAvatar) ? chatViewBackend.roomAvatar : ""
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -58,6 +77,7 @@ Rectangle {
             }
 
             delegate: MessageItem {
+                senderName: model.sender
                 messageText: model.text
                 isSenderMe: model.isMe
             }
@@ -235,17 +255,20 @@ Rectangle {
             id: headerMouseArea
             anchors.fill: headerColumn
             cursorShape: Qt.PointingHandCursor
+            onClicked: {
+                roomDetailsModal.open()
+            }
         }
     }
 
     Connections {
         target: typeof chatViewBackend !== "undefined" ? chatViewBackend : null
-        function onMessageAppended(text, isMe) {
-            chatListModel.append({"text": text, "isMe": isMe})
+        function onMessageAppended(sender, text, isMe) {
+            chatListModel.append({"sender": sender, "text": text, "isMe": isMe})
         }
-        function onMessagePrepended(text, isMe) {
+        function onMessagePrepended(sender, text, isMe) {
             let beforeHeight = chatListView.contentHeight
-            chatListModel.insert(0, {"text": text, "isMe": isMe})
+            chatListModel.insert(0, {"sender": sender, "text": text, "isMe": isMe})
             chatListView.forceLayout()
             chatListView.contentY += (chatListView.contentHeight - beforeHeight)
         }

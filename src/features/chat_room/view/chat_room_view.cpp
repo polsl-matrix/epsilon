@@ -25,12 +25,12 @@ void ChatRoomView::RequestEarlierMessages() {
     OnLoadEarlierRequested.Invoke();
 }
 
-void ChatRoomView::AppendMessage(const std::string& text, bool isMe) {
-    emit messageAppended(QString::fromStdString(text), isMe);
+void ChatRoomView::AppendMessage(const std::string& senderName, const std::string& text, bool isMe) {
+    emit messageAppended(QString::fromStdString(senderName), QString::fromStdString(text), isMe);
 }
 
-void ChatRoomView::PrependMessage(const std::string& text, bool isMe) {
-    emit messagePrepended(QString::fromStdString(text), isMe);
+void ChatRoomView::PrependMessage(const std::string& senderName, const std::string& text, bool isMe) {
+    emit messagePrepended(QString::fromStdString(senderName), QString::fromStdString(text), isMe);
 }
 
 }

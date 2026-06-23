@@ -117,6 +117,7 @@ qt_add_qml_module(epsilon
     src/features/main_page/view/components/SpaceSearchBar.qml
     src/features/main_page/view/components/RoomListView.qml
     src/features/main_page/view/components/CreateServerButton.qml
+    src/features/chat_room/view/components/ChatDetailsPopup.qml
   RESOURCES
     resources/settings.svg
     resources/search.svg
