@@ -1,8 +1,9 @@
 #include <QGuiApplication>
 #include <QObject>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
 #include <Qt>
+#include <QCoreApplication>
+
 
 #include <memory>
 #include <utility>

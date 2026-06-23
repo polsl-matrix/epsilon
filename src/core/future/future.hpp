@@ -29,7 +29,7 @@ template <typename TValue> class Future {
       public:
         virtual void Then(std::function<void(TValue)>) override;
 
-        virtual void Update(TValue value);
+        virtual void Update(TValue value) override;
     };
 
   public:

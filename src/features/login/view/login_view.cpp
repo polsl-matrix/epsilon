@@ -5,6 +5,7 @@
 #include "../../main_page/view/home_view.hpp"
 
 #include <memory>
+#include <utility>
 
 #include <qobject.h>
 #include <qtmetamacros.h>
@@ -14,7 +15,7 @@ namespace epsilon::features::login {
 
 LoginView::LoginView(std::shared_ptr<LoginView::PageRouter> page_router,
                      QObject *parent)
-    : QObject(parent), m_PageRouter(page_router) {
+    : QObject(parent), m_PageRouter(std::move(page_router)) {
     m_PageRouter->Display(m_QmlFilePath, m_QmlIdentifier, this);
 }
 
