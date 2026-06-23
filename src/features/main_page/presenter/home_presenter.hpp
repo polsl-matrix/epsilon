@@ -2,6 +2,7 @@
 
 #include "../../base/ipresenter.hpp"
 #include "contracts/ihome_view.hpp"
+#include "../../../core/event/detachment.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 
 #include <memory>
@@ -13,8 +14,11 @@ class HomePresenter : public base::IPresenter {
 
     std::shared_ptr<INavigationService> m_NavigationService;
 
+    core::event::Detachment m_LogoutEventDetachment;
+
   public:
     explicit HomePresenter(std::unique_ptr<IHomeView> view, std::shared_ptr<INavigationService> navigation_service);
+    ~HomePresenter();
     void HandleLogout();
 
   private:
