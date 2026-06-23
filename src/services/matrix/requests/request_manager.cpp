@@ -12,7 +12,7 @@ namespace epsilon::services::matrix::requests {
 
 RequestManager::RequestManager(
     std::string baseline_url,
-    std::unique_ptr<IRawRequestManager> &&raw_request_manager,
+    std::shared_ptr<IRawRequestManager> &&raw_request_manager,
     std::unique_ptr<serialization::Serializer> &&serializer,
     std::shared_ptr<serialization::Deserializer> &&deserializer)
     : m_BaselineUrl(std::move(baseline_url)),

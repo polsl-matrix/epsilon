@@ -23,6 +23,12 @@ template <typename... Args> class Event {
     Event();
     ~Event();
 
+    Event(const Event&) = delete;
+    Event& operator=(const Event&) = delete;
+
+    Event(Event&&) noexcept = default;
+    Event& operator=(Event&&) noexcept = default;
+
     Detachment Attach(std::shared_ptr<Observer<Args...>> observer);
 
     template <std::derived_from<Observer<Args...>> TObserver,

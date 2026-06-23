@@ -44,6 +44,7 @@ name should be prefixed by:
  * `bugfix/` - if the branch fixes a bug;
  * `docs/` - if the branch is about project documentation (e.g. this file);
  * `config/` - if the branch's main purpose is to configure a tool (e.g. CMake);
+ * `chore/` - if you only perform boring code maintenance on the branch;
  * `other/` - never - if some use case wasn't included in this list, you
  should first add it to this list in another pull request.
 

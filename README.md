@@ -36,5 +36,5 @@ should build the executable itself. It will be localted at
 # Running tests
 
 To run unit tests, you should first build the application in
-debug mode. After that, run `cd build/Debug && ctest`. You should
+debug mode. After that, run `ctest --test-dir build/Debug`. You should
 now be seeing test results.

@@ -1,11 +1,15 @@
 #pragma once
 
-#include <functional>
+#include "../../../../core/event/event.hpp"
+
+namespace epsilon::features::home {
 
 class IHomeView {
   public:
     virtual ~IHomeView() = default;
     virtual void ShowLogoutSuccess() = 0;
 
-    std::function<void()> OnLogoutRequested;
+    core::event::Event<> OnLogoutRequested;
 };
+
+}

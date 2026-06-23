@@ -72,12 +72,12 @@ Rectangle {
                 Layout.fillWidth: true
 
                 FormLabel {
-                    text: "Email:"
+                    text: "Username:"
                 }
 
                 TextField {
-                    id: emailInput
-                    placeholderText: "example@epsilon.com"
+                    id: usernameInput
+                    placeholderText: ""
                     Layout.fillWidth: true
                     Layout.minimumWidth: 180
                 }
@@ -117,7 +117,7 @@ Rectangle {
                 }
 
                 onClicked: {
-                    loginViewBackend.AttemptLogin(emailInput.text, passwordInput.text)
+                    loginViewBackend.AttemptLogin(usernameInput.text, passwordInput.text)
                 }
             }
 
