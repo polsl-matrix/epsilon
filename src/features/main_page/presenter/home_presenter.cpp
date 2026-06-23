@@ -20,14 +20,12 @@ HomePresenter::HomePresenter(
     std::shared_ptr<INavigationService> navigation_service)
     : m_NavigationService(std::move(navigation_service)),
       m_View(std::move(view)) {
-    m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(std::make_shared<core::event::util::Action<>>([this] {
-        this->HandleLogout();
-    }));
+    m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(
+        std::make_shared<core::event::util::Action<>>(
+            [this] { this->HandleLogout(); }));
 }
 
-HomePresenter::~HomePresenter() {
-    m_LogoutEventDetachment.Detach();
-}
+HomePresenter::~HomePresenter() { m_LogoutEventDetachment.Detach(); }
 
 void HomePresenter::HandleLogout() {
     std::cout << "trying to log out :)\n";

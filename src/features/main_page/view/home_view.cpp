@@ -14,9 +14,7 @@ HomeView::HomeView(std::shared_ptr<PageRouter> page_router, QObject *parent)
     m_PageRouter->Display(m_QmlFilePath, m_QmlIdentifier, this);
 }
 
-void HomeView::AttemptLogout() {
-    OnLogoutRequested.Invoke();
-}
+void HomeView::AttemptLogout() { OnLogoutRequested.Invoke(); }
 
 void HomeView::ShowLogoutSuccess() { emit logoutSucceeded(); }
 
