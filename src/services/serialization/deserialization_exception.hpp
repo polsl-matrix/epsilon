@@ -2,6 +2,7 @@
 
 #include "serialization_primitive.hpp"
 
+#include <optional>
 #include <stdexcept>
 #include <string>
 
@@ -31,7 +32,10 @@ class DeserializationUnrecognizedFormatException : public std::runtime_error {
     std::string m_ExpectedFormat;
 
 public:
-    DeserializationUnrecognizedFormatException(std::string expected_format);
+    DeserializationUnrecognizedFormatException(
+        std::string expected_format,
+        std::optional<std::string> error_message = std::nullopt
+    );
 
     std::string ExpectedFormat() const;
 };

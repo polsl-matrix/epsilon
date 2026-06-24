@@ -3,8 +3,10 @@
 #include "deserializer.hpp"
 
 #include "deserializable.hpp"
+#include "deserialization_exception.hpp"
 #include "iserialization_strategy.hpp"
 
+#include <format>
 #include <memory>
 
 namespace epsilon::services::matrix::serialization {
@@ -18,8 +20,16 @@ Deserializer Deserializer::Construct(ConstructorArgs &&...args) {
 template<typename T>
     requires Deserializable<T>
 T Deserializer::Deserialize(const std::string& serialized) const {
-    auto primitive_representation = m_Strategy->Deserialize(serialized);
-    return ::epsilon::services::matrix::serialization::Deserialize<T>(primitive_representation);
+    try {
+        auto primitive_representation = m_Strategy->Deserialize(serialized);
+        
+        return ::epsilon::services::matrix::serialization::Deserialize<T>(primitive_representation);
+    } catch(const DeserializationUnrecognizedFormatException& error) {
+        throw DeserializationUnrecognizedFormatException(
+            error.ExpectedFormat(),
+            std::format("{} was not recognized as the {} format", serialized, error.ExpectedFormat())
+        );
+    }
 }
 
 template <std::derived_from<IDeserializationStrategy> TStrategy,

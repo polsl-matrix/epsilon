@@ -23,9 +23,11 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/qt_raw_request_manager.cpp
 
   src/services/matrix/requests/implementation/common/error.cpp
+  src/services/matrix/requests/implementation/common/empty.cpp
   src/services/matrix/requests/implementation/login/login_request_body.cpp
   src/services/matrix/requests/implementation/login/login_request_response.cpp
   src/services/matrix/requests/implementation/login/login_request.cpp
+  src/services/matrix/requests/implementation/logout/logout_request.cpp
 
   src/services/matrix/requests/implementation/registration/registration_request.cpp
   src/services/matrix/requests/implementation/registration/registration_request_body.cpp
@@ -46,6 +48,7 @@ set(APP_SOURCES
   src/features/login/presenter/login_presenter.cpp
   src/features/login/view/login_view.cpp
 
+  src/features/main_page/model/home_model.cpp
   src/features/main_page/presenter/home_presenter.cpp
   src/features/main_page/view/home_view.cpp
 

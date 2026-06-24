@@ -3,6 +3,7 @@
 #include "serialization_primitive.hpp"
 
 #include <format>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -40,10 +41,14 @@ std::string DeserializationFieldNotFoundException::ExpectedField() const {
 
 // DeserializationUnrecognizedFormatException implementation
 DeserializationUnrecognizedFormatException::
-    DeserializationUnrecognizedFormatException(std::string expected_format)
-    : std::runtime_error(std::format("Deserialization failed because of an "
-                                     "unrecognized format. Expected format: {}",
-                                     expected_format)),
+    DeserializationUnrecognizedFormatException(
+        std::string expected_format, std::optional<std::string> error_message)
+    : std::runtime_error(
+          error_message
+              ? error_message.value()
+              : std::format("Deserialization failed because of an "
+                            "unrecognized format. Expected format: {}",
+                            expected_format)),
       m_ExpectedFormat(std::move(expected_format)) {}
 
 std::string DeserializationUnrecognizedFormatException::ExpectedFormat() const {
