@@ -27,6 +27,10 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/login/login_request_response.cpp
   src/services/matrix/requests/implementation/login/login_request.cpp
 
+  src/services/matrix/requests/implementation/registration/registration_request.cpp
+  src/services/matrix/requests/implementation/registration/registration_request_body.cpp
+  src/services/matrix/requests/implementation/registration/registration_request_response.cpp
+
   src/services/router/page_router.cpp
 )
 
@@ -49,6 +53,10 @@ set(APP_SOURCES
   src/features/chat_room/view/chat_room_view.cpp
 
   src/services/navigation/navigation_service.cpp
+
+  src/features/registration/model/registration_model.cpp
+  src/features/registration/presenter/registration_presenter.cpp
+  src/features/registration/view/registration_view.cpp
 )
 
 set(SOURCES
@@ -126,6 +134,8 @@ qt_add_qml_module(epsilon
     src/features/main_page/view/components/RoomListView.qml
     src/features/main_page/view/components/CreateServerButton.qml
     src/features/chat_room/view/components/ChatDetailsPopup.qml
+    src/components/CustomTextField.qml
+    src/features/registration/view/Registration.qml
   RESOURCES
     resources/settings.svg
     resources/search.svg

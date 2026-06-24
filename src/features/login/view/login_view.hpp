@@ -26,9 +26,10 @@ class LoginView : public QObject, public ILoginView {
 
     Q_INVOKABLE void AttemptLogin(const QString &username,
                                   const QString &password);
+    Q_INVOKABLE void RequestRegistration();
 
     void ShowLoginError(const std::string &error) override;
-  
+
     void DisplayLogoutSuccess();
 
   signals:
