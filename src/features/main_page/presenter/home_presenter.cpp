@@ -4,9 +4,9 @@
 #include "../../../services/navigation/args/login_screen_args.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 #include "../../../services/navigation/screen.hpp"
+#include "../../chat_room/presenter/chat_room_presenter.hpp"
 #include "../model/home_model.hpp"
 #include "contracts/ihome_view.hpp"
-#include "../../chat_room/presenter/chat_room_presenter.hpp"
 
 #include <iostream>
 #include <memory>
@@ -25,13 +25,12 @@ HomePresenter::HomePresenter(
     m_SelectRoomEventDetachment = m_View->OnChatSelected.Attach(
         std::make_shared<core::event::util::Action<std::string>>(
             [this](std::string room_id) {
-                this->m_OpenRoom = std::make_unique<chat_room::ChatRoomPresenter>(
-                    this->m_View->LoadChatRoomView(),
-                    this->m_Model->SelectRoom(room_id),
-                    this->m_Model->GetSession()
-                );
-            })
-    );
+                this->m_OpenRoom =
+                    std::make_unique<chat_room::ChatRoomPresenter>(
+                        this->m_View->LoadChatRoomView(),
+                        this->m_Model->SelectRoom(room_id),
+                        this->m_Model->GetSession());
+            }));
 
     m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(
         std::make_shared<core::event::util::Action<>>(

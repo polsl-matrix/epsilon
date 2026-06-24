@@ -23,9 +23,7 @@ void LoginView::AttemptLogin(const QString &username, const QString &password) {
     OnLoginRequested.Invoke(username.toStdString(), password.toStdString());
 }
 
-void LoginView::RequestRegistration() {
-    OnRegistrationClicked.Invoke();
-}
+void LoginView::RequestRegistration() { OnRegistrationClicked.Invoke(); }
 
 void LoginView::ShowLoginError(const std::string &error) {
     emit loginFailed(QString::fromStdString(error));
@@ -33,4 +31,4 @@ void LoginView::ShowLoginError(const std::string &error) {
 
 void LoginView::DisplayLogoutSuccess() { emit showSuccessPopup(); }
 
-}
+} // namespace epsilon::features::login

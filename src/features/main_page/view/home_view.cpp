@@ -1,14 +1,14 @@
 #include "home_view.hpp"
 
 #include "../../../services/router/page_router.hpp"
-#include "../presenter/contracts/ihome_view.hpp"
 #include "../../chat_room/view/chat_room_view.hpp"
+#include "../presenter/contracts/ihome_view.hpp"
 
 #include <memory>
 
+#include <QString>
 #include <qobject.h>
 #include <qtmetamacros.h>
-#include <QString>
 
 namespace epsilon::features::home {
 
@@ -26,7 +26,7 @@ std::unique_ptr<chat_room::IChatRoomView> HomeView::LoadChatRoomView() {
     return std::make_unique<chat_room::ChatRoomView>(m_PageRouter);
 }
 
-void HomeView::SelectRoom(const QString& room_id) {
+void HomeView::SelectRoom(const QString &room_id) {
     OnChatSelected.Invoke(room_id.toStdString());
 }
 

@@ -10,12 +10,8 @@ namespace epsilon::model {
 Message::Message(User author, std::string content)
     : m_Author(std::move(author)), m_Content(std::move(content)) {}
 
-User Message::Author() const {
-    return m_Author;
-}
+User Message::Author() const { return m_Author; }
 
-std::string Message::Content() const {
-    return m_Content;
-}
+std::string Message::Content() const { return m_Content; }
 
-}
+} // namespace epsilon::model

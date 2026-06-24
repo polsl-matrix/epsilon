@@ -10,15 +10,14 @@ using epsilon::services::matrix::serialization::String;
 
 namespace epsilon::services::matrix::requests::implementation::registration {
 
-RegistrationRequestBody::RegistrationRequestBody(std::string username, std::string password)
+RegistrationRequestBody::RegistrationRequestBody(std::string username,
+                                                 std::string password)
     : Username(std::move(username)), Password(std::move(password)) {}
 
 serialization::SerializationPrimitive
 RegistrationRequestBody::GetPrimitiveRepresentation() const {
-    return RObject(Object{
-        { { "username", String{ Username } },
-          { "password", String{ Password } } }
-    });
+    return RObject(Object{ { { "username", String{ Username } },
+                             { "password", String{ Password } } } });
 }
 
-}
+} // namespace epsilon::services::matrix::requests::implementation::registration

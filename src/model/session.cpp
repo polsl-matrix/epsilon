@@ -17,4 +17,4 @@ User Session::CurrentUser() const {
     return User(m_RequestManager, "guy"); // To be replaced by /whoami
 }
 
-}
+} // namespace epsilon::model

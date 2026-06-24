@@ -10,4 +10,4 @@ std::string RegistrationRequest::Endpoint() const {
     return "/_matrix/client/v3/register";
 }
 
-}
+} // namespace epsilon::services::matrix::requests::implementation::registration

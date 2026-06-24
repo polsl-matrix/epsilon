@@ -34,7 +34,8 @@ using epsilon::services::matrix::serialization::Deserializer;
 using epsilon::services::matrix::serialization::IDeserializationStrategy;
 using epsilon::services::matrix::serialization::ISerializationStrategy;
 using epsilon::services::matrix::serialization::Serializer;
-using epsilon::services::matrix::serialization::json::JsonDeserializationStrategy;
+using epsilon::services::matrix::serialization::json::
+    JsonDeserializationStrategy;
 using epsilon::services::matrix::serialization::json::JsonSerializationStrategy;
 
 using epsilon::services::navigation::NavigationService;
