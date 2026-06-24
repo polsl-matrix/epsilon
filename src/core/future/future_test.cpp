@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "future.hpp"
 
@@ -15,9 +16,9 @@ TEST(FutureTest, InvokesCallbackWhenRealizedAsynchronously) {
     bool callback_executed = false;
     std::string received_value = "";
 
-    handle->Then([&callback_executed, &received_value](std::string val) {
+    handle->Then([&callback_executed, &received_value](const std::string& val) {
         callback_executed = true;
-        received_value = std::move(val);
+        received_value = val;
     });
 
     EXPECT_FALSE(callback_executed);
@@ -38,7 +39,7 @@ TEST(FutureTest, InvokesCallbackImmediatelyIfAlreadyRealized) {
     bool callback_executed = false;
     int received_value = 0;
 
-    handle->Then([&callback_executed, &received_value](int val) {
+    handle->Then([&callback_executed, &received_value](const int& val) {
         callback_executed = true;
         received_value = val;
     });
@@ -55,8 +56,8 @@ TEST(FutureTest, SupportsMultipleIndependentObservers) {
 
     int activation_count = 0;
 
-    handle_alpha->Then([&activation_count](double) { activation_count++; });
-    handle_beta->Then([&activation_count](double) { activation_count++; });
+    handle_alpha->Then([&activation_count](const double&) { activation_count++; });
+    handle_beta->Then([&activation_count](const double&) { activation_count++; });
 
     EXPECT_EQ(activation_count, 0);
 

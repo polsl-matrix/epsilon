@@ -7,6 +7,7 @@
 #include "../../chat_room/presenter/chat_room_presenter.hpp"
 #include "../model/home_model.hpp"
 #include "contracts/ihome_view.hpp"
+#include "contracts/room_dto.hpp"
 
 #include <iostream>
 #include <memory>
@@ -22,6 +23,26 @@ HomePresenter::HomePresenter(
     std::shared_ptr<INavigationService> navigation_service)
     : m_NavigationService(std::move(navigation_service)),
       m_View(std::move(view)), m_Model(std::move(model)) {
+    m_Model->GetRooms()->Then([this](const HomeModel::RoomsResult& result) {
+        if (!result.has_value()) {
+            return;
+        }
+
+        const std::shared_ptr<std::vector<model::Room>>& rooms_ptr = result.value();
+        if (!rooms_ptr) {
+            return;
+        }
+
+        std::vector<RoomDto> view_dtos;
+        view_dtos.reserve(rooms_ptr->size());
+
+        for (const auto& room : *rooms_ptr) {
+            view_dtos.push_back(RoomDto{ room.Id(), room.Name() });
+        }
+
+        m_View->SetRoomsList(view_dtos);
+    });
+
     m_SelectRoomEventDetachment = m_View->OnChatSelected.Attach(
         std::make_shared<core::event::util::Action<std::string>>(
             [this](std::string room_id) {

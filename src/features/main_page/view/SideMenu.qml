@@ -7,6 +7,8 @@ Rectangle {
     signal logoutRequested()
     signal roomSelected(string room_id)
 
+    property var roomsModel: []
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -29,6 +31,7 @@ Rectangle {
         RoomListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            model: sideMenuRoot.roomsModel
             onRoomSelected: (room_id) => {
                 sideMenuRoot.roomSelected(room_id)
             }

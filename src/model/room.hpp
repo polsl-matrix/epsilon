@@ -23,6 +23,12 @@ class Room {
 public:
     Room(std::shared_ptr<RequestManager> request_manager, std::string id);
 
+    Room(Room&&) noexcept = default; 
+    Room& operator=(Room&&) noexcept = default;
+
+    Room(const Room&) = delete;
+    Room& operator=(const Room&) = delete;
+
     std::string Id() const;
     std::string Name() const;
     std::vector<Message> MessageList() const;
