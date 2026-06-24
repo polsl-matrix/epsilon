@@ -29,6 +29,8 @@ Rectangle {
             SplitView.maximumWidth: 350
             color: "#111111"
 
+            roomsModel: typeof homeViewBackend !== "undefined" ? homeViewBackend.rooms : []
+
             onLogoutRequested: {
                 if (typeof homeViewBackend !== "undefined") {
                     homeViewBackend.AttemptLogout()

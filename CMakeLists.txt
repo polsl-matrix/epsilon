@@ -24,6 +24,7 @@ set(SERVICES_SOURCES
 
   src/services/matrix/requests/implementation/common/error.cpp
   src/services/matrix/requests/implementation/common/empty.cpp
+
   src/services/matrix/requests/implementation/login/login_request_body.cpp
   src/services/matrix/requests/implementation/login/login_request_response.cpp
   src/services/matrix/requests/implementation/login/login_request.cpp
@@ -32,6 +33,9 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/registration/registration_request.cpp
   src/services/matrix/requests/implementation/registration/registration_request_body.cpp
   src/services/matrix/requests/implementation/registration/registration_request_response.cpp
+
+  src/services/matrix/requests/implementation/joined_rooms/joined_rooms_request.cpp
+  src/services/matrix/requests/implementation/joined_rooms/joined_rooms_request_response.cpp
 
   src/services/router/page_router.cpp
 )
