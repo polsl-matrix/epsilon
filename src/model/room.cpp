@@ -28,7 +28,13 @@ Room::Room(std::shared_ptr<RequestManager> request_manager, std::string id)
 std::string Room::Id() const { return m_Id; }
 
 std::string Room::Name() const {
-    return m_Id;
+    std::string name = "";
+
+    for(size_t i = 1; i < 9 && i < m_Id.size(); i++) {
+        name += m_Id[i];
+    }
+
+    return name;
 }
 
 std::vector<Message> Room::MessageList() const { return m_Messages; }
