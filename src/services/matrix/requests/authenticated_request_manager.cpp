@@ -16,4 +16,8 @@ std::shared_ptr<RequestManager> AuthenticatedRequestManager::GetInner() {
     return m_InnerManager;
 }
 
+std::string AuthenticatedRequestManager::UserId() const {
+    return "man";
+}
+
 } // namespace epsilon::services::matrix::requests

@@ -36,9 +36,17 @@ set(SERVICES_SOURCES
   src/services/router/page_router.cpp
 )
 
+set(MODEL_SOURCES
+  src/model/message.cpp
+  src/model/room.cpp
+  src/model/session.cpp
+  src/model/user.cpp
+)
+
 set(LIB_SOURCES
   ${CORE_SOURCES}
   ${SERVICES_SOURCES}
+  ${MODEL_SOURCES}
 )
 
 set(APP_SOURCES

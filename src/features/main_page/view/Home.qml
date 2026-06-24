@@ -56,7 +56,7 @@ Rectangle {
     }
 
     Connections {
-        target: typeof pageRouter !== "undefined" ? pageRouter : null
+        target: typeof homeViewBackend !== "undefined" ? homeViewBackend : null
         function onChatRoomLoaded() {
             chatLoader.source = ""
             chatLoader.source = "../../chat_room/view/ChatRoom.qml"

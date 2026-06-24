@@ -40,7 +40,7 @@ ListView {
             notif: 0
         }
         ListElement {
-            room_id: "!furry:epsilon"
+            room_id: "furry"
             name: "Furry Corn"
             avatar: "F"
             notif: 0
