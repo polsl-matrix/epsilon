@@ -15,6 +15,7 @@ class HomePresenter : public base::IPresenter {
 
     std::shared_ptr<INavigationService> m_NavigationService;
 
+    core::event::Detachment m_SelectRoomEventDetachment;
     core::event::Detachment m_LogoutEventDetachment;
 
   public:

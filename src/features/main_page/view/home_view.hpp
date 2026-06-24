@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <QObject>
+#include <QString>
 
 namespace epsilon::features::home {
 
@@ -25,6 +26,8 @@ class HomeView : public QObject, public IHomeView {
     Q_INVOKABLE void AttemptLogout();
 
     void ShowLogoutSuccess() override;
+
+    Q_INVOKABLE void SelectRoom(const QString& room_id);
 
   signals:
     void logoutSucceeded();

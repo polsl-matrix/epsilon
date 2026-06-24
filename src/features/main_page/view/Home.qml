@@ -35,10 +35,10 @@ Rectangle {
                 }
             }
 
-            onRoomSelected: (selectedRoom, selectedAvatar) => {
-                homeRoot.activeRoom = selectedRoom
-                if (typeof pageRouter !== "undefined") {
-                    pageRouter.NavigateToChat(selectedRoom, selectedAvatar)
+            onRoomSelected: (room_id) => {
+                homeRoot.activeRoom = room_id
+                if (typeof homeViewBackend !== "undefined") {
+                    homeViewBackend.SelectRoom(room_id)
                 }
             }
         }

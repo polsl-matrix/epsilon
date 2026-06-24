@@ -9,6 +9,7 @@ class IHomeView {
     virtual ~IHomeView() = default;
     virtual void ShowLogoutSuccess() = 0;
 
+    core::event::Event<std::string> OnChatSelected;
     core::event::Event<> OnLogoutRequested;
 };
 
