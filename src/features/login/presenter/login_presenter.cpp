@@ -8,7 +8,6 @@
 #include "../model/login_model.hpp"
 #include "contracts/ilogin_view.hpp"
 
-#include <QTimer>
 #include <memory>
 #include <string>
 #include <utility>
@@ -37,14 +36,11 @@ LoginPresenter::LoginPresenter(
             if (m_NavigationService && m_Model) {
                 auto nav = m_NavigationService;
                 auto req = m_Model->GetRequestManager();
-                QTimer::singleShot(0, [nav, req]() {
-                    if (nav && req) {
-                        nav->NavigateTo(
-                            services::navigation::Screen::Registration,
-                            services::navigation::args::RegistrationScreenArgs{ req, nav }
-                        );
-                    }
-                });
+
+                nav->NavigateTo(
+                    services::navigation::Screen::Registration,
+                    services::navigation::args::RegistrationScreenArgs{ req, nav }
+                );
             }
         });
 }

@@ -8,7 +8,6 @@
 #include "../model/registration_model.hpp"
 #include "contracts/iregistration_view.hpp"
 
-#include <QTimer>
 #include <algorithm>
 #include <cctype>
 #include <memory>
@@ -39,14 +38,11 @@ RegistrationPresenter::RegistrationPresenter(
             if (m_NavigationService && m_Model) {
                 auto nav = m_NavigationService;
                 auto req = m_Model->GetRequestManager();
-                QTimer::singleShot(0, [nav, req]() {
-                    if (nav && req) {
-                        nav->NavigateTo(
-                            services::navigation::Screen::Login,
-                            services::navigation::args::LoginScreenArgs{ req, nav }
-                        );
-                    }
-                });
+
+                nav->NavigateTo(
+                    services::navigation::Screen::Login,
+                    services::navigation::args::LoginScreenArgs{ req, nav }
+                );
             }
         });
 }
@@ -103,19 +99,16 @@ void RegistrationPresenter::HandleRegistration(const std::string &username, cons
 
             if (reg_data.has_value()) {
                 const auto access_token = reg_data.value().AccessToken;
-                QTimer::singleShot(0, [nav, model, access_token]() {
-                    if (nav && model) {
-                        nav->NavigateTo(
-                            services::navigation::Screen::Home,
-                            services::navigation::args::HomeScreenArgs{
-                                std::make_shared<AuthenticatedRequestManager>(
-                                    model->GetRequestManager(),
-                                    access_token),
-                                nav
-                            }
-                        );
+
+                nav->NavigateTo(
+                    services::navigation::Screen::Home,
+                    services::navigation::args::HomeScreenArgs{
+                        std::make_shared<AuthenticatedRequestManager>(
+                            model->GetRequestManager(),
+                            access_token),
+                        nav
                     }
-                });
+                );
             } else {
                 const auto error = reg_data.error();
 
