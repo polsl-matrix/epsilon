@@ -1,11 +1,15 @@
 #include <QGuiApplication>
 #include <QObject>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
 #include <Qt>
 
 #include <memory>
+#include <string>
 #include <utility>
+
+#include "services/matrix/requests/iraw_request_manager.hpp"
+#include "services/matrix/requests/qt_raw_request_manager.hpp"
+#include "services/matrix/requests/request_manager.hpp"
 
 #include "services/navigation/args/login_screen_args.hpp"
 #include "services/navigation/navigation_service.hpp"
@@ -22,10 +26,6 @@
 
 #include "util/unique_pointer_cast/unique_pointer_cast.hpp"
 
-using epsilon::services::navigation::NavigationService;
-using epsilon::services::navigation::Screen;
-using epsilon::services::navigation::args::LoginScreenArgs;
-
 using epsilon::services::matrix::requests::IRawRequestManager;
 using epsilon::services::matrix::requests::RequestManager;
 using epsilon::services::matrix::requests::qt::QtRawRequestManager;
@@ -34,9 +34,12 @@ using epsilon::services::matrix::serialization::Deserializer;
 using epsilon::services::matrix::serialization::IDeserializationStrategy;
 using epsilon::services::matrix::serialization::ISerializationStrategy;
 using epsilon::services::matrix::serialization::Serializer;
-using epsilon::services::matrix::serialization::json::
-    JsonDeserializationStrategy;
+using epsilon::services::matrix::serialization::json::JsonDeserializationStrategy;
 using epsilon::services::matrix::serialization::json::JsonSerializationStrategy;
+
+using epsilon::services::navigation::NavigationService;
+using epsilon::services::navigation::Screen;
+using epsilon::services::navigation::args::LoginScreenArgs;
 
 using epsilon::services::router::PageRouter;
 

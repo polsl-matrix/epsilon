@@ -25,6 +25,7 @@ private:
     std::shared_ptr<LoginModel> m_Model;
     std::shared_ptr<services::navigation::INavigationService> m_NavigationService;
     epsilon::core::event::Detachment m_LoginRequestDetachment;
+    epsilon::core::event::Detachment m_RegistrationClickDetachment;
 };
 
 }

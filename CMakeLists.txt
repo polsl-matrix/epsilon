@@ -29,6 +29,10 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/login/login_request.cpp
   src/services/matrix/requests/implementation/logout/logout_request.cpp
 
+  src/services/matrix/requests/implementation/registration/registration_request.cpp
+  src/services/matrix/requests/implementation/registration/registration_request_body.cpp
+  src/services/matrix/requests/implementation/registration/registration_request_response.cpp
+
   src/services/router/page_router.cpp
 )
 
@@ -48,7 +52,14 @@ set(APP_SOURCES
   src/features/main_page/presenter/home_presenter.cpp
   src/features/main_page/view/home_view.cpp
 
+  src/features/chat_room/presenter/chat_room_presenter.cpp
+  src/features/chat_room/view/chat_room_view.cpp
+
   src/services/navigation/navigation_service.cpp
+
+  src/features/registration/model/registration_model.cpp
+  src/features/registration/presenter/registration_presenter.cpp
+  src/features/registration/view/registration_view.cpp
 )
 
 set(SOURCES
@@ -117,14 +128,17 @@ qt_add_qml_module(epsilon
     src/features/main_page/view/Home.qml
     src/features/main_page/view/EmptySpace.qml
     src/features/main_page/view/SideMenu.qml
-    src/features/main_page/view/ChatRoom.qml
-    src/features/main_page/view/components/CustomScrollBar.qml
-    src/features/main_page/view/components/CircleAvatar.qml
+    src/features/chat_room/view/ChatRoom.qml
+    src/components/CustomScrollBar.qml
+    src/components/CircleAvatar.qml
     src/features/main_page/view/components/MenuDivider.qml
     src/features/main_page/view/components/UserProfileBar.qml
     src/features/main_page/view/components/SpaceSearchBar.qml
     src/features/main_page/view/components/RoomListView.qml
     src/features/main_page/view/components/CreateServerButton.qml
+    src/features/chat_room/view/components/ChatDetailsPopup.qml
+    src/components/CustomTextField.qml
+    src/features/registration/view/Registration.qml
   RESOURCES
     resources/settings.svg
     resources/search.svg

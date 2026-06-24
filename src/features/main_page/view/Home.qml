@@ -6,7 +6,6 @@ Rectangle {
     id: homeRoot
 
     property string activeRoom: ""
-    property string activeAvatar: ""
 
     color: "#1d1d1d"
 
@@ -38,7 +37,9 @@ Rectangle {
 
             onRoomSelected: (selectedRoom, selectedAvatar) => {
                 homeRoot.activeRoom = selectedRoom
-                homeRoot.activeAvatar = selectedAvatar
+                if (typeof pageRouter !== "undefined") {
+                    pageRouter.NavigateToChat(selectedRoom, selectedAvatar)
+                }
             }
         }
 
@@ -48,10 +49,17 @@ Rectangle {
 
             EmptySpace {}
 
-            ChatRoom {
-                roomName: homeRoot.activeRoom
-                roomAvatar: homeRoot.activeAvatar
+            Loader {
+                id: chatLoader
             }
+        }
+    }
+
+    Connections {
+        target: typeof pageRouter !== "undefined" ? pageRouter : null
+        function onChatRoomLoaded() {
+            chatLoader.source = ""
+            chatLoader.source = "../../chat_room/view/ChatRoom.qml"
         }
     }
 }

@@ -2,6 +2,7 @@
 
 #include "args/home_screen_args.hpp"
 #include "args/login_screen_args.hpp"
+#include "args/registration_screen_args.hpp"
 #include "inavigation_service.hpp"
 #include "screen.hpp"
 
@@ -16,6 +17,10 @@
 #include "../../features/login/model/login_model.hpp"
 #include "../../features/login/presenter/login_presenter.hpp"
 #include "../../features/login/view/login_view.hpp"
+
+#include "../../features/registration/model/registration_model.hpp"
+#include "../../features/registration/presenter/registration_presenter.hpp"
+#include "../../features/registration/view/registration_view.hpp"
 
 #include <any>
 #include <memory>
@@ -50,6 +55,15 @@ void NavigationService::NavigateTo(Screen screen, std::any args) {
         new_presenter = std::make_unique<login::LoginPresenter>(
             std::move(view), std::move(model),
             std::move(login_args.NavigationService));
+        break;
+    }
+    case Screen::Registration: {
+        auto reg_args = std::any_cast<args::RegistrationScreenArgs>(args);
+        auto view = std::make_unique<registration::RegistrationView>(m_PageRouter);
+        auto model = std::make_unique<registration::RegistrationModel>(reg_args.request_manager);
+        new_presenter = std::make_unique<registration::RegistrationPresenter>(
+            std::move(view), std::move(model), reg_args.navigation_service
+        );
         break;
     }
     }

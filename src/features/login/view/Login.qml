@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
+import "../../../components"
 
 Rectangle {
     color: "#1d1d1d"
@@ -75,7 +76,7 @@ Rectangle {
                     text: "Username:"
                 }
 
-                TextField {
+                CustomTextField {
                     id: usernameInput
                     placeholderText: ""
                     Layout.fillWidth: true
@@ -86,7 +87,7 @@ Rectangle {
                     text: "Password:"
                 }
 
-                TextField {
+                CustomTextField {
                     id: passwordInput
                     placeholderText: "******"
                     echoMode: TextInput.Password
@@ -140,6 +141,9 @@ Rectangle {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            loginViewBackend.RequestRegistration()
+                        }
                     }
                 }
             }
