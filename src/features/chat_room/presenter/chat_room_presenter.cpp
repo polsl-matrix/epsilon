@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 namespace epsilon::features::chat_room {
 
@@ -42,38 +43,60 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
 }
 
 void ChatRoomPresenter::LoadInitialBatch() {
-    const auto &messages = m_Model->MessageList();
+    m_Model->MessageList()->Then([this](const model::Room::Result& result) {
+        if (!result.has_value()) {
+            std::cerr << "Failed to load initial message batch from room backend.\n";
+            return;
+        }
 
-    const int batch_size = 7;
-    const int total = static_cast<int>(messages.size());
-    const int start = std::max(0, total - batch_size);
+        const auto& messages_ptr = result.value();
+        if (!messages_ptr) {
+            return;
+        }
 
-    for (int i = start; i < total; ++i) {
-        m_View->AppendMessage(
-            MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                        messages[i].Author() == m_Session->CurrentUser() });
-    }
-    m_LoadedCount = total - start;
+        const auto& messages = *messages_ptr;
+        const int batch_size = 7;
+        const int total = static_cast<int>(messages.size());
+        const int start = std::max(0, total - batch_size);
+
+        for (int i = start; i < total; ++i) {
+            m_View->AppendMessage(
+                MessageDao{ messages[i].Author().Name(), messages[i].Content(),
+                            messages[i].Author() == m_Session->CurrentUser() });
+        }
+        m_LoadedCount = total - start;
+    });
 }
 
 void ChatRoomPresenter::LoadEarlierBatch() {
-    const auto &messages = m_Model->MessageList();
+    m_Model->MessageList()->Then([this](const model::Room::Result& result) {
+        if (!result.has_value()) {
+            std::cerr << "Failed to load earlier message batch from room backend.\n";
+            return;
+        }
 
-    const int total = static_cast<int>(messages.size());
-    if (m_LoadedCount >= total) {
-        return;
-    }
+        const auto& messages_ptr = result.value();
+        if (!messages_ptr) {
+            return;
+        }
 
-    const int batch_size = 7;
-    const int end = total - m_LoadedCount;
-    const int start = std::max(0, end - batch_size);
+        const auto& messages = *messages_ptr;
+        const int total = static_cast<int>(messages.size());
+        if (m_LoadedCount >= total) {
+            return;
+        }
 
-    for (int i = end - 1; i >= start; --i) {
-        m_View->PrependMessage(
-            MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                        messages[i].Author() == m_Session->CurrentUser() });
-    }
-    m_LoadedCount += (end - start);
+        const int batch_size = 7;
+        const int end = total - m_LoadedCount;
+        const int start = std::max(0, end - batch_size);
+
+        for (int i = end - 1; i >= start; --i) {
+            m_View->PrependMessage(
+                MessageDao{ messages[i].Author().Name(), messages[i].Content(),
+                            messages[i].Author() == m_Session->CurrentUser() });
+        }
+        m_LoadedCount += (end - start);
+    });
 }
 
 void ChatRoomPresenter::HandleSendMessage(const std::string &text) {

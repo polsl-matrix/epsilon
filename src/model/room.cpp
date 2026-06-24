@@ -1,6 +1,9 @@
 #include "room.hpp"
 
 #include "../services/matrix/requests/authenticated_request_manager.hpp"
+#include "../services/matrix/requests/implementation/room_messages/room_messages_request.hpp"
+#include "../services/matrix/requests/implementation/common/empty.hpp"
+#include "../services/matrix/requests/implementation/common/error.hpp"
 
 #include "message.hpp"
 #include "user.hpp"
@@ -13,17 +16,7 @@
 namespace epsilon::model {
 
 Room::Room(std::shared_ptr<RequestManager> request_manager, std::string id)
-    : m_RequestManager(std::move(request_manager)), m_Id(std::move(id)) {
-    m_Messages = {
-        { User(m_RequestManager, "joker"), "why so queerious?" },
-        { User(m_RequestManager, "guy"), "wtf man" },
-        { User(m_RequestManager, "guy"),
-          "why are you terrorizing gotham city?" },
-        { User(m_RequestManager, "joker"), "gotham deez nuts" },
-        { User(m_RequestManager, "joker"), "hee hee hee" },
-        { User(m_RequestManager, "user"), "lol" },
-    };
-}
+    : m_RequestManager(std::move(request_manager)), m_Id(std::move(id)) {}
 
 std::string Room::Id() const { return m_Id; }
 
@@ -37,11 +30,45 @@ std::string Room::Name() const {
     return name;
 }
 
-std::vector<Message> Room::MessageList() const { return m_Messages; }
+std::shared_ptr<typename core::future::Future<Room::Result>::Handle> 
+Room::MessageList() const {
+    using namespace epsilon::services::matrix::requests::implementation::room_messages;
+    using namespace epsilon::services::matrix::requests::implementation::common;
 
-void Room::SendMessage(std::string content) {
-    m_Messages.push_back(
-        { User(m_RequestManager, "joker"), std::move(content) });
+    auto messages_future = std::make_shared<core::future::Future<Result>>();
+    auto request = RoomMessagesRequest(m_Id);
+    request.SetBody(Empty{});
+
+    m_RequestManager->Execute<Empty, RoomMessagesRequestResponse, Error>(
+        request, [request_manager = m_RequestManager, messages_future](auto reply) {
+            if (!reply.has_value()) {
+                messages_future->Realize(std::unexpected(GetMessagesError::RequestFailed));
+                return;
+            }
+
+            if (reply->StatusCode != 200 || !reply->Body.has_value()) {
+                messages_future->Realize(std::unexpected(GetMessagesError::UnknownError));
+                return;
+            }
+
+            const auto& response_data = reply->Body.value();
+            
+            auto messages_vector = std::make_shared<std::vector<Message>>();
+            messages_vector->reserve(response_data.Messages.size());
+
+            for (const auto& msg_data : response_data.Messages) {
+                User sender(request_manager, msg_data.Sender);
+                messages_vector->emplace_back(std::move(sender), msg_data.Body);
+            }
+
+            messages_future->Realize(std::move(messages_vector));
+        });
+
+    return messages_future->GetHandle();
+}
+
+void Room::SendMessage(std::string) {
+    OnMessageReceived.Invoke();
 }
 
 } // namespace epsilon::model
