@@ -37,6 +37,9 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/joined_rooms/joined_rooms_request.cpp
   src/services/matrix/requests/implementation/joined_rooms/joined_rooms_request_response.cpp
 
+  src/services/matrix/requests/implementation/room_messages/room_messages_request.cpp
+  src/services/matrix/requests/implementation/room_messages/room_messages_request_response.cpp
+
   src/services/router/page_router.cpp
 )
 
