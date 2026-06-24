@@ -68,15 +68,6 @@ int main(int argc, char *argv[]) {
 
     navigation_service->NavigateTo(Screen::Login, login_screen_args);
 
-    // QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
-    //                  pageRouter.get(), [pageRouter]() {
-    //                      pageRouter->NavigateTo(
-    //                          "features/login/view/Login.qml");
-    //                  });
-
-    // QObject::connect(homeView.get(), &HomeView::logoutSucceeded,
-    //                  loginView.get(), &LoginView::DisplayLogoutSuccess);
-
     engine.rootContext()->setContextProperty("pageRouter", page_router.get());
 
     QObject::connect(
