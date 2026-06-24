@@ -4,7 +4,8 @@
 #include "../../../services/navigation/args/login_screen_args.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 #include "../../../services/navigation/screen.hpp"
-#include "src/features/main_page/presenter/contracts/ihome_view.hpp"
+#include "../model/home_model.hpp"
+#include "contracts/ihome_view.hpp"
 
 #include <iostream>
 #include <memory>
@@ -16,10 +17,10 @@ using epsilon::services::navigation::args::LoginScreenArgs;
 namespace epsilon::features::home {
 
 HomePresenter::HomePresenter(
-    std::unique_ptr<IHomeView> view,
+    std::unique_ptr<IHomeView> view, std::unique_ptr<HomeModel> model,
     std::shared_ptr<INavigationService> navigation_service)
     : m_NavigationService(std::move(navigation_service)),
-      m_View(std::move(view)) {
+      m_View(std::move(view)), m_Model(std::move(model)) {
     m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(
         std::make_shared<core::event::util::Action<>>(
             [this] { this->HandleLogout(); }));
@@ -28,8 +29,11 @@ HomePresenter::HomePresenter(
 HomePresenter::~HomePresenter() { m_LogoutEventDetachment.Detach(); }
 
 void HomePresenter::HandleLogout() {
-    std::cout << "trying to log out :)\n";
-    // m_NavigationService->NavigateTo(Screen::Login, LoginScreenArgs {});
+    const auto request_manager = m_Model->Logout();
+
+    m_NavigationService->NavigateTo(
+        Screen::Login,
+        LoginScreenArgs{ std::move(request_manager), m_NavigationService });
 }
 
 } // namespace epsilon::features::home

@@ -9,6 +9,7 @@
 
 #include "../../features/base/ipresenter.hpp"
 
+#include "../../features/main_page/model/home_model.hpp"
 #include "../../features/main_page/presenter/home_presenter.hpp"
 #include "../../features/main_page/view/home_view.hpp"
 
@@ -34,9 +35,11 @@ void NavigationService::NavigateTo(Screen screen, std::any args) {
     case Screen::Home: {
         auto home_args = std::any_cast<args::HomeScreenArgs>(args);
         auto view = std::make_unique<home::HomeView>(m_PageRouter);
+        auto model = std::make_unique<home::HomeModel>(
+            std::move(home_args.AuthenticatedRequestManager));
         new_presenter = std::make_unique<home::HomePresenter>(
-            std::move(view), std::move(home_args.NavigationService));
-        // `home_args.AuthenticatedRequestManager` will be used in HomeModel
+            std::move(view), std::move(model),
+            std::move(home_args.NavigationService));
         break;
     }
     case Screen::Login: {
