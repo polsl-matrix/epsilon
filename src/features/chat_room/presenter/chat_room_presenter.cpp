@@ -20,7 +20,7 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
       m_LoadedCount(0) {
 
     const auto room_name = m_Model->Name();
-    const auto first_letter = "" + room_name[0];
+    const std::string first_letter { room_name[0] };
 
     m_View->SetRoomName(room_name);
     m_View->SetRoomAvatar(first_letter);
