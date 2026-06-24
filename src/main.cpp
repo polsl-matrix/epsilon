@@ -34,7 +34,8 @@ using epsilon::services::matrix::serialization::Deserializer;
 using epsilon::services::matrix::serialization::IDeserializationStrategy;
 using epsilon::services::matrix::serialization::ISerializationStrategy;
 using epsilon::services::matrix::serialization::Serializer;
-using epsilon::services::matrix::serialization::json::JsonDeserializationStrategy;
+using epsilon::services::matrix::serialization::json::
+    JsonDeserializationStrategy;
 using epsilon::services::matrix::serialization::json::JsonSerializationStrategy;
 
 using epsilon::services::navigation::NavigationService;
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    const auto backend_url = "http://127.0.0.1:8080";
+    const auto backend_url = "http://192.168.0.211:8080";
 
     auto page_router = std::make_shared<PageRouter>(engine.rootContext());
 

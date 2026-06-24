@@ -5,7 +5,7 @@ import QtQuick.Layouts
 ListView {
     id: roomListRoot
 
-    signal roomSelected(string roomName, string roomAvatar)
+    signal roomSelected(string room_id)
 
     clip: true
     boundsBehavior: Flickable.StopAtBounds
@@ -16,26 +16,31 @@ ListView {
 
     model: ListModel {
         ListElement {
+            room_id: "!catlovers:epsilon"
             name: "Cat Lovers"
             avatar: "C"
             notif: 0
         }
         ListElement {
+            room_id: "!myserver:epsilon"
             name: "My Server #1"
             avatar: "M"
             notif: 67
         }
         ListElement {
+            room_id: "!doggies:epsilon"
             name: "Dog Aficionados"
             avatar: "D"
             notif: 1
         }
         ListElement {
+            room_id: "!neighbour:epsilon"
             name: "FriendlyNeighbour23"
             avatar: "F"
             notif: 0
         }
         ListElement {
+            room_id: "furry"
             name: "Furry Corn"
             avatar: "F"
             notif: 0
@@ -105,7 +110,7 @@ ListView {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
-                roomListRoot.roomSelected(model.name, model.avatar)
+                roomListRoot.roomSelected(model.room_id)
             }
         }
     }

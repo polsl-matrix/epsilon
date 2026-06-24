@@ -7,6 +7,7 @@
 
 #include <concepts>
 #include <memory>
+#include <string>
 
 namespace epsilon::services::matrix::requests {
 
@@ -33,6 +34,8 @@ public:
     AuthenticatedRequestManager(std::shared_ptr<RequestManager> inner, std::string token);
 
     std::shared_ptr<RequestManager> GetInner();
+
+    std::string UserId() const;
 
     template<class TBody, class TResult, class TError>
         requires std::derived_from<TBody, serialization::ISerializable> && serialization::Deserializable<TResult> && serialization::Deserializable<TError>

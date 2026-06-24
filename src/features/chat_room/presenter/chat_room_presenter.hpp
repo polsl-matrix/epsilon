@@ -1,34 +1,38 @@
 #pragma once
 
-#include "../contracts/ichat_room_view.hpp"
+#include "contracts/ichat_room_view.hpp"
+#include "../../../model/room.hpp"
+#include "../../../model/session.hpp"
 #include "../../../core/event/detachment.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace epsilon::features::chat_room::presenter {
+namespace epsilon::features::chat_room {
 
 class ChatRoomPresenter {
+    std::shared_ptr<IChatRoomView> m_View;
+    std::shared_ptr<model::Room> m_Model;
+    std::shared_ptr<model::Session> m_Session;
+    
+    epsilon::core::event::Detachment m_MessageSentDetachment;
+    epsilon::core::event::Detachment m_ViewReadyDetachment;
+    epsilon::core::event::Detachment m_LoadEarlierDetachment;
+    
+    int m_LoadedCount;
+    
 public:
-    explicit ChatRoomPresenter(std::weak_ptr<IChatRoomView> view);
+    explicit ChatRoomPresenter(
+        std::shared_ptr<IChatRoomView> view,
+        std::shared_ptr<model::Room> model,
+        std::shared_ptr<model::Session> session
+    );
     void HandleSendMessage(const std::string& text);
 
 private:
     void LoadInitialBatch();
     void LoadEarlierBatch();
-
-    struct MessageRecord {
-        std::string sender_name;
-        std::string text;
-        bool is_me;
-    };
-
-    std::weak_ptr<IChatRoomView> m_View;
-    epsilon::core::event::Detachment m_MessageSentDetachment;
-    epsilon::core::event::Detachment m_ViewReadyDetachment;
-    epsilon::core::event::Detachment m_LoadEarlierDetachment;
-    std::vector<MessageRecord> m_Database;
-    int m_LoadedCount;
 };
 
 }

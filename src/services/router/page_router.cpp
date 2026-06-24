@@ -12,9 +12,13 @@ PageRouter::PageRouter(QQmlContext *qml_context, QObject *parent)
 
 void PageRouter::Display(const QString &path, const QString &view_qt_name,
                          QObject *view) {
-    m_QmlContext->setContextProperty(view_qt_name, view);
+    Bind(view_qt_name, view);
 
     emit navigateRequested(path);
+}
+
+void PageRouter::Bind(const QString &view_qt_name, QObject *view) {
+    m_QmlContext->setContextProperty(view_qt_name, view);
 }
 
 } // namespace epsilon::services::router

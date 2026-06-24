@@ -6,8 +6,8 @@
 namespace epsilon::services::matrix::serialization {
 
 template <>
-requests::implementation::registration::RegistrationRequestResponse
-Deserialize<requests::implementation::registration::RegistrationRequestResponse>(
+requests::implementation::registration::RegistrationRequestResponse Deserialize<
+    requests::implementation::registration::RegistrationRequestResponse>(
     SerializationPrimitive primitive) {
     const auto reply = Expect<RObject>(primitive).get();
 
@@ -16,10 +16,8 @@ Deserialize<requests::implementation::registration::RegistrationRequestResponse>
     const auto user_id = ReadField<String>(reply, "user_id");
 
     return requests::implementation::registration::RegistrationRequestResponse{
-        access_token.value,
-        refresh_token.value,
-        user_id.value
+        access_token.value, refresh_token.value, user_id.value
     };
 }
 
-}
+} // namespace epsilon::services::matrix::serialization

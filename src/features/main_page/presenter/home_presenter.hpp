@@ -3,6 +3,7 @@
 #include "../../base/ipresenter.hpp"
 #include "contracts/ihome_view.hpp"
 #include "../model/home_model.hpp"
+#include "../../chat_room/presenter/chat_room_presenter.hpp"
 #include "../../../core/event/detachment.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 
@@ -15,6 +16,7 @@ class HomePresenter : public base::IPresenter {
 
     std::shared_ptr<INavigationService> m_NavigationService;
 
+    core::event::Detachment m_SelectRoomEventDetachment;
     core::event::Detachment m_LogoutEventDetachment;
 
   public:
@@ -25,6 +27,8 @@ class HomePresenter : public base::IPresenter {
   private:
     std::unique_ptr<IHomeView> m_View;
     std::unique_ptr<HomeModel> m_Model;
+
+    std::unique_ptr<chat_room::ChatRoomPresenter> m_OpenRoom;
 };
 
 }

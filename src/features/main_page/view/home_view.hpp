@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <QObject>
+#include <QString>
 
 namespace epsilon::features::home {
 
@@ -26,8 +27,13 @@ class HomeView : public QObject, public IHomeView {
 
     void ShowLogoutSuccess() override;
 
+    std::unique_ptr<chat_room::IChatRoomView> LoadChatRoomView() override;
+
+    Q_INVOKABLE void SelectRoom(const QString& room_id);
+
   signals:
     void logoutSucceeded();
+    void chatRoomLoaded();
 };
 
 }

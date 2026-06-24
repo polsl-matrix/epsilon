@@ -59,11 +59,12 @@ void NavigationService::NavigateTo(Screen screen, std::any args) {
     }
     case Screen::Registration: {
         auto reg_args = std::any_cast<args::RegistrationScreenArgs>(args);
-        auto view = std::make_unique<registration::RegistrationView>(m_PageRouter);
-        auto model = std::make_unique<registration::RegistrationModel>(reg_args.request_manager);
+        auto view =
+            std::make_unique<registration::RegistrationView>(m_PageRouter);
+        auto model = std::make_unique<registration::RegistrationModel>(
+            reg_args.request_manager);
         new_presenter = std::make_unique<registration::RegistrationPresenter>(
-            std::move(view), std::move(model), reg_args.navigation_service
-        );
+            std::move(view), std::move(model), reg_args.navigation_service);
         break;
     }
     }

@@ -5,7 +5,7 @@ Rectangle {
     id: sideMenuRoot
 
     signal logoutRequested()
-    signal roomSelected(string roomName, string roomAvatar)
+    signal roomSelected(string room_id)
 
     ColumnLayout {
         anchors.fill: parent
@@ -29,8 +29,8 @@ Rectangle {
         RoomListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            onRoomSelected: (name, avatar) => {
-                sideMenuRoot.roomSelected(name, avatar)
+            onRoomSelected: (room_id) => {
+                sideMenuRoot.roomSelected(room_id)
             }
         }
 
