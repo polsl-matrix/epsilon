@@ -13,8 +13,6 @@ struct ExtractedMessage {
 };
 
 struct RoomMessagesRequestResponse {
-    std::string StartToken;
-    std::string EndToken;
     std::vector<ExtractedMessage> Messages;
 };
 

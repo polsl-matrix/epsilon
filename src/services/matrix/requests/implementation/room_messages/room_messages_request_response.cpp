@@ -21,8 +21,6 @@ Deserialize<requests::implementation::room_messages::RoomMessagesRequestResponse
     SerializationPrimitive primitive) {
     const auto reply = Expect<RObject>(primitive).get();
 
-    const auto start_token = ReadField<String>(reply, "start");
-    const auto end_token = ReadField<String>(reply, "end");
     const auto chunk_primitive = ReadField<RArray>(reply, "chunk");
     const auto& chunk_array = chunk_primitive.get().values;
 
@@ -39,7 +37,7 @@ Deserialize<requests::implementation::room_messages::RoomMessagesRequestResponse
 
         const auto sender_field = ReadField<String>(event_obj, "sender");
         const auto content_obj = ReadField<RObject>(event_obj, "content").get();
-        const auto body_field = ReadFieldOptional<String>(content_obj, "body");
+        const auto body_field = ReadFieldOptional<String>(content_obj, "membership");
 
         if (body_field.has_value()) {
             messages.push_back({
@@ -50,8 +48,6 @@ Deserialize<requests::implementation::room_messages::RoomMessagesRequestResponse
     }
 
     return requests::implementation::room_messages::RoomMessagesRequestResponse{
-        start_token.value,
-        end_token.value,
         std::move(messages)
     };
 }

@@ -51,10 +51,13 @@ Room::MessageList() const {
                 return;
             }
 
+            //return
             const auto& response_data = reply->Body.value();
             
             auto messages_vector = std::make_shared<std::vector<Message>>();
             messages_vector->reserve(response_data.Messages.size());
+
+            //return;
 
             for (const auto& msg_data : response_data.Messages) {
                 User sender(request_manager, msg_data.Sender);
