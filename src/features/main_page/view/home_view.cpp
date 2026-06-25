@@ -4,13 +4,13 @@
 #include "../../chat_room/view/chat_room_view.hpp"
 #include "../presenter/contracts/ihome_view.hpp"
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 #include <QString>
+#include <QVariantList>
 #include <qobject.h>
 #include <qtmetamacros.h>
-#include <QVariantList>
 
 namespace epsilon::features::home {
 
@@ -23,17 +23,18 @@ void HomeView::AttemptLogout() { OnLogoutRequested.Invoke(); }
 
 void HomeView::ShowLogoutSuccess() { emit logoutSucceeded(); }
 
-void HomeView::SetRoomsList(const std::vector<RoomDto>& rooms) {
+void HomeView::SetRoomsList(const std::vector<RoomDto> &rooms) {
     m_Rooms.clear();
     std::cout << "Reloading rooms...\n";
-    for (const auto& room : rooms) {
+    for (const auto &room : rooms) {
         QVariantMap roomMap;
         roomMap["room_id"] = QString::fromStdString(room.Id);
         roomMap["name"] = QString::fromStdString(room.Name);
-        
+
         std::cout << '\t' << room.Id << '\n';
 
-        QString avatarInit = room.Name.empty() ? "?" : QString(room.Name[0]).toUpper();
+        QString avatarInit =
+            room.Name.empty() ? "?" : QString(room.Name[0]).toUpper();
         roomMap["avatar"] = avatarInit;
         roomMap["notif"] = 0;
 
@@ -42,9 +43,7 @@ void HomeView::SetRoomsList(const std::vector<RoomDto>& rooms) {
     emit roomsChanged();
 }
 
-QVariantList HomeView::rooms() const {
-    return m_Rooms;
-}
+QVariantList HomeView::rooms() const { return m_Rooms; }
 
 std::unique_ptr<chat_room::IChatRoomView> HomeView::LoadChatRoomView() {
     emit chatRoomLoaded();

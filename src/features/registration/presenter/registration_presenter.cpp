@@ -36,17 +36,16 @@ RegistrationPresenter::RegistrationPresenter(
                 });
 
     m_LoginLinkEventHandle =
-        m_View->OnLoginLinkClicked.Attach<Action<>>(
-            [this]() {
-                if (m_NavigationService && m_Model) {
-                    auto nav = m_NavigationService;
-                    auto req = m_Model->GetRequestManager();
+        m_View->OnLoginLinkClicked.Attach<Action<>>([this]() {
+            if (m_NavigationService && m_Model) {
+                auto nav = m_NavigationService;
+                auto req = m_Model->GetRequestManager();
 
-                    nav->NavigateTo(services::navigation::Screen::Login,
-                                    services::navigation::args::LoginScreenArgs{
-                                        req, nav });
-                }
-            });
+                nav->NavigateTo(
+                    services::navigation::Screen::Login,
+                    services::navigation::args::LoginScreenArgs{ req, nav });
+            }
+        });
 }
 
 void RegistrationPresenter::HandleRegistration(

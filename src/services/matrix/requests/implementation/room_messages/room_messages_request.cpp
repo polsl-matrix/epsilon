@@ -16,4 +16,5 @@ std::string RoomMessagesRequest::Endpoint() const {
     return "/_matrix/client/v3/rooms/" + m_RoomId + "/messages";
 }
 
-} // namespace epsilon::services::matrix::requests::implementation::room_messages
+} // namespace
+  // epsilon::services::matrix::requests::implementation::room_messages

@@ -34,18 +34,18 @@ TEST(EventTests, EventFiring) {
     {
         auto attached = event.Attach<Action<uint32_t>>(
             [&state](uint32_t new_state) { state = new_state; });
-    
+
         const uint32_t new_state = 42;
-    
+
         event.Invoke(new_state);
-    
+
         EXPECT_EQ(state, new_state);
     }
-    
+
     const uint32_t unreachable_state = 67;
-    
+
     event.Invoke(unreachable_state);
-    
+
     EXPECT_NE(state, unreachable_state);
 }
 

@@ -6,9 +6,9 @@
 #include "contracts/message_dao.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <utility>
-#include <iostream>
 
 namespace epsilon::features::chat_room {
 
@@ -18,44 +18,43 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
     : m_View(std::move(view)), m_Model(std::move(model)),
       m_Session(std::move(session)), m_LoadedCount(0) {
     const auto room_name = m_Model->Name();
-    const auto first_letter = std::string{room_name[0]};
+    const auto first_letter = std::string{ room_name[0] };
 
     m_View->SetRoomName(room_name);
     m_View->SetRoomAvatar(first_letter);
 
     m_MessageSentEventHandle =
         m_View->OnMessageSent.Attach<Action<std::string>>(
-                [this](std::string text) { HandleSendMessage(text); });
+            [this](std::string text) { HandleSendMessage(text); });
 
     LoadInitialBatch();
 
-    m_LoadEarlierEventHandle =
-        m_View->OnLoadEarlierRequested.Attach<Action<>>(
-                [this]() { LoadEarlierBatch(); });
+    m_LoadEarlierEventHandle = m_View->OnLoadEarlierRequested.Attach<Action<>>(
+        [this]() { LoadEarlierBatch(); });
 }
 
 void ChatRoomPresenter::LoadInitialBatch() {
-    m_Model->MessageList()->Then([this](const model::Room::Result& result) {
+    m_Model->MessageList()->Then([this](const model::Room::Result &result) {
         if (!result.has_value()) {
-            std::cerr << "Failed to load initial message batch from room backend.\n";
+            std::cerr
+                << "Failed to load initial message batch from room backend.\n";
             return;
         }
 
-        const auto& messages_ptr = result.value();
+        const auto &messages_ptr = result.value();
         if (!messages_ptr) {
             return;
         }
 
-        const auto& messages = *messages_ptr;
+        const auto &messages = *messages_ptr;
         const int batch_size = 7;
         const int total = static_cast<int>(messages.size());
         const int start = std::max(0, total - batch_size);
 
-        
         for (int i = start; i < total; ++i) {
             m_View->AppendMessage(
                 MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                messages[i].Author() == m_Session->CurrentUser() });
+                            messages[i].Author() == m_Session->CurrentUser() });
         }
         m_LoadedCount = total - start;
     });
@@ -63,18 +62,19 @@ void ChatRoomPresenter::LoadInitialBatch() {
 
 void ChatRoomPresenter::LoadEarlierBatch() {
     return;
-    m_Model->MessageList()->Then([this](const model::Room::Result& result) {
+    m_Model->MessageList()->Then([this](const model::Room::Result &result) {
         if (!result.has_value()) {
-            std::cerr << "Failed to load earlier message batch from room backend.\n";
+            std::cerr
+                << "Failed to load earlier message batch from room backend.\n";
             return;
         }
 
-        const auto& messages_ptr = result.value();
+        const auto &messages_ptr = result.value();
         if (!messages_ptr) {
             return;
         }
 
-        const auto& messages = *messages_ptr;
+        const auto &messages = *messages_ptr;
         const int total = static_cast<int>(messages.size());
         if (m_LoadedCount >= total) {
             return;

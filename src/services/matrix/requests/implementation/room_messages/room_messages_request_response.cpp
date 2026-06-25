@@ -7,26 +7,28 @@
 #include <vector>
 
 using epsilon::services::matrix::serialization::Expect;
+using epsilon::services::matrix::serialization::RArray;
 using epsilon::services::matrix::serialization::ReadField;
 using epsilon::services::matrix::serialization::ReadFieldOptional;
 using epsilon::services::matrix::serialization::RObject;
-using epsilon::services::matrix::serialization::RArray;
 using epsilon::services::matrix::serialization::String;
 
 namespace epsilon::services::matrix::serialization {
 
 template <>
 requests::implementation::room_messages::RoomMessagesRequestResponse
-Deserialize<requests::implementation::room_messages::RoomMessagesRequestResponse>(
+Deserialize<
+    requests::implementation::room_messages::RoomMessagesRequestResponse>(
     SerializationPrimitive primitive) {
     const auto reply = Expect<RObject>(primitive).get();
 
     const auto chunk_primitive = ReadField<RArray>(reply, "chunk");
-    const auto& chunk_array = chunk_primitive.get().values;
+    const auto &chunk_array = chunk_primitive.get().values;
 
-    std::vector<requests::implementation::room_messages::ExtractedMessage> messages;
+    std::vector<requests::implementation::room_messages::ExtractedMessage>
+        messages;
 
-    for (const auto& element : chunk_array) {
+    for (const auto &element : chunk_array) {
         const auto event_obj = Expect<RObject>(element).get();
 
         // We only parse messages, not the other types of events
@@ -37,13 +39,11 @@ Deserialize<requests::implementation::room_messages::RoomMessagesRequestResponse
 
         const auto sender_field = ReadField<String>(event_obj, "sender");
         const auto content_obj = ReadField<RObject>(event_obj, "content").get();
-        const auto body_field = ReadFieldOptional<String>(content_obj, "membership");
+        const auto body_field =
+            ReadFieldOptional<String>(content_obj, "membership");
 
         if (body_field.has_value()) {
-            messages.push_back({
-                sender_field.value,
-                body_field->value
-            });
+            messages.push_back({ sender_field.value, body_field->value });
         }
     }
 

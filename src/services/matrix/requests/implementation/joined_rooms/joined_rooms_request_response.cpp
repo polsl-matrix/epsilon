@@ -7,9 +7,9 @@
 #include <vector>
 
 using epsilon::services::matrix::serialization::Expect;
+using epsilon::services::matrix::serialization::RArray;
 using epsilon::services::matrix::serialization::ReadField;
 using epsilon::services::matrix::serialization::RObject;
-using epsilon::services::matrix::serialization::RArray;
 using epsilon::services::matrix::serialization::String;
 
 namespace epsilon::services::matrix::serialization {
