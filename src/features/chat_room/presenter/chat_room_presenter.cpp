@@ -50,15 +50,22 @@ void ChatRoomPresenter::LoadMessages() {
         const auto &messages = *messages_ptr;
 
         if (auto session = session_weak_pointer.lock()) {
-            auto current_user = session->CurrentUser();
-
-            for (const auto &message : messages) {
-                if (auto view = view_weak_pointer.lock()) {
-                    view->AppendMessage(
-                        MessageDao{ message.Author().Name(), message.Content(),
-                                    message.Author() == current_user });
+            session->CurrentUser()->Then([view_weak_pointer, messages = std::move(messages)](const auto& current_user) {
+                if(!current_user.has_value()) {
+                    if (auto view = view_weak_pointer.lock()) {
+                        view->AppendMessage(MessageDao{ "epsilon", "We've encountered some problems while loading messages :(", false });
+                    }
+                    return;
                 }
-            }
+
+                for (const auto &message : messages) {
+                    if (auto view = view_weak_pointer.lock()) {
+                        view->AppendMessage(
+                            MessageDao{ message.Author().Name(), message.Content(),
+                                        message.Author() == *current_user });
+                    }
+                }
+            });
         } else {
             return;
         }
@@ -73,8 +80,22 @@ void ChatRoomPresenter::HandleSendMessage(const std::string &text) {
     m_Model->SendMessage(text);
     m_LoadedCount++;
 
-    m_View->AppendMessage(
-        MessageDao{ m_Session->CurrentUser().Name(), text, true });
+    std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
+
+    m_Session->CurrentUser()->Then([view_weak_pointer, &text](const auto &current_user){
+        if(!current_user.has_value()) {
+            if (auto view = view_weak_pointer.lock()) {
+                view->AppendMessage(MessageDao{ "epsilon", "We've encountered some problems while loading messages :(", false });
+            }
+            return;
+        }
+
+        if (auto view = view_weak_pointer.lock()) {
+            view->AppendMessage(
+                MessageDao{ current_user->Name(), text, true });
+        }
+
+    });
 }
 
 } // namespace epsilon::features::chat_room
