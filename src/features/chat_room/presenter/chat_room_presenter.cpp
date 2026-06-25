@@ -17,8 +17,7 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
                                      std::shared_ptr<model::Session> session)
     : m_View(std::move(view)), m_Model(std::move(model)),
       m_Session(std::move(session)), m_MessageSentDetachment([]() {}),
-      m_ViewReadyDetachment([]() {}), m_LoadEarlierDetachment([]() {}),
-      m_LoadedCount(0) {
+      m_LoadEarlierDetachment([]() {}), m_LoadedCount(0) {
     const auto room_name = m_Model->Name();
     const auto first_letter = std::string{room_name[0]};
 
@@ -36,6 +35,11 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
         m_View->OnLoadEarlierRequested
             .template Attach<epsilon::core::event::util::Action<>>(
                 [this]() { LoadEarlierBatch(); });
+}
+
+ChatRoomPresenter::~ChatRoomPresenter() {
+    m_LoadEarlierDetachment.Detach();
+    m_MessageSentDetachment.Detach();
 }
 
 void ChatRoomPresenter::LoadInitialBatch() {

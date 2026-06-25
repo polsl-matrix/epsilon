@@ -36,6 +36,7 @@ Room::MessageList() const {
     using namespace epsilon::services::matrix::requests::implementation::common;
 
     auto messages_future = std::make_shared<core::future::Future<Result>>();
+
     auto request = RoomMessagesRequest(m_Id);
     request.SetBody(Empty{});
 
@@ -51,13 +52,10 @@ Room::MessageList() const {
                 return;
             }
 
-            //return
             const auto& response_data = reply->Body.value();
             
             auto messages_vector = std::make_shared<std::vector<Message>>();
             messages_vector->reserve(response_data.Messages.size());
-
-            //return;
 
             for (const auto& msg_data : response_data.Messages) {
                 User sender(request_manager, msg_data.Sender);

@@ -16,7 +16,6 @@ public:
     virtual void SetRoomAvatar(const std::string& avatar) = 0;
 
     epsilon::core::event::Event<std::string> OnMessageSent;
-    epsilon::core::event::Event<> OnViewReady;
     epsilon::core::event::Event<> OnLoadEarlierRequested;
 };
 

@@ -24,10 +24,6 @@ void ChatRoomView::SendMessage(const QString &text) {
     OnMessageSent.Invoke(text.toStdString());
 }
 
-void ChatRoomView::NotifyViewReady() {
-    OnViewReady.Invoke();
-}
-
 void ChatRoomView::RequestEarlierMessages() { OnLoadEarlierRequested.Invoke(); }
 
 void ChatRoomView::SetRoomName(const std::string &name) {

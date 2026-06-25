@@ -17,7 +17,6 @@ class ChatRoomPresenter {
     std::shared_ptr<model::Session> m_Session;
     
     epsilon::core::event::Detachment m_MessageSentDetachment;
-    epsilon::core::event::Detachment m_ViewReadyDetachment;
     epsilon::core::event::Detachment m_LoadEarlierDetachment;
     
     int m_LoadedCount;
@@ -28,6 +27,8 @@ public:
         std::shared_ptr<model::Room> model,
         std::shared_ptr<model::Session> session
     );
+    ~ChatRoomPresenter();
+
     void HandleSendMessage(const std::string& text);
 
 private:

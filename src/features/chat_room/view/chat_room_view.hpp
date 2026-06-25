@@ -25,7 +25,6 @@ public:
     QString roomName() const;
     QString roomAvatar() const;
     Q_INVOKABLE void SendMessage(const QString& text);
-    Q_INVOKABLE void NotifyViewReady();
     Q_INVOKABLE void RequestEarlierMessages();
 
     void SetRoomName(const std::string& name) override;

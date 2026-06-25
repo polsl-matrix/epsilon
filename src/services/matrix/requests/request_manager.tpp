@@ -45,7 +45,7 @@ void RequestManager::Execute(const Request<TBody, TResult, TError>& request, std
 
         if (reply.StatusCode >= http_status_ok && reply.StatusCode < http_status_redirect) {
             TResult deserialized = deserializer->Deserialize<TResult>(reply.Body.value_or(""));
-            
+
             callback(Reply<TResult, TError> {
                 reply.StatusCode,
                 deserialized
