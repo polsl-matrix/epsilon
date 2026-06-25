@@ -27,14 +27,14 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
         m_View->OnMessageSent.Attach<Action<std::string>>(
             [this](std::string text) { HandleSendMessage(text); });
 
-    LoadInitialBatch();
-
-    m_LoadEarlierEventHandle = m_View->OnLoadEarlierRequested.Attach<Action<>>(
-        [this]() { LoadEarlierBatch(); });
+    LoadMessages();
 }
 
-void ChatRoomPresenter::LoadInitialBatch() {
-    m_Model->MessageList()->Then([this](const model::Room::Result &result) {
+void ChatRoomPresenter::LoadMessages() {
+    std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
+    std::weak_ptr<model::Session> session_weak_pointer = m_Session;
+
+    m_Model->MessageList()->Then([view_weak_pointer, session_weak_pointer](const model::Room::Result &result) {
         if (!result.has_value()) {
             std::cerr
                 << "Failed to load initial message batch from room backend.\n";
@@ -47,49 +47,20 @@ void ChatRoomPresenter::LoadInitialBatch() {
         }
 
         const auto &messages = *messages_ptr;
-        const int batch_size = 7;
-        const int total = static_cast<int>(messages.size());
-        const int start = std::max(0, total - batch_size);
 
-        for (int i = start; i < total; ++i) {
-            m_View->AppendMessage(
-                MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                            messages[i].Author() == m_Session->CurrentUser() });
-        }
-        m_LoadedCount = total - start;
-    });
-}
+        if(auto session = session_weak_pointer.lock()) {
+            auto current_user = session->CurrentUser();
 
-void ChatRoomPresenter::LoadEarlierBatch() {
-    return;
-    m_Model->MessageList()->Then([this](const model::Room::Result &result) {
-        if (!result.has_value()) {
-            std::cerr
-                << "Failed to load earlier message batch from room backend.\n";
+            for (const auto& message : messages) {
+                if(auto view = view_weak_pointer.lock()) {
+                view->AppendMessage(
+                    MessageDao{ message.Author().Name(), message.Content(),
+                                message.Author() == current_user });
+                }
+            }
+        } else {
             return;
         }
-
-        const auto &messages_ptr = result.value();
-        if (!messages_ptr) {
-            return;
-        }
-
-        const auto &messages = *messages_ptr;
-        const int total = static_cast<int>(messages.size());
-        if (m_LoadedCount >= total) {
-            return;
-        }
-
-        const int batch_size = 7;
-        const int end = total - m_LoadedCount;
-        const int start = std::max(0, end - batch_size);
-
-        for (int i = end - 1; i >= start; --i) {
-            m_View->PrependMessage(
-                MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                            messages[i].Author() == m_Session->CurrentUser() });
-        }
-        m_LoadedCount += (end - start);
     });
 }
 

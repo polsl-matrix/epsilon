@@ -34,8 +34,7 @@ public:
     void HandleSendMessage(const std::string& text);
 
 private:
-    void LoadInitialBatch();
-    void LoadEarlierBatch();
+    void LoadMessages();
 };
 
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+// FIXME: The observer might get deleted WHILE updating,
+// which may cause issues with longer callbacks.
+
 namespace epsilon::core::event {
 template <typename... Args> class Observer {
   public:

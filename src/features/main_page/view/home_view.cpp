@@ -4,7 +4,6 @@
 #include "../../chat_room/view/chat_room_view.hpp"
 #include "../presenter/contracts/ihome_view.hpp"
 
-#include <iostream>
 #include <memory>
 
 #include <QString>
@@ -25,13 +24,11 @@ void HomeView::ShowLogoutSuccess() { emit logoutSucceeded(); }
 
 void HomeView::SetRoomsList(const std::vector<RoomDto> &rooms) {
     m_Rooms.clear();
-    std::cout << "Reloading rooms...\n";
+    
     for (const auto &room : rooms) {
         QVariantMap roomMap;
         roomMap["room_id"] = QString::fromStdString(room.Id);
         roomMap["name"] = QString::fromStdString(room.Name);
-
-        std::cout << '\t' << room.Id << '\n';
 
         QString avatarInit =
             room.Name.empty() ? "?" : QString(room.Name[0]).toUpper();
