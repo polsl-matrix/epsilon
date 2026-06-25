@@ -2,6 +2,7 @@
 
 #include "../services/matrix/requests/authenticated_request_manager.hpp"
 #include "../core/event/event.hpp"
+#include "../core/future/future.hpp"
 
 #include "message.hpp"
 
@@ -11,16 +12,21 @@
 
 namespace epsilon::model {
 
+enum class GetMessagesError {
+    RequestFailed,
+    UnknownError
+};
+
 class Room {
     using RequestManager = services::matrix::requests::AuthenticatedRequestManager;
 
     std::shared_ptr<RequestManager> m_RequestManager;
-
     std::string m_Id;
 
-    std::vector<Message> m_Messages; // This is temporary - to be replaced by backend
-
 public:
+    using MessageVector = std::vector<Message>;
+    using Result = std::expected<std::shared_ptr<MessageVector>, GetMessagesError>;
+
     Room(std::shared_ptr<RequestManager> request_manager, std::string id);
 
     Room(Room&&) noexcept = default; 
@@ -31,7 +37,7 @@ public:
 
     std::string Id() const;
     std::string Name() const;
-    std::vector<Message> MessageList() const;
+    std::shared_ptr<typename core::future::Future<Result>::Handle> MessageList() const;
 
     void SendMessage(std::string content);
 

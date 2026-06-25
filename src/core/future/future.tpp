@@ -43,11 +43,14 @@ void Future<TValue>::Realize(TValue&& value) {
 template <typename TValue>
 std::shared_ptr<typename Future<TValue>::Handle> Future<TValue>::GetHandle() {
     const auto observer = std::make_shared<FutureObserver>();
+
     if(m_CachedValue.has_value()) {
         observer->Update(*m_CachedValue);
     }
 
     m_Finished.Attach(observer);
+    
+    m_Handles.push_back(observer);
 
     return observer;
 }

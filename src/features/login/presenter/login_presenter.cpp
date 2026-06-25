@@ -22,29 +22,26 @@ LoginPresenter::LoginPresenter(
     std::shared_ptr<services::navigation::INavigationService>
         navigation_service)
     : m_View(std::move(view)), m_Model(std::move(model)),
-      m_NavigationService(std::move(navigation_service)),
-      m_LoginRequestDetachment([]() {}),
-      m_RegistrationClickDetachment([]() {}) {
+      m_NavigationService(std::move(navigation_service)) {
 
-    m_LoginRequestDetachment = m_View->OnLoginRequested.Attach<
-        epsilon::core::event::util::Action<std::string, std::string>>(
-        [this](const std::string &username, const std::string &password) {
-            HandleLogin(username, password);
-        });
-
-    m_RegistrationClickDetachment =
-        m_View->OnRegistrationClicked
-            .Attach<epsilon::core::event::util::Action<>>([this]() {
-                if (m_NavigationService && m_Model) {
-                    auto nav = m_NavigationService;
-                    auto req = m_Model->GetRequestManager();
-
-                    nav->NavigateTo(
-                        services::navigation::Screen::Registration,
-                        services::navigation::args::RegistrationScreenArgs{
-                            req, nav });
-                }
+    m_LoginRequestEventHandle =
+        m_View->OnLoginRequested.Attach<Action<std::string, std::string>>(
+            [this](const std::string &username, const std::string &password) {
+                HandleLogin(username, password);
             });
+
+    m_RegistrationClickEventHandle =
+        m_View->OnRegistrationClicked.Attach<Action<>>([this]() {
+            if (m_NavigationService && m_Model) {
+                auto nav = m_NavigationService;
+                auto req = m_Model->GetRequestManager();
+
+                nav->NavigateTo(
+                    services::navigation::Screen::Registration,
+                    services::navigation::args::RegistrationScreenArgs{ req,
+                                                                        nav });
+            }
+        });
 }
 
 void LoginPresenter::HandleLogin(const std::string &username,

@@ -23,12 +23,13 @@ HomePresenter::HomePresenter(
     std::shared_ptr<INavigationService> navigation_service)
     : m_NavigationService(std::move(navigation_service)),
       m_View(std::move(view)), m_Model(std::move(model)) {
-    m_Model->GetRooms()->Then([this](const HomeModel::RoomsResult& result) {
+    m_Model->GetRooms()->Then([this](const HomeModel::RoomsResult &result) {
         if (!result.has_value()) {
             return;
         }
 
-        const std::shared_ptr<std::vector<model::Room>>& rooms_ptr = result.value();
+        const std::shared_ptr<std::vector<model::Room>> &rooms_ptr =
+            result.value();
         if (!rooms_ptr) {
             return;
         }
@@ -36,31 +37,30 @@ HomePresenter::HomePresenter(
         std::vector<RoomDto> view_dtos;
         view_dtos.reserve(rooms_ptr->size());
 
-        for (const auto& room : *rooms_ptr) {
+        for (const auto &room : *rooms_ptr) {
             view_dtos.push_back(RoomDto{ room.Id(), room.Name() });
         }
 
         m_View->SetRoomsList(view_dtos);
     });
 
-    m_SelectRoomEventDetachment = m_View->OnChatSelected.Attach(
-        std::make_shared<core::event::util::Action<std::string>>(
+    m_SelectRoomEventHandle =
+        m_View->OnChatSelected.Attach<Action<std::string>>(
             [this](std::string room_id) {
+                std::shared_ptr<chat_room::IChatRoomView> view =
+                    this->m_View->LoadChatRoomView();
+                std::shared_ptr<model::Room> model =
+                    this->m_Model->SelectRoom(room_id);
+                std::shared_ptr<model::Session> session =
+                    this->m_Model->GetSession();
+
                 this->m_OpenRoom =
-                    std::make_unique<chat_room::ChatRoomPresenter>(
-                        this->m_View->LoadChatRoomView(),
-                        this->m_Model->SelectRoom(room_id),
-                        this->m_Model->GetSession());
-            }));
+                    std::make_unique<chat_room::ChatRoomPresenter>(view, model,
+                                                                   session);
+            });
 
-    m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(
-        std::make_shared<core::event::util::Action<>>(
-            [this] { this->HandleLogout(); }));
-}
-
-HomePresenter::~HomePresenter() {
-    m_SelectRoomEventDetachment.Detach();
-    m_LogoutEventDetachment.Detach();
+    m_LogoutEventHandle = m_View->OnLogoutRequested.Attach<Action<>>(
+        [this] { this->HandleLogout(); });
 }
 
 void HomePresenter::HandleLogout() {

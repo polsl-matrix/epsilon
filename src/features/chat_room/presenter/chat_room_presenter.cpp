@@ -6,6 +6,7 @@
 #include "contracts/message_dao.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <utility>
 
@@ -15,65 +16,53 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
                                      std::shared_ptr<model::Room> model,
                                      std::shared_ptr<model::Session> session)
     : m_View(std::move(view)), m_Model(std::move(model)),
-      m_Session(std::move(session)), m_MessageSentDetachment([]() {}),
-      m_ViewReadyDetachment([]() {}), m_LoadEarlierDetachment([]() {}),
-      m_LoadedCount(0) {
-
+      m_Session(std::move(session)), m_LoadedCount(0) {
     const auto room_name = m_Model->Name();
     const std::string first_letter { room_name[0] };
 
     m_View->SetRoomName(room_name);
     m_View->SetRoomAvatar(first_letter);
 
-    m_MessageSentDetachment =
-        m_View->OnMessageSent
-            .template Attach<epsilon::core::event::util::Action<std::string>>(
-                [this](std::string text) { HandleSendMessage(text); });
+    m_MessageSentEventHandle =
+        m_View->OnMessageSent.Attach<Action<std::string>>(
+            [this](std::string text) { HandleSendMessage(text); });
 
-    m_ViewReadyDetachment =
-        m_View->OnViewReady
-            .template Attach<epsilon::core::event::util::Action<>>(
-                [this]() { LoadInitialBatch(); });
-
-    m_LoadEarlierDetachment =
-        m_View->OnLoadEarlierRequested
-            .template Attach<epsilon::core::event::util::Action<>>(
-                [this]() { LoadEarlierBatch(); });
+    LoadMessages();
 }
 
-void ChatRoomPresenter::LoadInitialBatch() {
-    const auto &messages = m_Model->MessageList();
+void ChatRoomPresenter::LoadMessages() {
+    std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
+    std::weak_ptr<model::Session> session_weak_pointer = m_Session;
 
-    const int batch_size = 7;
-    const int total = static_cast<int>(messages.size());
-    const int start = std::max(0, total - batch_size);
+    m_Model->MessageList()->Then([view_weak_pointer, session_weak_pointer](
+                                     const model::Room::Result &result) {
+        if (!result.has_value()) {
+            std::cerr
+                << "Failed to load initial message batch from room backend.\n";
+            return;
+        }
 
-    for (int i = start; i < total; ++i) {
-        m_View->AppendMessage(
-            MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                        messages[i].Author() == m_Session->CurrentUser() });
-    }
-    m_LoadedCount = total - start;
-}
+        const auto &messages_ptr = result.value();
+        if (!messages_ptr) {
+            return;
+        }
 
-void ChatRoomPresenter::LoadEarlierBatch() {
-    const auto &messages = m_Model->MessageList();
+        const auto &messages = *messages_ptr;
 
-    const int total = static_cast<int>(messages.size());
-    if (m_LoadedCount >= total) {
-        return;
-    }
+        if (auto session = session_weak_pointer.lock()) {
+            auto current_user = session->CurrentUser();
 
-    const int batch_size = 7;
-    const int end = total - m_LoadedCount;
-    const int start = std::max(0, end - batch_size);
-
-    for (int i = end - 1; i >= start; --i) {
-        m_View->PrependMessage(
-            MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                        messages[i].Author() == m_Session->CurrentUser() });
-    }
-    m_LoadedCount += (end - start);
+            for (const auto &message : messages) {
+                if (auto view = view_weak_pointer.lock()) {
+                    view->AppendMessage(
+                        MessageDao{ message.Author().Name(), message.Content(),
+                                    message.Author() == current_user });
+                }
+            }
+        } else {
+            return;
+        }
+    });
 }
 
 void ChatRoomPresenter::HandleSendMessage(const std::string &text) {

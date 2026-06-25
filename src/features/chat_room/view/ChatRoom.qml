@@ -273,10 +273,4 @@ Rectangle {
             chatListView.contentY += (chatListView.contentHeight - beforeHeight)
         }
     }
-
-    Component.onCompleted: {
-        if (typeof chatViewBackend !== "undefined") {
-            chatViewBackend.NotifyViewReady()
-        }
-    }
 }

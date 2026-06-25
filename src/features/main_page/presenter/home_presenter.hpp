@@ -4,7 +4,7 @@
 #include "contracts/ihome_view.hpp"
 #include "../model/home_model.hpp"
 #include "../../chat_room/presenter/chat_room_presenter.hpp"
-#include "../../../core/event/detachment.hpp"
+#include "../../../core/event/util/action.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 
 #include <memory>
@@ -16,12 +16,14 @@ class HomePresenter : public base::IPresenter {
 
     std::shared_ptr<INavigationService> m_NavigationService;
 
-    core::event::Detachment m_SelectRoomEventDetachment;
-    core::event::Detachment m_LogoutEventDetachment;
+    template<typename... T>
+    using Action = core::event::util::Action<T...>;
+
+    std::shared_ptr<Action<std::string>> m_SelectRoomEventHandle;
+    std::shared_ptr<Action<>> m_LogoutEventHandle;
 
   public:
     explicit HomePresenter(std::unique_ptr<IHomeView> view, std::unique_ptr<HomeModel> model, std::shared_ptr<INavigationService> navigation_service);
-    ~HomePresenter();
     void HandleLogout();
 
   private:

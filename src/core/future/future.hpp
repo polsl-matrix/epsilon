@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <optional>
+#include <memory>
 
 namespace epsilon::core::future {
 
@@ -18,10 +19,13 @@ template <typename TValue> class Future {
   public:
     class Handle {
       public:
-        virtual void Then(std::function<void(const TValue&)>) = 0;
+      virtual void Then(std::function<void(const TValue&)>) = 0;
     };
-
+    
   private:
+    // Necessary to keep the handles alive as long as the future is active
+    std::vector<std::shared_ptr<Handle>> m_Handles;
+
     class FutureObserver : public event::Observer<const TValue&>, public Handle {
         std::optional<TValue> m_Value = std::nullopt;
         std::optional<std::function<void(const TValue&)>> m_Callback = std::nullopt;
