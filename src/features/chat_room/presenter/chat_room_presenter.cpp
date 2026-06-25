@@ -18,7 +18,7 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
     : m_View(std::move(view)), m_Model(std::move(model)),
       m_Session(std::move(session)), m_LoadedCount(0) {
     const auto room_name = m_Model->Name();
-    const std::string first_letter { room_name[0] };
+    const std::string first_letter{ room_name[0] };
 
     m_View->SetRoomName(room_name);
     m_View->SetRoomAvatar(first_letter);
@@ -50,15 +50,28 @@ void ChatRoomPresenter::LoadMessages() {
         const auto &messages = *messages_ptr;
 
         if (auto session = session_weak_pointer.lock()) {
-            auto current_user = session->CurrentUser();
+            session->CurrentUser()->Then(
+                [view_weak_pointer,
+                 messages = std::move(messages)](const auto &current_user) {
+                    if (!current_user.has_value()) {
+                        if (auto view = view_weak_pointer.lock()) {
+                            view->AppendMessage(
+                                MessageDao{ "epsilon",
+                                            "We've encountered some problems "
+                                            "while loading messages :(",
+                                            false });
+                        }
+                        return;
+                    }
 
-            for (const auto &message : messages) {
-                if (auto view = view_weak_pointer.lock()) {
-                    view->AppendMessage(
-                        MessageDao{ message.Author().Name(), message.Content(),
-                                    message.Author() == current_user });
-                }
-            }
+                    for (const auto &message : messages) {
+                        if (auto view = view_weak_pointer.lock()) {
+                            view->AppendMessage(MessageDao{
+                                message.Author().Name(), message.Content(),
+                                message.Author() == *current_user });
+                        }
+                    }
+                });
         } else {
             return;
         }
@@ -73,8 +86,24 @@ void ChatRoomPresenter::HandleSendMessage(const std::string &text) {
     m_Model->SendMessage(text);
     m_LoadedCount++;
 
-    m_View->AppendMessage(
-        MessageDao{ m_Session->CurrentUser().Name(), text, true });
+    std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
+
+    m_Session->CurrentUser()->Then([view_weak_pointer,
+                                    &text](const auto &current_user) {
+        if (!current_user.has_value()) {
+            if (auto view = view_weak_pointer.lock()) {
+                view->AppendMessage(MessageDao{
+                    "epsilon",
+                    "We've encountered some problems while loading messages :(",
+                    false });
+            }
+            return;
+        }
+
+        if (auto view = view_weak_pointer.lock()) {
+            view->AppendMessage(MessageDao{ current_user->Name(), text, true });
+        }
+    });
 }
 
 } // namespace epsilon::features::chat_room
