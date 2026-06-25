@@ -6,13 +6,16 @@
 namespace epsilon::services::matrix::serialization {
 
 template <>
-requests::implementation::who_am_i::WhoAmIRequestResponse Deserialize<requests::implementation::who_am_i::WhoAmIRequestResponse>(
+requests::implementation::who_am_i::WhoAmIRequestResponse
+Deserialize<requests::implementation::who_am_i::WhoAmIRequestResponse>(
     SerializationPrimitive primitive) {
     const auto reply = Expect<RObject>(primitive).get();
 
     const auto user_id = ReadField<String>(reply, "userId");
 
-    return requests::implementation::who_am_i::WhoAmIRequestResponse{ user_id.value };
+    return requests::implementation::who_am_i::WhoAmIRequestResponse{
+        user_id.value
+    };
 }
 
 } // namespace epsilon::services::matrix::serialization

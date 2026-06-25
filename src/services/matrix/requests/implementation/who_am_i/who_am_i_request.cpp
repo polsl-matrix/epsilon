@@ -10,4 +10,4 @@ std::string WhoAmIRequest::Endpoint() const {
     return "/_matrix/client/v3/account/whoami";
 }
 
-} // namespace epsilon::services::matrix::requests::implementation::registration
+} // namespace epsilon::services::matrix::requests::implementation::who_am_i
