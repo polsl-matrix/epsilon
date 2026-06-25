@@ -16,30 +16,22 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
                                      std::shared_ptr<model::Room> model,
                                      std::shared_ptr<model::Session> session)
     : m_View(std::move(view)), m_Model(std::move(model)),
-      m_Session(std::move(session)), m_MessageSentDetachment([]() {}),
-      m_LoadEarlierDetachment([]() {}), m_LoadedCount(0) {
+      m_Session(std::move(session)), m_LoadedCount(0) {
     const auto room_name = m_Model->Name();
     const auto first_letter = std::string{room_name[0]};
 
     m_View->SetRoomName(room_name);
     m_View->SetRoomAvatar(first_letter);
 
-    m_MessageSentDetachment =
-        m_View->OnMessageSent
-            .template Attach<epsilon::core::event::util::Action<std::string>>(
+    m_MessageSentEventHandle =
+        m_View->OnMessageSent.Attach<Action<std::string>>(
                 [this](std::string text) { HandleSendMessage(text); });
 
     LoadInitialBatch();
 
-    m_LoadEarlierDetachment =
-        m_View->OnLoadEarlierRequested
-            .template Attach<epsilon::core::event::util::Action<>>(
+    m_LoadEarlierEventHandle =
+        m_View->OnLoadEarlierRequested.Attach<Action<>>(
                 [this]() { LoadEarlierBatch(); });
-}
-
-ChatRoomPresenter::~ChatRoomPresenter() {
-    m_LoadEarlierDetachment.Detach();
-    m_MessageSentDetachment.Detach();
 }
 
 void ChatRoomPresenter::LoadInitialBatch() {
@@ -59,16 +51,18 @@ void ChatRoomPresenter::LoadInitialBatch() {
         const int total = static_cast<int>(messages.size());
         const int start = std::max(0, total - batch_size);
 
+        
         for (int i = start; i < total; ++i) {
             m_View->AppendMessage(
                 MessageDao{ messages[i].Author().Name(), messages[i].Content(),
-                            messages[i].Author() == m_Session->CurrentUser() });
+                messages[i].Author() == m_Session->CurrentUser() });
         }
         m_LoadedCount = total - start;
     });
 }
 
 void ChatRoomPresenter::LoadEarlierBatch() {
+    return;
     m_Model->MessageList()->Then([this](const model::Room::Result& result) {
         if (!result.has_value()) {
             std::cerr << "Failed to load earlier message batch from room backend.\n";

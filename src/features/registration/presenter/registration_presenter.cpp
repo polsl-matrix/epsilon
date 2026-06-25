@@ -27,17 +27,16 @@ RegistrationPresenter::RegistrationPresenter(
     : m_View(std::move(view)), m_Model(std::move(model)),
       m_NavigationService(std::move(navigation_service)) {
 
-    m_RegistrationRequestDetachment =
+    m_RegistrationRequestEventHandle =
         m_View->OnRegistrationRequested
-            .Attach<epsilon::core::event::util::Action<std::string, std::string,
-                                                       std::string>>(
+            .Attach<Action<std::string, std::string, std::string>>(
                 [this](const std::string &username, const std::string &password,
                        const std::string &repeat_password) {
                     HandleRegistration(username, password, repeat_password);
                 });
 
-    m_LoginLinkDetachment =
-        m_View->OnLoginLinkClicked.Attach<epsilon::core::event::util::Action<>>(
+    m_LoginLinkEventHandle =
+        m_View->OnLoginLinkClicked.Attach<Action<>>(
             [this]() {
                 if (m_NavigationService && m_Model) {
                     auto nav = m_NavigationService;

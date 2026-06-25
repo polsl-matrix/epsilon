@@ -43,24 +43,18 @@ HomePresenter::HomePresenter(
         m_View->SetRoomsList(view_dtos);
     });
 
-    m_SelectRoomEventDetachment = m_View->OnChatSelected.Attach(
-        std::make_shared<core::event::util::Action<std::string>>(
+    m_SelectRoomEventHandle = m_View->OnChatSelected
+        .Attach<Action<std::string>>(
             [this](std::string room_id) {
                 this->m_OpenRoom =
                     std::make_unique<chat_room::ChatRoomPresenter>(
                         this->m_View->LoadChatRoomView(),
                         this->m_Model->SelectRoom(room_id),
                         this->m_Model->GetSession());
-            }));
+            });
 
-    m_LogoutEventDetachment = m_View->OnLogoutRequested.Attach(
-        std::make_shared<core::event::util::Action<>>(
-            [this] { this->HandleLogout(); }));
-}
-
-HomePresenter::~HomePresenter() {
-    m_SelectRoomEventDetachment.Detach();
-    m_LogoutEventDetachment.Detach();
+    m_LogoutEventHandle = m_View->OnLogoutRequested.Attach<Action<>>(
+            [this] { this->HandleLogout(); });
 }
 
 void HomePresenter::HandleLogout() {

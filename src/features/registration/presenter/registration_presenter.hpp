@@ -3,7 +3,7 @@
 #include "../../base/ipresenter.hpp"
 #include "contracts/iregistration_view.hpp"
 #include "../model/registration_model.hpp"
-#include "../../../core/event/detachment.hpp"
+#include "../../../core/event/util/action.hpp"
 #include "../../../services/navigation/inavigation_service.hpp"
 
 #include <memory>
@@ -25,8 +25,12 @@ private:
     std::shared_ptr<IRegistrationView> m_View;
     std::shared_ptr<RegistrationModel> m_Model;
     std::shared_ptr<services::navigation::INavigationService> m_NavigationService;
-    epsilon::core::event::Detachment m_RegistrationRequestDetachment;
-    epsilon::core::event::Detachment m_LoginLinkDetachment;
+
+    template<typename... T>
+    using Action = epsilon::core::event::util::Action<T...>;
+
+    std::shared_ptr<Action<std::string, std::string, std::string>> m_RegistrationRequestEventHandle;
+    std::shared_ptr<Action<>> m_LoginLinkEventHandle;
 };
 
 }
