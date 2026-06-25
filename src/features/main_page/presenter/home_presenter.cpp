@@ -47,12 +47,16 @@ HomePresenter::HomePresenter(
     m_SelectRoomEventHandle =
         m_View->OnChatSelected.Attach<Action<std::string>>(
             [this](std::string room_id) {
-                std::shared_ptr<chat_room::IChatRoomView> view = this->m_View->LoadChatRoomView();
-                std::shared_ptr<model::Room> model = this->m_Model->SelectRoom(room_id);
-                std::shared_ptr<model::Session> session = this->m_Model->GetSession();
+                std::shared_ptr<chat_room::IChatRoomView> view =
+                    this->m_View->LoadChatRoomView();
+                std::shared_ptr<model::Room> model =
+                    this->m_Model->SelectRoom(room_id);
+                std::shared_ptr<model::Session> session =
+                    this->m_Model->GetSession();
 
                 this->m_OpenRoom =
-                    std::make_unique<chat_room::ChatRoomPresenter>(view, model, session);
+                    std::make_unique<chat_room::ChatRoomPresenter>(view, model,
+                                                                   session);
             });
 
     m_LogoutEventHandle = m_View->OnLogoutRequested.Attach<Action<>>(

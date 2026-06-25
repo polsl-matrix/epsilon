@@ -34,7 +34,8 @@ void ChatRoomPresenter::LoadMessages() {
     std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
     std::weak_ptr<model::Session> session_weak_pointer = m_Session;
 
-    m_Model->MessageList()->Then([view_weak_pointer, session_weak_pointer](const model::Room::Result &result) {
+    m_Model->MessageList()->Then([view_weak_pointer, session_weak_pointer](
+                                     const model::Room::Result &result) {
         if (!result.has_value()) {
             std::cerr
                 << "Failed to load initial message batch from room backend.\n";
@@ -48,14 +49,14 @@ void ChatRoomPresenter::LoadMessages() {
 
         const auto &messages = *messages_ptr;
 
-        if(auto session = session_weak_pointer.lock()) {
+        if (auto session = session_weak_pointer.lock()) {
             auto current_user = session->CurrentUser();
 
-            for (const auto& message : messages) {
-                if(auto view = view_weak_pointer.lock()) {
-                view->AppendMessage(
-                    MessageDao{ message.Author().Name(), message.Content(),
-                                message.Author() == current_user });
+            for (const auto &message : messages) {
+                if (auto view = view_weak_pointer.lock()) {
+                    view->AppendMessage(
+                        MessageDao{ message.Author().Name(), message.Content(),
+                                    message.Author() == current_user });
                 }
             }
         } else {

@@ -24,7 +24,7 @@ void HomeView::ShowLogoutSuccess() { emit logoutSucceeded(); }
 
 void HomeView::SetRoomsList(const std::vector<RoomDto> &rooms) {
     m_Rooms.clear();
-    
+
     for (const auto &room : rooms) {
         QVariantMap roomMap;
         roomMap["room_id"] = QString::fromStdString(room.Id);
