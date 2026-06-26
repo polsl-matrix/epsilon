@@ -9,11 +9,14 @@ Rectangle {
 
     property var roomsModel: []
 
+    property alias usernameText: userProfileBar.usernameText
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
         UserProfileBar {
+            id: userProfileBar
             Layout.fillWidth: true
             Layout.preferredHeight: 75
             onLogoutRequested: {

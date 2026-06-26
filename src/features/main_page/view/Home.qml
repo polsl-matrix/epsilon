@@ -30,6 +30,7 @@ Rectangle {
             color: "#111111"
 
             roomsModel: typeof homeViewBackend !== "undefined" ? homeViewBackend.rooms : []
+            usernameText: typeof homeViewBackend !== "undefined" ? homeViewBackend.username : "Anonymous"
 
             onLogoutRequested: {
                 if (typeof homeViewBackend !== "undefined") {

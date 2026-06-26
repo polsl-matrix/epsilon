@@ -14,6 +14,7 @@ namespace epsilon::features::home {
 class HomeView : public QObject, public IHomeView {
     Q_OBJECT
     Q_PROPERTY(QVariantList rooms READ rooms NOTIFY roomsChanged)
+    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
 
     using PageRouter = services::router::PageRouter;
 
@@ -23,6 +24,7 @@ class HomeView : public QObject, public IHomeView {
     QString m_QmlIdentifier = "homeViewBackend";
 
     QVariantList m_Rooms;
+    QString m_Username = "Anonymous";
 
   public:
     explicit HomeView(std::shared_ptr<PageRouter> page_router, QObject *parent = nullptr);
@@ -33,8 +35,11 @@ class HomeView : public QObject, public IHomeView {
     void SetRoomsList(const std::vector<RoomDto>& rooms) override;
 
     std::unique_ptr<chat_room::IChatRoomView> LoadChatRoomView() override;
+    void SetUserName(std::string user_name) override;
 
     Q_INVOKABLE void SelectRoom(const QString& room_id);
+    QString username() const;
+    Q_INVOKABLE void setUsername(const QString& newUsername);
 
     QVariantList rooms() const;
 
@@ -42,6 +47,7 @@ class HomeView : public QObject, public IHomeView {
     void logoutSucceeded();
     void chatRoomLoaded();
     void roomsChanged();
+    void usernameChanged();
 };
 
 }

@@ -42,6 +42,8 @@ HomePresenter::HomePresenter(
         }
 
         m_View->SetRoomsList(view_dtos);
+
+        UpdateUserName();
     });
 
     m_SelectRoomEventHandle =
@@ -69,6 +71,18 @@ void HomePresenter::HandleLogout() {
     m_NavigationService->NavigateTo(
         Screen::Login,
         LoginScreenArgs{ std::move(request_manager), m_NavigationService });
+}
+
+void HomePresenter::UpdateUserName() {
+    std::weak_ptr<IHomeView> view_weak_pointer = m_View;
+
+    m_Model->GetSession()->CurrentUser()->Then([view_weak_pointer](const auto &user) {
+        user->Name()->Then([view_weak_pointer](const auto& user_name) {
+            if(auto view = view_weak_pointer.lock()) {
+                view->SetUserName(user_name);
+            }
+        });
+    });
 }
 
 } // namespace epsilon::features::home
