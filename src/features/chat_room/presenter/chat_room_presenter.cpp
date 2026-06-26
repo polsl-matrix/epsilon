@@ -88,39 +88,37 @@ void ChatRoomPresenter::HandleSendMessage(const std::string &text) {
     std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
     std::weak_ptr<model::Session> session_weak_pointer = m_Session;
 
-    m_Model->SendMessage(text)->Then([view_weak_pointer, session_weak_pointer, text](const auto& reply) {
-        if(!reply) {
-            if (auto view = view_weak_pointer.lock()) {
-                view->AppendMessage(MessageDao{
-                    "epsilon",
-                    "Failed to send :(",
-                    false });
-            }
-            return;
-        }
-
-        if(auto session = session_weak_pointer.lock()) {
-            session->CurrentUser()->Then([view_weak_pointer,
-                                        text](const auto &current_user) {
-            if (!current_user.has_value()) {
+    m_Model->SendMessage(text)->Then(
+        [view_weak_pointer, session_weak_pointer, text](const auto &reply) {
+            if (!reply) {
                 if (auto view = view_weak_pointer.lock()) {
-                    view->AppendMessage(MessageDao{
-                        "epsilon",
-                        "Failed to send :(",
-                        false });
+                    view->AppendMessage(
+                        MessageDao{ "epsilon", "Failed to send :(", false });
                 }
                 return;
             }
-    
-            current_user->Name()->Then(
-                [view_weak_pointer, text](const auto &user_name) {
-                    if (auto view = view_weak_pointer.lock()) {
-                        view->AppendMessage(MessageDao{ user_name, text, true });
-                    }
-                });
-            });
-        }
-    });
+
+            if (auto session = session_weak_pointer.lock()) {
+                session->CurrentUser()->Then(
+                    [view_weak_pointer, text](const auto &current_user) {
+                        if (!current_user.has_value()) {
+                            if (auto view = view_weak_pointer.lock()) {
+                                view->AppendMessage(MessageDao{
+                                    "epsilon", "Failed to send :(", false });
+                            }
+                            return;
+                        }
+
+                        current_user->Name()->Then(
+                            [view_weak_pointer, text](const auto &user_name) {
+                                if (auto view = view_weak_pointer.lock()) {
+                                    view->AppendMessage(
+                                        MessageDao{ user_name, text, true });
+                                }
+                            });
+                    });
+            }
+        });
 }
 
 } // namespace epsilon::features::chat_room

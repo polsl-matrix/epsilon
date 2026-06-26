@@ -16,7 +16,9 @@ Deserialize<requests::implementation::send_message::SendMessageRequestResponse>(
 
     const auto event_id = ReadField<String>(reply, "event_id").value;
 
-    return requests::implementation::send_message::SendMessageRequestResponse{ event_id };
+    return requests::implementation::send_message::SendMessageRequestResponse{
+        event_id
+    };
 }
 
 } // namespace epsilon::services::matrix::serialization

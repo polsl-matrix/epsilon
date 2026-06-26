@@ -17,9 +17,7 @@ SendMessageRequestBody::SendMessageRequestBody(std::string body)
 
 serialization::SerializationPrimitive
 SendMessageRequestBody::GetPrimitiveRepresentation() const {
-    return RObject(Object{{
-        { "body", String(Body) }
-    }});
+    return RObject(Object{ { { "body", String(Body) } } });
 }
 
-} // namespace epsilon::services::matrix::requests::implementation::login
+} // namespace epsilon::services::matrix::requests::implementation::send_message
