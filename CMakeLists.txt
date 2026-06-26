@@ -42,6 +42,9 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/who_am_i/who_am_i_request.cpp
   src/services/matrix/requests/implementation/who_am_i/who_am_i_request_response.cpp
 
+  src/services/matrix/requests/implementation/profile/profile_request.cpp
+  src/services/matrix/requests/implementation/profile/profile_request_response.cpp
+
   src/services/router/page_router.cpp
 )
 

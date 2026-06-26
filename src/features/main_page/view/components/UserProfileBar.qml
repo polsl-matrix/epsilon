@@ -7,6 +7,8 @@ Item {
 
     signal logoutRequested()
 
+    property alias usernameText: usernameField.text
+
     RowLayout {
         anchors.fill: parent
         anchors.margins: 15
@@ -38,7 +40,7 @@ Item {
             spacing: 2
 
             Text {
-                text: "username123"
+                id: usernameField
                 color: "white"
                 font.pixelSize: 15
                 font.bold: true

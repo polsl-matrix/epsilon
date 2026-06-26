@@ -27,7 +27,9 @@ class HomePresenter : public base::IPresenter {
     void HandleLogout();
 
   private:
-    std::unique_ptr<IHomeView> m_View;
+    void UpdateUserName();
+
+    std::shared_ptr<IHomeView> m_View;
     std::unique_ptr<HomeModel> m_Model;
 
     std::unique_ptr<chat_room::ChatRoomPresenter> m_OpenRoom;

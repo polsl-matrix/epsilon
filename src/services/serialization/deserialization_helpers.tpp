@@ -40,7 +40,11 @@ std::optional<TField> ReadFieldOptional(const Object& object, const std::string&
 
     const auto &field = object.values.at(field_name);
 
-    return Expect<TField>(field);
+    try {
+        return Expect<TField>(field);
+    } catch(const DeserializationUnexpectedPrimitiveException& error) {
+        return std::nullopt;
+    }
 }
 
 }
