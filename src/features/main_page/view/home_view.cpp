@@ -40,11 +40,9 @@ void HomeView::SetRoomsList(const std::vector<RoomDto> &rooms) {
     emit roomsChanged();
 }
 
-QString HomeView::username() const {
-    return m_Username;
-}
+QString HomeView::username() const { return m_Username; }
 
-void HomeView::setUsername(const QString& newUsername) {
+void HomeView::setUsername(const QString &newUsername) {
     if (m_Username != newUsername) {
         m_Username = newUsername;
         emit usernameChanged();
