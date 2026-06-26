@@ -42,34 +42,34 @@ void ChatRoomPresenter::LoadMessages() {
             return;
         }
 
-        const auto &messages_ptr = result.value();
-        if (!messages_ptr) {
+        const auto messages = result.value();
+        if (!messages) {
             return;
         }
-
-        const auto &messages = *messages_ptr;
 
         if (auto session = session_weak_pointer.lock()) {
             session->CurrentUser()->Then(
                 [view_weak_pointer,
-                 messages = std::move(messages)](const auto &current_user) {
+                    messages = std::move(messages)](const auto &current_user) {
                     if (!current_user.has_value()) {
                         if (auto view = view_weak_pointer.lock()) {
                             view->AppendMessage(
                                 MessageDao{ "epsilon",
-                                            "We've encountered some problems "
-                                            "while loading messages :(",
-                                            false });
+                                    "We've encountered some problems "
+                                    "while loading messages :(",
+                                    false });
                         }
                         return;
                     }
 
-                    for (const auto &message : messages) {
-                        if (auto view = view_weak_pointer.lock()) {
-                            view->AppendMessage(MessageDao{
-                                message.Author().Name(), message.Content(),
-                                message.Author() == *current_user });
-                        }
+                    for (const auto &message : *messages) {
+                        message.Author().Name()->Then([view_weak_pointer, message, current_user, messages](const auto &author_name) {
+                            if (auto view = view_weak_pointer.lock()) {
+                                view->AppendMessage(MessageDao{
+                                    author_name, message.Content(),
+                                    message.Author() == *current_user });
+                            }
+                        });
                     }
                 });
         } else {
@@ -100,9 +100,11 @@ void ChatRoomPresenter::HandleSendMessage(const std::string &text) {
             return;
         }
 
-        if (auto view = view_weak_pointer.lock()) {
-            view->AppendMessage(MessageDao{ current_user->Name(), text, true });
-        }
+        current_user->Name()->Then([view_weak_pointer, &text](const auto &user_name) {
+            if (auto view = view_weak_pointer.lock()) {
+                view->AppendMessage(MessageDao{ user_name, text, true });
+            }
+        });
     });
 }
 
