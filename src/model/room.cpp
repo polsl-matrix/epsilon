@@ -4,6 +4,9 @@
 #include "../services/matrix/requests/implementation/common/empty.hpp"
 #include "../services/matrix/requests/implementation/common/error.hpp"
 #include "../services/matrix/requests/implementation/room_messages/room_messages_request.hpp"
+#include "../services/matrix/requests/implementation/send_message/send_message_request.hpp"
+#include "../services/matrix/requests/implementation/send_message/send_message_request_body.hpp"
+#include "../services/matrix/requests/implementation/send_message/send_message_request_response.hpp"
 
 #include "message.hpp"
 #include "user.hpp"
@@ -72,6 +75,44 @@ Room::MessageList() const {
     return messages_future->GetHandle();
 }
 
-void Room::SendMessage(std::string) { OnMessageReceived.Invoke(); }
+std::shared_ptr<core::future::Future<std::expected<void, SendMessageError>>::Handle> Room::SendMessage(std::string content) {
+    using namespace epsilon::services::matrix::requests::implementation::send_message;
+    using namespace epsilon::services::matrix::requests::implementation::common;
+
+    auto result = std::make_shared<core::future::Future<std::expected<void, SendMessageError>>>();
+
+    auto request = SendMessageRequest(m_Id);
+    
+    request.SetBody(SendMessageRequestBody(content));
+
+    m_RequestManager->Execute<SendMessageRequestBody, SendMessageRequestResponse, Error>(
+        request,
+        [result](const auto& reply) {
+            if(!reply) {
+                result->Realize(std::unexpected(SendMessageError::RequestFailed));
+                return;
+            }
+
+            if(reply->StatusCode == 400) {
+                result->Realize(std::unexpected(SendMessageError::Unauthorized));
+                return;
+            }
+
+            if(reply->StatusCode == 404) {
+                result->Realize(std::unexpected(SendMessageError::RoomNotFound));
+                return;
+            }
+
+            if(reply->StatusCode != 200 || !reply->Body.has_value()) {
+                result->Realize(std::unexpected(SendMessageError::UnknownError));
+                return;
+            }
+
+            result->Realize({});
+        }
+    );
+
+    return result->GetHandle();
+}
 
 } // namespace epsilon::model

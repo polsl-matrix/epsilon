@@ -16,7 +16,7 @@ ChatRoomPresenter::ChatRoomPresenter(std::shared_ptr<IChatRoomView> view,
                                      std::shared_ptr<model::Room> model,
                                      std::shared_ptr<model::Session> session)
     : m_View(std::move(view)), m_Model(std::move(model)),
-      m_Session(std::move(session)), m_LoadedCount(0) {
+      m_Session(std::move(session)) {
     const auto room_name = m_Model->Name();
     const std::string first_letter{ room_name[0] };
 
@@ -85,29 +85,41 @@ void ChatRoomPresenter::HandleSendMessage(const std::string &text) {
         return;
     }
 
-    m_Model->SendMessage(text);
-    m_LoadedCount++;
-
     std::weak_ptr<IChatRoomView> view_weak_pointer = m_View;
+    std::weak_ptr<model::Session> session_weak_pointer = m_Session;
 
-    m_Session->CurrentUser()->Then([view_weak_pointer,
-                                    &text](const auto &current_user) {
-        if (!current_user.has_value()) {
+    m_Model->SendMessage(text)->Then([view_weak_pointer, session_weak_pointer, text](const auto& reply) {
+        if(!reply) {
             if (auto view = view_weak_pointer.lock()) {
                 view->AppendMessage(MessageDao{
                     "epsilon",
-                    "We've encountered some problems while loading messages :(",
+                    "Failed to send :(",
                     false });
             }
             return;
         }
 
-        current_user->Name()->Then(
-            [view_weak_pointer, &text](const auto &user_name) {
+        if(auto session = session_weak_pointer.lock()) {
+            session->CurrentUser()->Then([view_weak_pointer,
+                                        text](const auto &current_user) {
+            if (!current_user.has_value()) {
                 if (auto view = view_weak_pointer.lock()) {
-                    view->AppendMessage(MessageDao{ user_name, text, true });
+                    view->AppendMessage(MessageDao{
+                        "epsilon",
+                        "Failed to send :(",
+                        false });
                 }
+                return;
+            }
+    
+            current_user->Name()->Then(
+                [view_weak_pointer, text](const auto &user_name) {
+                    if (auto view = view_weak_pointer.lock()) {
+                        view->AppendMessage(MessageDao{ user_name, text, true });
+                    }
+                });
             });
+        }
     });
 }
 

@@ -39,6 +39,10 @@ set(SERVICES_SOURCES
   src/services/matrix/requests/implementation/room_messages/room_messages_request.cpp
   src/services/matrix/requests/implementation/room_messages/room_messages_request_response.cpp
 
+  src/services/matrix/requests/implementation/send_message/send_message_request.cpp
+  src/services/matrix/requests/implementation/send_message/send_message_request_body.cpp
+  src/services/matrix/requests/implementation/send_message/send_message_request_response.cpp
+
   src/services/matrix/requests/implementation/who_am_i/who_am_i_request.cpp
   src/services/matrix/requests/implementation/who_am_i/who_am_i_request_response.cpp
 

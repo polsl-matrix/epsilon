@@ -17,6 +17,13 @@ enum class GetMessagesError {
     UnknownError
 };
 
+enum class SendMessageError {
+    RequestFailed,
+    Unauthorized,
+    RoomNotFound,
+    UnknownError
+};
+
 class Room {
     using RequestManager = services::matrix::requests::AuthenticatedRequestManager;
 
@@ -39,7 +46,7 @@ public:
     std::string Name() const;
     std::shared_ptr<typename core::future::Future<Result>::Handle> MessageList() const;
 
-    void SendMessage(std::string content);
+    std::shared_ptr<core::future::Future<std::expected<void, SendMessageError>>::Handle> SendMessage(std::string content);
 
     core::event::Event<> OnMessageReceived;
 };

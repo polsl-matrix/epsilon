@@ -22,8 +22,6 @@ class ChatRoomPresenter {
     std::shared_ptr<Action<std::string>> m_MessageSentEventHandle;
     std::shared_ptr<Action<>> m_LoadEarlierEventHandle;
     
-    int m_LoadedCount;
-    
 public:
     explicit ChatRoomPresenter(
         std::shared_ptr<IChatRoomView> view,
