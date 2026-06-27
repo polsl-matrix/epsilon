@@ -3,6 +3,8 @@
 #include "../../../../serialization/deserializable.hpp"
 #include "../../../../serialization/deserialization_helpers.hpp"
 
+#include <chrono>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -38,6 +40,14 @@ Deserialize<
         }
 
         const auto sender_field = ReadField<String>(event_obj, "sender");
+        const auto timestamp_string = ReadField<String>(event_obj, "origin_server_ts");
+
+        const std::istringstream string_stream{timestamp_string.value};
+        std::chrono::sys_time<std::chrono::microseconds> timestamp;
+
+        // TODO: Add exception handling
+        string_stream >> std::chrono::parse("%FT%T%Ez", timestamp);
+
         const auto content_obj = ReadField<RObject>(event_obj, "content").get();
         const auto body_field =
             ReadFieldOptional<String>(content_obj, "membership");
