@@ -42,7 +42,7 @@ Deserialize<
         const auto sender_field = ReadField<String>(event_obj, "sender");
         const auto timestamp_string = ReadField<String>(event_obj, "origin_server_ts");
 
-        const std::istringstream string_stream{timestamp_string.value};
+        std::istringstream string_stream{timestamp_string.value};
         std::chrono::sys_time<std::chrono::microseconds> timestamp;
 
         // TODO: Add exception handling
@@ -53,7 +53,7 @@ Deserialize<
             ReadFieldOptional<String>(content_obj, "membership");
 
         if (body_field.has_value()) {
-            messages.push_back({ sender_field.value, body_field->value });
+            messages.push_back({ sender_field.value, body_field->value, timestamp });
         }
     }
 
