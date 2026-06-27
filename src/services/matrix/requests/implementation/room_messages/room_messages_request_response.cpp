@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include <date/date.h>
+
 using epsilon::services::matrix::serialization::Expect;
 using epsilon::services::matrix::serialization::RArray;
 using epsilon::services::matrix::serialization::ReadField;
@@ -46,7 +48,7 @@ Deserialize<
         std::chrono::sys_time<std::chrono::microseconds> timestamp;
 
         // TODO: Add exception handling
-        string_stream >> std::chrono::parse("%FT%T%Ez", timestamp);
+        string_stream >> date::parse("%FT%T%Ez", timestamp);
 
         const auto content_obj = ReadField<RObject>(event_obj, "content").get();
         const auto body_field =

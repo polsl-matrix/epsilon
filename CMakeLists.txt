@@ -113,6 +113,8 @@ set(TEST_SOURCES
   ${APP_TEST_SOURCES}
 )
 
+find_package(date REQUIRED)
+
 ### Compiler configuration ###
 
 # Disallow warnings
@@ -182,6 +184,7 @@ target_link_libraries(epsilon
     Qt6::Qml
     Qt6::Network
     Qt6::Svg
+    date::date
 )
 
 # Disallow warnings
@@ -271,6 +274,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       Qt6::Quick
       Qt6::Qml
       Qt6::Network
+      date::date
   )
 
 #  set_target_properties(epsilon_test PROPERTIES
