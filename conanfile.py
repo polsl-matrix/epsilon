@@ -14,7 +14,6 @@ class EpsilonRecipe(ConanFile):
 
     def requirements(self):
         self.requires("gtest/1.17.0")
-        self.requires("date/3.0.4")
 
     def generate(self):
         tc = CMakeToolchain(self)
