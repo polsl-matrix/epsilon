@@ -1,6 +1,7 @@
 #include "chat_room_presenter.hpp"
 
 #include "../../../core/event/util/action.hpp"
+#include "../../../core/future/future.hpp"
 #include "../../../model/room.hpp"
 #include "contracts/ichat_room_view.hpp"
 #include "contracts/message_dao.hpp"
@@ -8,7 +9,10 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <utility>
+
+using epsilon::core::future::Future;
 
 namespace epsilon::features::chat_room {
 
@@ -62,8 +66,12 @@ void ChatRoomPresenter::LoadMessages() {
                         return;
                     }
 
+                    std::optional<std::shared_ptr<Future<std::string>::Handle>> prev = std::nullopt;
+
                     for (const auto &message : *messages) {
-                        message.Author().Name()->Then(
+                        auto author_name_future = message.Author().Name();
+                        
+                        author_name_future->Then(
                             [view_weak_pointer, message, current_user,
                              messages](const auto &author_name) {
                                 if (auto view = view_weak_pointer.lock()) {
@@ -72,6 +80,12 @@ void ChatRoomPresenter::LoadMessages() {
                                         message.Author() == *current_user });
                                 }
                             });
+
+                        if(prev.has_value()) {
+                            author_name_future->After(*prev);
+                        }
+
+                        prev = author_name_future;
                     }
                 });
         } else {

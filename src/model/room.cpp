@@ -11,6 +11,7 @@
 #include "message.hpp"
 #include "user.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <utility>
@@ -66,8 +67,12 @@ Room::MessageList() const {
 
             for (const auto &msg_data : response_data.Messages) {
                 User sender(request_manager, msg_data.Sender);
-                messages_vector->emplace_back(std::move(sender), msg_data.Body);
+                messages_vector->emplace_back(std::move(sender), msg_data.Body, msg_data.Timestamp);
             }
+
+            std::sort(messages_vector->begin(), messages_vector->end(), [](const auto &first, const auto &second) {
+                return first.Timestamp() < second.Timestamp();
+            });
 
             messages_future->Realize(std::move(messages_vector));
         });

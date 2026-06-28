@@ -2,6 +2,7 @@
 
 #include "../../../../serialization/deserializable.hpp"
 
+#include <chrono>
 #include <string>
 #include <vector>
 
@@ -10,6 +11,7 @@ namespace epsilon::services::matrix::requests::implementation::room_messages {
 struct ExtractedMessage {
     std::string Sender;
     std::string Body;
+    std::chrono::sys_time<std::chrono::nanoseconds> Timestamp;
 };
 
 struct RoomMessagesRequestResponse {

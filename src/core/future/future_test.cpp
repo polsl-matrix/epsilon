@@ -68,6 +68,51 @@ TEST(FutureTest, SupportsMultipleIndependentObservers) {
     EXPECT_EQ(activation_count, 2);
 }
 
+TEST(FutureTest, SupportsDoubleThen) {
+    Future<int> future;
+
+    auto handle = future.GetHandle();
+
+    int a = 0, b = 0;
+
+    handle->Then([&a](int value) {
+        a = value;
+    }).Then([&b](int value) {
+        b = value;
+    });
+
+    future.Realize(42);
+
+    EXPECT_EQ(a, 42);
+    EXPECT_EQ(b, 42);
+}
+
+TEST(FutureTest, SupportsHandleOrderingWithAfter) {
+    Future<int> first;
+    Future<int> second;
+
+    auto first_handle = first.GetHandle();
+    auto second_handle = second.GetHandle();
+
+    int a = 1, b = 2;
+
+    first_handle->Then([&a](int value) {
+        a = value;
+    });
+
+    second_handle->Then([&b](int value) {
+        b = value;
+    }).After(first_handle);
+
+    second.Realize(42);
+
+    EXPECT_EQ(b, 2);
+    
+    first.Realize(42);
+
+    EXPECT_EQ(b, 42);
+}
+
 TEST(FutureTest, ThrowsExceptionWhenRealizedMoreThanOnce) {
     Future<int> critical_future;
 
